@@ -92,6 +92,60 @@ using namespace std;
 //     }
 // };
 
+
+// Solution 4
+class Solution {
+public:
+
+    string encode(vector<string>& strs) {
+        string s = "" ;
+        for ( auto element : strs ) {
+            s+=to_string(element.size()) + "#" + element; 
+        }
+        return s;
+    }
+
+    vector<string> decode(string s) {
+        vector<string> strs = {}; // initialise too to avoid garbage
+        string buffer = "";
+        int start_idx = 0;
+        int freq_buff = 0;
+        int freq_check = 1; // 1 = true, 0 = false
+        for ( int i = 0 ; i<s.size() ; i++){
+            if ( freq_check==1 ){
+            if ( s[i] == '#'  ) {
+                int end_idx = i-1;
+                freq_buff = stoi( s.substr(start_idx, end_idx-start_idx+1) );
+                freq_check = 0;
+            }}
+            else if (freq_buff > 0){
+                buffer+=s[i];
+                freq_buff--;
+            }
+            else if ( freq_buff == 0){
+                freq_check=1;
+                strs.push_back(buffer);
+                buffer="";
+                start_idx=i;
+            }
+
+        }
+        // --- THIS IS THE FIX ---
+        // After the loop, the last word ("you") is still in the buffer.
+        // Push it to the vector.
+        strs.push_back(buffer);
+        return strs;
+
+    }
+};
+
+// Time & Space Complexity
+// Time complexity: O(m) for each encode() and decode()function calls.
+// Space complexity: O(m+n) for each encode() and decode() function calls.
+// Where 
+// m is the sum of lengths of all the strings and 
+// n is the number of strings.
+
 // --- Helper function to print a vector of strings ---
 void printVector(const vector<string>& vec) {
     cout << "[";

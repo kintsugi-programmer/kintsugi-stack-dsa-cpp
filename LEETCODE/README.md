@@ -2048,7 +2048,12 @@ public:
     }
 };
 ```
-- Solution 4
+- Solution 4 -- optimised
+  - we can store state inside string
+    - with our dilimiter
+    - and it doesn't matter if another edge case comes
+      - as with state
+      - we know its not part of state var
   - thought
     - mix of all ways
     - ["neet","4#co#de2"] => "4#neet8#4#co#de2"
@@ -2063,7 +2068,7 @@ public:
           - index inc
     - NO
       - fails at case of '10#'
-  - 
+
 ```cpp
 // Solution 4
 class Solution {
@@ -2118,7 +2123,6 @@ public:
 // m is the sum of lengths of all the strings and 
 // n is the number of strings.
 ```
-- mid
 
 ---
 
