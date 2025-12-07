@@ -2015,6 +2015,7 @@ public:
   - Why illegal ?
     - Breaks the Problem Contract
     - This solution is incorrect because it relies on shared state (a class member variable) to pass information from encode to decode
+    - WE HAVE TO CODE STATELESS
 ```cpp
 // Illegal Solution 3
 class Solution {
