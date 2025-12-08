@@ -2180,11 +2180,6 @@ public:
 ---
 
 **PreReqs**
-**QuesNotes**
-- a
-```cpp
-
-```
 ```cpp
 #include<bits/stdc++.h>
 int main(){
