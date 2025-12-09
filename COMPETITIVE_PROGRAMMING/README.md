@@ -887,7 +887,6 @@ int main(){
   - a = { a0,a1,a2,k,a4...an}
   - we haven't told lenght of subarray
   - we can take length =1 , {k} is correct too , now in this subarray, k is the highest occurance as k is only
-  -
 ```cpp
 #include<bits/stdc++.h>
 using namespace std;
