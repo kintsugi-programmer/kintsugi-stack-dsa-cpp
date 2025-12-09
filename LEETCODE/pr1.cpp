@@ -356,13 +356,126 @@ int main(){
     // nos:{b,5}{a,3}
 
     vector<string> strs = {}; // initialise too to avoid garbage
-    string s = ""; // initialise too to avoid garbage
+    // string s = ""; // initialise too to avoid garbage
 
     // To convert an int to a std::string, use 
     // std::string str = std::to_string(your_int);.
 
     // To convert a std::string to an int, use 
     // int num = std::stoi(your_str);.
+
+
+    // Prefix & Suffix Multiplication
+    // The Core Idea: 
+    // To find the product of all elements EXCEPT index 'i', we can break the problem into two parts:
+    // 1. Product of everything to the LEFT of 'i' (Prefix Product)
+    // 2. Product of everything to the RIGHT of 'i' (Suffix Product)
+    // Formula: Result[i] = Prefix[i] * Suffix[i]
+
+    // Visualizing the Arrays (Example: [1, 2, 3, 4])
+    // ---------------------------------------------------------
+    // Index:       0    1    2    3
+    // Nums:      [ 1,   2,   3,   4 ]
+    vector<int> nums2 = {1,2,3,4};
+    vector<int> prefix_nums2(nums2.size());
+    vector<int> suffix_nums2(nums2.size());
+    
+    
+    // 1. Prefix Array (scans Left -> Right)
+    //    Stores product of elements BEFORE current index.
+    //    prefix[0] is always 1 (nothing to the left).
+    //    prefix[1] = nums[0]
+    //    prefix[2] = prefix[0] * nums[1]
+    //    Prefix: [ 1,   1,   2,   6 ]
+    prefix_nums2[0]=nums2[0];//obv
+    for (int i=1; i<nums2.size(); i++){
+        prefix_nums2[i]=prefix_nums2[i-1]*nums2[i-1];
+    }
+    // {1,1,2,6}
+
+    // 2. Suffix Array (scans Right -> Left)
+    //    Stores product of elements AFTER current index.
+    //    suffix[3] is always 1 (nothing to the right).
+    //    suffix[2] = suffix[3] * nums[3]
+    //    suffix[1] = suffix[2] * nums[2]
+    //    Suffix: [ 24,  12,  4,   1 ]
+    suffix_nums2[nums2.size()-1]=1;// obv
+    suffix_nums2[nums2.size()-2]=nums2[nums2.size()-1];//obv
+    
+    for (int i=nums2.size()-3; i>=0; i--){
+        suffix_nums2[i]=suffix_nums2[i+1]*nums2[i+1];
+    }// {24,12,4,1}
+
+    // 3. Final Calculation
+    //    Result[i] = Prefix[i] * Suffix[i]
+    //    i=0: 1  * 24 = 24
+    //    i=1: 1  * 12 = 12
+    //    i=2: 2  * 4  = 8
+    //    i=3: 6  * 1  = 6
+    //    Result: [ 24,  12,  8,   6 ]
+    vector<int> res_nums2(nums2.size());
+    for (int i=0; i<nums2.size();i++) {
+        res_nums2[i]=prefix_nums2[i]*suffix_nums2[i];
+    }
+    // {24,12,8,6}
+
+    cout<<"arr :\t| ";
+    for (int i=0; i<nums2.size();i++) {
+        cout<<nums2[i]<<" | ";
+    }
+    cout<<endl;
+    cout<<"pre :\t| ";
+    for (int i=0; i<nums2.size();i++) {
+        cout<<prefix_nums2[i]<<" | ";
+    }
+    cout<<endl;
+    cout<<"suff :\t| ";
+    for (int i=0; i<nums2.size();i++) {
+        cout<<suffix_nums2[i]<<" | ";
+    }
+    cout<<endl;
+    cout<<"res :\t| ";
+    for (int i=0; i<nums2.size();i++) {
+        cout<<res_nums2[i]<<" | ";
+    }
+    cout<<endl;
+    // arr :   | 1 | 2 | 3 | 4 | 
+    // pre :   | 1 | 1 | 2 | 6 | 
+    // suff :  | 24 | 12 | 4 | 1 | 
+    // res :   | 24 | 12 | 8 | 6 | 
+
+    // Space Optimization Theory (O(N) -> O(1) space)
+    // We don't actually need 3 separate arrays.
+    // Step 1: Calculate Prefix products directly into the 'Result' array.
+    //         Result is now: [1, 1, 2, 6]
+    // Step 2: Iterate backwards. Instead of storing a full Suffix array, 
+    //         keep a running integer variable 'rightProduct'.
+    //         Update Result[i] = Result[i] * rightProduct
+    //         Then update rightProduct = rightProduct * nums[i]
+    vector<int> res_nums2_1(nums2.size());
+    res_nums2_1[0]=nums2[0];
+    for ( int i=1; i<nums2.size(); i++){
+        res_nums2_1[i]=res_nums2_1[i-1]*nums2[i-1];
+    }// {1,1,2,6}
+    // pre impose on res done
+
+    int rightProd = 1;
+    // res_nums2_1[nums2.size()-1]=res_nums2_1[nums2.size()-1]*rightProd;
+    for ( int i=nums2.size()-1; i>=0 ;i--){
+        res_nums2_1[i]=res_nums2_1[i]*rightProd;
+        rightProd*=nums2[i];
+    }// {24,12,8,6}
+    // suff impose on res done
+
+
+    cout<<"res2 :\t| ";
+    for (int i=0; i<nums2.size();i++) {
+        cout<<res_nums2_1[i]<<" | ";
+    }
+    cout<<endl;
+    // res2 :  | 24 | 12 | 8 | 6 | 
+
+    // & res :   | 24 | 12 | 8 | 6 | 
 
     return 0;
 }

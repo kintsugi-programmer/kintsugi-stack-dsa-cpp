@@ -6,9 +6,6 @@
 
 > Disclaimer: The content presented here is a curated blend of my personal learning journey, experiences, open-source documentation, and invaluable knowledge gained from diverse sources. I do not claim sole ownership over all the material; this is a community-driven effort to learn, share, and grow together.
 
-**TotalCompanyTags**
-> Baidu, Airbnb, Netease, Cisco, Amazon, Aetion, Box, Mathworks, Zoom, Google, Cloudera, Intel, Indeed, Godaddy, Walmart Global Tech, Salesforce, Didi, Affirm, Vmware, Yandex, Microsoft, Adobe, Alibaba, Jpmorgan, Linkedin, Citadel, Emc, Groupon, Intuit, Twitter, Nvidia, Twilio, Valve, Expedia, Yahoo, Zoho, Bookingcom, Wish, Zillow, Morgan-stanley, Drawbridge, Paypal, Huawei, Dropbox, Radius, Zomato, Roblox, Accenture, Goldman-sachs, Lyft, Yelp, Splunk, Bloomberg, Samsung, Bytedance, Servicenow, Quora, Goldman Sachs, Blackrock, Ebay, Ge-digital, Oracle, Qualcomm, Tencent, Uber, Tableau, Spotify, Morgan Stanley, American Express, Sap, Ibm, Deutsche-bank, Snapchat, Dell, Apple, Visa, Works-applications, Facebook, Factset, Audible, Google, Adobe, Facebook, Twilio, Salesforce, Affirm, Docusign, Yahoo, Cisco, Servicenow, Blackrock, Goldman Sachs, Ebay, Vmware, Tiktok, Bookingcom, Electronic-arts, Amazon, Wish, Microsoft, Yandex, Oracle, Qualtrics, Bloomberg, Adobe, Alation, Uber, Nutanix, Jpmorgan, Tesla, Mathworks, Zulily, Google, Hulu, Ibm, Snapchat, Apple, Intuit, Visa, Goldman-sachs, Yelp, Facebook, Walmart Global Tech, Bytedance, Yahoo, Cisco, Vmware, Ebay, Pocket-gems, Amazon, Microsoft, Oracle, Adobe, Uber, Spotify, Google, Linkedin, Hulu, Snapchat, Apple, Goldman-sachs, Yelp, Facebook, Bloomberg, Microsoft, Google, Linkedin, Square, Facebook, Twitter, Bloomberg, Amazon, Meta, Oracle, CrowdStrike, OpenAI, Snowflake
-
 ## Table of Contents
 - [kintsugi-stack-dsa-cpp: LEETCODE](#kintsugi-stack-dsa-cpp-leetcode)
   - [Table of Contents](#table-of-contents)
@@ -17,16 +14,19 @@
     - [2 Contains Duplicate \[Easy\]](#2-contains-duplicate-easy)
     - [3 Valid Anagram \[Easy\]](#3-valid-anagram-easy)
     - [4 Two Sum \[Easy\]](#4-two-sum-easy)
+    - [5 Group Anagrams \[Medium\]](#5-group-anagrams-medium)
     - [6 Top K Frequent Elements \[Medium\]](#6-top-k-frequent-elements-medium)
     - [7 Encode and Decode Strings \[Medium\]](#7-encode-and-decode-strings-medium)
+    - [8 Product of Array Except Self \[Medium\]](#8-product-of-array-except-self-medium)
 - [Template](#template)
   - [Topic](#topic)
     - [Sr.No. Question \[Easy/Medium/Hard\]](#srno-question-easymediumhard)
+- [TotalCompanyTags](#totalcompanytags)
 
 ## Array & Hashing
 
 **TotalCompanyTags**
-> Baidu, Airbnb, Netease, Cisco, Amazon, Aetion, Box, Mathworks, Zoom, Google, Cloudera, Intel, Indeed, Godaddy, Walmart Global Tech, Salesforce, Didi, Affirm, Vmware, Yandex, Microsoft, Adobe, Alibaba, Jpmorgan, Linkedin, Citadel, Emc, Groupon, Intuit, Twitter, Nvidia, Twilio, Valve, Expedia, Yahoo, Zoho, Bookingcom, Wish, Zillow, Morgan-stanley, Drawbridge, Paypal, Huawei, Dropbox, Radius, Zomato, Roblox, Accenture, Goldman-sachs, Lyft, Yelp, Splunk, Bloomberg, Samsung, Bytedance, Servicenow, Quora, Goldman Sachs, Blackrock, Ebay, Ge-digital, Oracle, Qualcomm, Tencent, Uber, Tableau, Spotify, Morgan Stanley, American Express, Sap, Ibm, Deutsche-bank, Snapchat, Dell, Apple, Visa, Works-applications, Facebook, Factset, Audible, Google, Adobe, Facebook, Twilio, Salesforce, Affirm, Docusign, Yahoo, Cisco, Servicenow, Blackrock, Goldman Sachs, Ebay, Vmware, Tiktok, Bookingcom, Electronic-arts, Amazon, Wish, Microsoft, Yandex, Oracle, Qualtrics, Bloomberg, Adobe, Alation, Uber, Nutanix, Jpmorgan, Tesla, Mathworks, Zulily, Google, Hulu, Ibm, Snapchat, Apple, Intuit, Visa, Goldman-sachs, Yelp, Facebook, Walmart Global Tech, Bytedance, Yahoo, Cisco, Vmware, Ebay, Pocket-gems, Amazon, Microsoft, Oracle, Adobe, Uber, Spotify, Google, Linkedin, Hulu, Snapchat, Apple, Goldman-sachs, Yelp, Facebook, Bloomberg, Microsoft, Google, Linkedin, Square, Facebook, Twitter, Bloomberg, Amazon, Meta, Oracle, CrowdStrike, OpenAI, Snowflake
+> Baidu, Airbnb, Netease, Cisco, Amazon, Aetion, Box, Mathworks, Zoom, Google, Cloudera, Intel, Indeed, Godaddy, Walmart Global Tech, Salesforce, Didi, Affirm, Vmware, Yandex, Microsoft, Adobe, Alibaba, Jpmorgan, Linkedin, Citadel, Emc, Groupon, Intuit, Twitter, Nvidia, Twilio, Valve, Expedia, Yahoo, Zoho, Bookingcom, Wish, Zillow, Morgan-stanley, Drawbridge, Paypal, Huawei, Dropbox, Radius, Zomato, Roblox, Accenture, Goldman-sachs, Lyft, Yelp, Splunk, Bloomberg, Samsung, Bytedance, Servicenow, Quora, Goldman Sachs, Blackrock, Ebay, Ge-digital, Oracle, Qualcomm, Tencent, Uber, Tableau, Spotify, Morgan Stanley, American Express, Sap, Ibm, Deutsche-bank, Snapchat, Dell, Apple, Visa, Works-applications, Facebook, Factset, Audible, Google, Adobe, Facebook, Twilio, Salesforce, Affirm, Docusign, Yahoo, Cisco, Servicenow, Blackrock, Goldman Sachs, Ebay, Vmware, Tiktok, Bookingcom, Electronic-arts, Amazon, Wish, Microsoft, Yandex, Oracle, Qualtrics, Bloomberg, Adobe, Alation, Uber, Nutanix, Jpmorgan, Tesla, Mathworks, Zulily, Google, Hulu, Ibm, Snapchat, Apple, Intuit, Visa, Goldman-sachs, Yelp, Facebook, Walmart Global Tech, Bytedance, Yahoo, Cisco, Vmware, Ebay, Pocket-gems, Amazon, Microsoft, Oracle, Adobe, Uber, Spotify, Google, Linkedin, Hulu, Snapchat, Apple, Goldman-sachs, Yelp, Facebook, Bloomberg, Microsoft, Google, Linkedin, Square, Facebook, Twitter, Bloomberg, Amazon, Meta, Oracle, CrowdStrike, OpenAI, Snowflake, Salesforce, ByteDance, Yahoo, ServiceNow, Blackrock, eBay, VMware, Amazon, Microsoft, Oracle, Qualtrics, Adobe, Uber, Nutanix, Tableau, Google, Linkedin, SAP, PayPal, Groupon, Intel, Asana, Snapchat, Grab, Apple, Visa, Evernote, Goldman-sachs, Lyft, Facebook, Splunk, Bloomberg, Cisco, Goldman Sachs, Ibm, Meta, Tiktok, Walmart Global Tech, Zoho, Accenture, Autodesk, CEDCOSS, Disney, Docusign, Flipkart, Infosys, Intuit, Makemytrip, Paytm, Ripple, Sigmoid, Snap, TCS, Tekion, Turing, Unity, WarnerMedia, Wells Fargo, Yandex, ZS Associates
 
 ---
 
@@ -436,6 +436,121 @@
     // To convert a std::string to an int, use 
     // int num = std::stoi(your_str);.
 ```
+- Prefix & Suffix Multiplication
+```cpp
+
+    // Prefix & Suffix Multiplication
+    // The Core Idea: 
+    // To find the product of all elements EXCEPT index 'i', we can break the problem into two parts:
+    // 1. Product of everything to the LEFT of 'i' (Prefix Product)
+    // 2. Product of everything to the RIGHT of 'i' (Suffix Product)
+    // Formula: Result[i] = Prefix[i] * Suffix[i]
+
+    // Visualizing the Arrays (Example: [1, 2, 3, 4])
+    // ---------------------------------------------------------
+    // Index:       0    1    2    3
+    // Nums:      [ 1,   2,   3,   4 ]
+    vector<int> nums2 = {1,2,3,4};
+    vector<int> prefix_nums2(nums2.size());
+    vector<int> suffix_nums2(nums2.size());
+    
+    
+    // 1. Prefix Array (scans Left -> Right)
+    //    Stores product of elements BEFORE current index.
+    //    prefix[0] is always 1 (nothing to the left).
+    //    prefix[1] = nums[0]
+    //    prefix[2] = prefix[0] * nums[1]
+    //    Prefix: [ 1,   1,   2,   6 ]
+    prefix_nums2[0]=nums2[0];//obv
+    for (int i=1; i<nums2.size(); i++){
+        prefix_nums2[i]=prefix_nums2[i-1]*nums2[i-1];
+    }
+    // {1,1,2,6}
+
+    // 2. Suffix Array (scans Right -> Left)
+    //    Stores product of elements AFTER current index.
+    //    suffix[3] is always 1 (nothing to the right).
+    //    suffix[2] = suffix[3] * nums[3]
+    //    suffix[1] = suffix[2] * nums[2]
+    //    Suffix: [ 24,  12,  4,   1 ]
+    suffix_nums2[nums2.size()-1]=1;// obv
+    suffix_nums2[nums2.size()-2]=nums2[nums2.size()-1];//obv
+    
+    for (int i=nums2.size()-3; i>=0; i--){
+        suffix_nums2[i]=suffix_nums2[i+1]*nums2[i+1];
+    }// {24,12,4,1}
+
+    // 3. Final Calculation
+    //    Result[i] = Prefix[i] * Suffix[i]
+    //    i=0: 1  * 24 = 24
+    //    i=1: 1  * 12 = 12
+    //    i=2: 2  * 4  = 8
+    //    i=3: 6  * 1  = 6
+    //    Result: [ 24,  12,  8,   6 ]
+    vector<int> res_nums2(nums2.size());
+    for (int i=0; i<nums2.size();i++) {
+        res_nums2[i]=prefix_nums2[i]*suffix_nums2[i];
+    }
+    // {24,12,8,6}
+
+    cout<<"arr :\t| ";
+    for (int i=0; i<nums2.size();i++) {
+        cout<<nums2[i]<<" | ";
+    }
+    cout<<endl;
+    cout<<"pre :\t| ";
+    for (int i=0; i<nums2.size();i++) {
+        cout<<prefix_nums2[i]<<" | ";
+    }
+    cout<<endl;
+    cout<<"suff :\t| ";
+    for (int i=0; i<nums2.size();i++) {
+        cout<<suffix_nums2[i]<<" | ";
+    }
+    cout<<endl;
+    cout<<"res :\t| ";
+    for (int i=0; i<nums2.size();i++) {
+        cout<<res_nums2[i]<<" | ";
+    }
+    cout<<endl;
+    // arr :   | 1 | 2 | 3 | 4 | 
+    // pre :   | 1 | 1 | 2 | 6 | 
+    // suff :  | 24 | 12 | 4 | 1 | 
+    // res :   | 24 | 12 | 8 | 6 | 
+
+    // Space Optimization Theory (O(N) -> O(1) space)
+    // We don't actually need 3 separate arrays.
+    // Step 1: Calculate Prefix products directly into the 'Result' array.
+    //         Result is now: [1, 1, 2, 6]
+    // Step 2: Iterate backwards. Instead of storing a full Suffix array, 
+    //         keep a running integer variable 'rightProduct'.
+    //         Update Result[i] = Result[i] * rightProduct
+    //         Then update rightProduct = rightProduct * nums[i]
+    vector<int> res_nums2_1(nums2.size());
+    res_nums2_1[0]=nums2[0];
+    for ( int i=1; i<nums2.size(); i++){
+        res_nums2_1[i]=res_nums2_1[i-1]*nums2[i-1];
+    }// {1,1,2,6}
+    // pre impose on res done
+
+    int rightProd = 1;
+    // res_nums2_1[nums2.size()-1]=res_nums2_1[nums2.size()-1]*rightProd;
+    for ( int i=nums2.size()-1; i>=0 ;i--){
+        res_nums2_1[i]=res_nums2_1[i]*rightProd;
+        rightProd*=nums2[i];
+    }// {24,12,8,6}
+    // suff impose on res done
+
+
+    cout<<"res2 :\t| ";
+    for (int i=0; i<nums2.size();i++) {
+        cout<<res_nums2_1[i]<<" | ";
+    }
+    cout<<endl;
+    // res2 :  | 24 | 12 | 8 | 6 | 
+    // &btw res :   | 24 | 12 | 8 | 6 | 
+```
+
 ---
 
 ### 1 Concatenation of Array [Easy]
@@ -1304,7 +1419,6 @@ public:
 // O(n)
 
 ```
-```
 
 ---
 ### 5 Group Anagrams [Medium]
@@ -2153,9 +2267,380 @@ public:
 };
 ```
 ---
+### 8 Product of Array Except Self [Medium]
 
+- https://leetcode.com/problems/product-of-array-except-self/description/
+> Salesforce, ByteDance, Yahoo, ServiceNow, Blackrock, eBay, VMware, Amazon, Microsoft, Oracle, Qualtrics, Adobe, Uber, Nutanix, Tableau, Google, Linkedin, SAP, PayPal, Groupon, Intel, Asana, Snapchat, Grab, Apple, Visa, Evernote, Goldman-sachs, Lyft, Facebook, Splunk, Bloomberg, Cisco, Goldman Sachs, Ibm, Meta, Tiktok, Walmart Global Tech, Zoho, Accenture, Autodesk, CEDCOSS, Disney, Docusign, Flipkart, Infosys, Intuit, Makemytrip, Paytm, Ripple, Sigmoid, Snap, TCS, Tekion, Turing, Unity, WarnerMedia, Wells Fargo, Yandex, ZS Associates
 
+---
 
+**Ques**
+
+Given an integer array nums, return an array output where output[i] is the product of all the elements of nums except nums[i].
+
+Each product is guaranteed to fit in a 32-bit integer.
+
+Follow-up: Could you solve it in O(n) time without using the division operation?
+
+Example 1:
+```
+Input: nums = [1,2,4,6]
+
+Output: [48,24,12,8]
+```
+Example 2:
+```
+Input: nums = [-1,0,1,2,3]
+
+Output: [0,-6,0,0,0]
+```
+Constraints:
+```
+2 <= nums.length <= 1000
+-20 <= nums[i] <= 20
+```
+Recommended Time & Space Complexity :
+You should aim for a solution as good or better than O(n) time and O(n) space, where n is the size of the input array.
+
+Hint 1
+A brute-force solution would be to iterate through the array with index i and compute the product of the array except for that index element. This would be an O(n^2) solution. Can you think of a better way?
+
+Hint 2
+Is there a way to avoid the repeated work? Maybe we can store the results of the repeated work in an array.
+
+Hint 3
+We can use the prefix and suffix technique. First, we iterate from left to right and store the prefix products for each index in a prefix array, excluding the current index's number. Then, we iterate from right to left and store the suffix products for each index in a suffix array, also excluding the current index's number. Can you figure out the solution from here?
+
+Hint 4
+We can use the stored prefix and suffix products to compute the result array by iterating through the array and simply multiplying the prefix and suffix products at each index.
+
+---
+
+**Solutions**
+- so given
+    - array of integers
+- to find
+    - another array
+    - of integers 
+    - where each index has are product of all other indexes multiply
+- edge cases
+    - at array containing 0
+      - [1,-2,0] => [0,0,-1]
+    - at array only having 0
+      - [0,0] => [0,0]
+    - at array having more than 1 zero
+      - [0,4,0] => [0,0,0]
+- Solution 1 -- brute force
+    - TLE AT LEETCODE
+    - let result array int
+    - traverse through array i 0 to n-1
+        - let buffer int element = 1
+        - at traversal each element, start another traversal j 0 to n-1
+            - where j is not i
+                - buffer * = element at j's index
+        - put buffer in result array
+        - automatic reset buffer to 1
+    - return result array
+```cpp
+// Solution 1 
+class Solution {
+public:
+    vector<int> productExceptSelf(vector<int>& nums) {
+        vector<int> prod(nums.size());
+        for (int i=0; i<nums.size(); i++){
+            int buff =1;
+            for (int j=0; j<nums.size(); j++){
+                if(j!=i){
+                    buff*=nums[j];
+                }
+            }
+            prod[i]=buff;
+        }
+        return prod;
+    }
+};
+
+// Time & Space Complexity
+// Time complexity: 
+// O(n^2)
+// Space complexity:
+//     O(1) extra space.
+//     O(n) space for the output array.
+```
+- Solution 2 -- illegal
+    - not allowed to use division operator
+    - thought 
+        - int totalProd = 1
+        - vector int result_array
+        - traverse through array 
+            - totalProd * = array[index]
+        - traverse through array 
+            - result_array[index] = totalProd / array[index]
+        - WRONG, fails at case where array containing 0, as it just hides the prod,by multiplying with 0, and not show prod when index contains 0
+            - eg
+                - intput : [1,0,2,-3]
+                - output : [0,-6,0,0]
+                - thought's output : [0,0,0,0]
+    - thought
+        - int totalProd = 1
+        - make checker var bool named containZero, default false
+        - vector int result_array
+        - traverse through array 
+            - totalProd * = array[index]
+            - if array[index]==0 { containZero is true }
+        - traverse through array 
+            - if containsZero is true
+                - if at case where zero exist 
+                    - result_array[index] = totalProd 
+                - else 
+                    - let non_zero indexes of given array have zero as new result_array
+            - if containsZero is false
+                - result_array[index] = totalProd / array[index]
+        - WRONG, fails at only zero arrays, where we default set prod=1
+    - int totalProd = 1
+    - make checker var bool named containNonZeroNumbers, default false
+    - make checker var bool named containZero, default 0
+    - vector int result_array
+    - traverse through array 
+        - if array[index]!=0
+            - totalProd * = array[index]
+            - containNonZeroNumbers +=1
+        - if array[index]==0 { containZero is true }
+    - traverse through array 
+        - if containNonZeroNumbers is ture
+            - if containsZero is 1
+                - if at case where zero exist 
+                    - result_array[index] = totalProd 
+                - else 
+                    - let non_zero indexes of given array have zero as new result_array
+            - if containsZero is false
+                - result_array[index] = totalProd / array[index]
+```cpp
+// Ilegal Solution 2
+class Solution {
+public:
+    vector<int> productExceptSelf(vector<int>& nums) {
+        vector<int> prod(nums.size());
+        int totalProd= 1;
+        int containZero = 0;
+        int containNums = 0; 
+        for (int i=0; i<nums.size(); i++){
+            if (nums[i]==0) {containZero+=1;}
+            if (nums[i]!=0) {totalProd*= nums[i];containNums =1;}
+        }
+        for (int i=0; i<nums.size(); i++){
+            if ( containNums ==1 ){
+            if (containZero==1){
+                if (nums[i]==0){ prod[i]=totalProd;}
+                }
+            if (containZero==0){
+                prod[i]=totalProd/nums[i];
+                }
+            }
+            
+        }
+        return prod;
+    }
+};
+
+// Time & Space Complexity
+// Time complexity: 
+// O(n)
+// Space complexity:
+//     O(1) extra space.
+//     O(n) space for the output array.
+```
+```cpp
+class Solution {
+public:
+    vector<int> productExceptSelf(vector<int>& nums) {
+        int prod = 1, zeroCount = 0;
+        for (int num : nums) {
+            if (num != 0) {
+                prod *= num;
+            } else {
+                zeroCount++;
+            }
+        }
+
+        if (zeroCount > 1) {
+            return vector<int>(nums.size(), 0);
+        }
+
+        vector<int> res(nums.size());
+        for (size_t i = 0; i < nums.size(); i++) {
+            if (zeroCount > 0) {
+                res[i] = (nums[i] == 0) ? prod : 0;
+            } else {
+                res[i] = prod / nums[i];
+            }
+        }
+        return res;
+    }
+};
+```
+- Solution 3
+    - thought
+        - the requirement is that, suppose [1,2,3,4] for element 3's result_array
+            - we need [1,2, ,4] multiply
+            - result_array[that index of 3] = mul. of all prefixes and suffixes of 3 of given array
+            - prefix = 1,2
+            - suffix = 4
+        - so let's make 2 arrays out of [1,2,3,4]
+            - product of prefixes => [1,2,6,24]
+                - l to r
+                - where this array's element = prev array same index element * prev element of this array
+            - product of suffixes => [24,24,12,4]
+                - r to l
+                - from reverse oreder, starting from end, where this array's element = prev array same index element * prev element of this array
+            - thus the result array[index] = prefixes[index-1]*suffixes[index+1]
+            - result_array => [24,12,8,6]
+            - observe it 
+                - [1,2,3,4] given
+                - [1,2,6,24] pre
+                - [24,24,12,4] suf
+                - [24,12,8,6] res
+    - YES, Implement it
+```cpp
+// Solution 3
+class Solution {
+public:
+    vector<int> productExceptSelf(vector<int>& nums) {
+        vector<int> res(nums.size());
+        vector<int> pre(nums.size());
+        vector<int> suff(nums.size());
+        pre[0]=nums[0];
+        for ( int i=1; i<nums.size(); i++ ){ 
+            pre[i]=nums[i]*pre[i-1];   
+        }
+        suff[nums.size()-1]=nums[nums.size()-1];
+        for ( int i=nums.size()-2; i>0; i-- ){ 
+            suff[i]=nums[i]*suff[i+1];   
+        }
+        for ( int i=0; i<nums.size(); i++ ){ 
+            int preN =1;
+            int suffN =1;
+            if (i-1>=0) {preN = pre[i-1];}
+            if(i+1<nums.size()){suffN = suff[i+1];}
+            res[i] = preN * suffN;
+        }
+
+        return res;
+    }
+};
+// Time & Space Complexity
+// Time complexity: 
+// O(n)
+// Space complexity: 
+// O(n)
+```
+```cpp
+class Solution {
+public:
+    vector<int> productExceptSelf(vector<int>& nums) {
+        int n = nums.size();
+        vector<int> res(n);
+        vector<int> pref(n);
+        vector<int> suff(n);
+
+        pref[0] = 1;
+        suff[n - 1] = 1;
+        for (int i = 1; i < n; i++) {
+            pref[i] = nums[i - 1] * pref[i - 1];
+        }
+        for (int i = n - 2; i >= 0; i--) {
+            suff[i] = nums[i + 1] * suff[i + 1];
+        }
+        for (int i = 0; i < n; i++) {
+            res[i] = pref[i] * suff[i];
+        }
+        return res;
+    }
+};
+```
+- Solution 4 -- optimal
+    - tweaked version of Solution 3
+    - same concept, just save the array space of prefixes and suffixes mul array
+    - now
+        - [1,2,3,4] given
+        - [1,2,6,24(noneed)] pre => [1,2,6] needed nos => [1(obv),1(nums[0]),2,6] arr1
+        - [24(noneed),24,12,4] suf => [24,12,4] needed nos => [24,12,4(nums.size()-1),1(obv)] arr2
+        - [24,12,8,6] res 
+            - res[i] = arr1[i] * arr2[i] 
+            - we can just store res[i]=arr1[i] // correct till this
+            - then res[i]=res[i]*arr2[i] // not this because to construct arr2 elements inside res , that process involves null beforehand to get replaced , and if we think of just multiplay the patteren with res updated non-null element instead of replacing, then old values just distrupt the construct
+            - instead of making suffixes in array and iterating on it, make independent var suff
+                - which updates to get multiplied with res simple
+```cpp
+// Solution 4
+class Solution {
+public:
+    vector<int> productExceptSelf(vector<int>& nums) {
+        vector<int> res(nums.size());
+        // vector<int> pre(nums.size());
+        // vector<int> suff(nums.size());
+        // pre[0]=nums[0];
+        res[0]=1;//obv
+        res[1]=nums[0];//obv
+        for ( int i=2; i<nums.size(); i++ ){ 
+            res[i]=nums[i-1]*res[i-1];   
+        }
+        // pre array inside res
+
+        // no reverse fashion play like pre impose with arr, because to construct arr2 elements inside res , that process involves null beforehand to get replaced , and if we think of just multiplay the patteren with res updated non-null element instead of replacing, then old values just distrupt the construct
+        // res[nums.size()-1]=res[nums.size()-1]*1; // obv // obv a*1=a
+        // res[nums.size()-2]=res[nums.size()-1]*nums[nums.size()-1];//obv
+        // // for ( int i=nums.size()-3; i>=0; i-- ){ 
+        // //     res[i]=nums[i+1]*res[i+1]*res[i];
+        // // }
+
+        // suff array inside res without involvement of prearray imposed in it
+        int suffN = 1;
+        for ( int i=nums.size()-1; i>=0; i-- ){ 
+            res[i]=res[i]*suffN;
+            suffN=suffN*nums[i];
+
+        }
+
+        // no need
+        // for ( int i=0; i<nums.size(); i++ ){ 
+        //     int preN =1;
+        //     int suffN =1;
+        //     if (i-1>=0) {preN = pre[i-1];}
+        //     if(i+1<nums.size()){suffN = suff[i+1];}
+        //     res[i] = preN * suffN;
+        // }
+
+        return res;
+    }
+};
+// Time & Space Complexity
+// Time complexity: 
+// O(n)
+// Space complexity:
+// O(1) extra space.
+// O(n) space for the output array.
+```
+```cpp
+class Solution {
+public:
+    vector<int> productExceptSelf(vector<int>& nums) {
+        int n = nums.size();
+        vector<int> res(n, 1);
+
+        for (int i = 1; i < n; i++) {
+            res[i] = res[i - 1] * nums[i - 1];
+        }
+
+        int postfix = 1;
+        for (int i = n - 1; i >= 0; i--) {
+            res[i] *= postfix;
+            postfix *= nums[i];
+        }
+        return res;
+    }
+};
+```
 
 
 
@@ -2218,6 +2703,11 @@ You are an expert C++ tutor. Your goal is to teach me the necessary concepts to 
 Create super depth notes in Markdown (.md) format with 100% information preserved, no loss. Use simple grammar and keep everything clear, direct, and well-structured. using headings, subheadings,paragraphs, statements and code blocks when needed. Include every detail, definition, example, and step exactly from the source. transform the given content into clean, readable .md format.
 and no #, just nested - lines plaintext
 ```
+
+# TotalCompanyTags
+
+**TotalCompanyTags**
+> Baidu, Airbnb, Netease, Cisco, Amazon, Aetion, Box, Mathworks, Zoom, Google, Cloudera, Intel, Indeed, Godaddy, Walmart Global Tech, Salesforce, Didi, Affirm, Vmware, Yandex, Microsoft, Adobe, Alibaba, Jpmorgan, Linkedin, Citadel, Emc, Groupon, Intuit, Twitter, Nvidia, Twilio, Valve, Expedia, Yahoo, Zoho, Bookingcom, Wish, Zillow, Morgan-stanley, Drawbridge, Paypal, Huawei, Dropbox, Radius, Zomato, Roblox, Accenture, Goldman-sachs, Lyft, Yelp, Splunk, Bloomberg, Samsung, Bytedance, Servicenow, Quora, Goldman Sachs, Blackrock, Ebay, Ge-digital, Oracle, Qualcomm, Tencent, Uber, Tableau, Spotify, Morgan Stanley, American Express, Sap, Ibm, Deutsche-bank, Snapchat, Dell, Apple, Visa, Works-applications, Facebook, Factset, Audible, Google, Adobe, Facebook, Twilio, Salesforce, Affirm, Docusign, Yahoo, Cisco, Servicenow, Blackrock, Goldman Sachs, Ebay, Vmware, Tiktok, Bookingcom, Electronic-arts, Amazon, Wish, Microsoft, Yandex, Oracle, Qualtrics, Bloomberg, Adobe, Alation, Uber, Nutanix, Jpmorgan, Tesla, Mathworks, Zulily, Google, Hulu, Ibm, Snapchat, Apple, Intuit, Visa, Goldman-sachs, Yelp, Facebook, Walmart Global Tech, Bytedance, Yahoo, Cisco, Vmware, Ebay, Pocket-gems, Amazon, Microsoft, Oracle, Adobe, Uber, Spotify, Google, Linkedin, Hulu, Snapchat, Apple, Goldman-sachs, Yelp, Facebook, Bloomberg, Microsoft, Google, Linkedin, Square, Facebook, Twitter, Bloomberg, Amazon, Meta, Oracle, CrowdStrike, OpenAI, Snowflake, Salesforce, ByteDance, Yahoo, ServiceNow, Blackrock, eBay, VMware, Amazon, Microsoft, Oracle, Qualtrics, Adobe, Uber, Nutanix, Tableau, Google, Linkedin, SAP, PayPal, Groupon, Intel, Asana, Snapchat, Grab, Apple, Visa, Evernote, Goldman-sachs, Lyft, Facebook, Splunk, Bloomberg, Cisco, Goldman Sachs, Ibm, Meta, Tiktok, Walmart Global Tech, Zoho, Accenture, Autodesk, CEDCOSS, Disney, Docusign, Flipkart, Infosys, Intuit, Makemytrip, Paytm, Ripple, Sigmoid, Snap, TCS, Tekion, Turing, Unity, WarnerMedia, Wells Fargo, Yandex, ZS Associates
 
 ---
 End-of-File
