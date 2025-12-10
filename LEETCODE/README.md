@@ -18,6 +18,7 @@
     - [6 Top K Frequent Elements \[Medium\]](#6-top-k-frequent-elements-medium)
     - [7 Encode and Decode Strings \[Medium\]](#7-encode-and-decode-strings-medium)
     - [8 Product of Array Except Self \[Medium\]](#8-product-of-array-except-self-medium)
+    - [9 Longest Consecutive Sequence \[Medium\]](#9-longest-consecutive-sequence-medium)
 - [Template](#template)
   - [Topic](#topic)
     - [Sr.No. Question \[Easy/Medium/Hard\]](#srno-question-easymediumhard)
@@ -26,7 +27,7 @@
 ## Array & Hashing
 
 **TotalCompanyTags**
-> Baidu, Airbnb, Netease, Cisco, Amazon, Aetion, Box, Mathworks, Zoom, Google, Cloudera, Intel, Indeed, Godaddy, Walmart Global Tech, Salesforce, Didi, Affirm, Vmware, Yandex, Microsoft, Adobe, Alibaba, Jpmorgan, Linkedin, Citadel, Emc, Groupon, Intuit, Twitter, Nvidia, Twilio, Valve, Expedia, Yahoo, Zoho, Bookingcom, Wish, Zillow, Morgan-stanley, Drawbridge, Paypal, Huawei, Dropbox, Radius, Zomato, Roblox, Accenture, Goldman-sachs, Lyft, Yelp, Splunk, Bloomberg, Samsung, Bytedance, Servicenow, Quora, Goldman Sachs, Blackrock, Ebay, Ge-digital, Oracle, Qualcomm, Tencent, Uber, Tableau, Spotify, Morgan Stanley, American Express, Sap, Ibm, Deutsche-bank, Snapchat, Dell, Apple, Visa, Works-applications, Facebook, Factset, Audible, Google, Adobe, Facebook, Twilio, Salesforce, Affirm, Docusign, Yahoo, Cisco, Servicenow, Blackrock, Goldman Sachs, Ebay, Vmware, Tiktok, Bookingcom, Electronic-arts, Amazon, Wish, Microsoft, Yandex, Oracle, Qualtrics, Bloomberg, Adobe, Alation, Uber, Nutanix, Jpmorgan, Tesla, Mathworks, Zulily, Google, Hulu, Ibm, Snapchat, Apple, Intuit, Visa, Goldman-sachs, Yelp, Facebook, Walmart Global Tech, Bytedance, Yahoo, Cisco, Vmware, Ebay, Pocket-gems, Amazon, Microsoft, Oracle, Adobe, Uber, Spotify, Google, Linkedin, Hulu, Snapchat, Apple, Goldman-sachs, Yelp, Facebook, Bloomberg, Microsoft, Google, Linkedin, Square, Facebook, Twitter, Bloomberg, Amazon, Meta, Oracle, CrowdStrike, OpenAI, Snowflake, Salesforce, ByteDance, Yahoo, ServiceNow, Blackrock, eBay, VMware, Amazon, Microsoft, Oracle, Qualtrics, Adobe, Uber, Nutanix, Tableau, Google, Linkedin, SAP, PayPal, Groupon, Intel, Asana, Snapchat, Grab, Apple, Visa, Evernote, Goldman-sachs, Lyft, Facebook, Splunk, Bloomberg, Cisco, Goldman Sachs, Ibm, Meta, Tiktok, Walmart Global Tech, Zoho, Accenture, Autodesk, CEDCOSS, Disney, Docusign, Flipkart, Infosys, Intuit, Makemytrip, Paytm, Ripple, Sigmoid, Snap, TCS, Tekion, Turing, Unity, WarnerMedia, Wells Fargo, Yandex, ZS Associates
+> Baidu, Airbnb, Netease, Cisco, Amazon, Aetion, Box, Mathworks, Zoom, Google, Cloudera, Intel, Indeed, Godaddy, Walmart Global Tech, Salesforce, Didi, Affirm, Vmware, Yandex, Microsoft, Adobe, Alibaba, Jpmorgan, Linkedin, Citadel, Emc, Groupon, Intuit, Twitter, Nvidia, Twilio, Valve, Expedia, Yahoo, Zoho, Bookingcom, Wish, Zillow, Morgan-stanley, Drawbridge, Paypal, Huawei, Dropbox, Radius, Zomato, Roblox, Accenture, Goldman-sachs, Lyft, Yelp, Splunk, Bloomberg, Samsung, Bytedance, Servicenow, Quora, Goldman Sachs, Blackrock, Ebay, Ge-digital, Oracle, Qualcomm, Tencent, Uber, Tableau, Spotify, Morgan Stanley, American Express, Sap, Ibm, Deutsche-bank, Snapchat, Dell, Apple, Visa, Works-applications, Facebook, Factset, Audible, Google, Adobe, Facebook, Twilio, Salesforce, Affirm, Docusign, Yahoo, Cisco, Servicenow, Blackrock, Goldman Sachs, Ebay, Vmware, Tiktok, Bookingcom, Electronic-arts, Amazon, Wish, Microsoft, Yandex, Oracle, Qualtrics, Bloomberg, Adobe, Alation, Uber, Nutanix, Jpmorgan, Tesla, Mathworks, Zulily, Google, Hulu, Ibm, Snapchat, Apple, Intuit, Visa, Goldman-sachs, Yelp, Facebook, Walmart Global Tech, Bytedance, Yahoo, Cisco, Vmware, Ebay, Pocket-gems, Amazon, Microsoft, Oracle, Adobe, Uber, Spotify, Google, Linkedin, Hulu, Snapchat, Apple, Goldman-sachs, Yelp, Facebook, Bloomberg, Microsoft, Google, Linkedin, Square, Facebook, Twitter, Bloomberg, Amazon, Meta, Oracle, CrowdStrike, OpenAI, Snowflake, Salesforce, ByteDance, Yahoo, ServiceNow, Blackrock, eBay, VMware, Amazon, Microsoft, Oracle, Qualtrics, Adobe, Uber, Nutanix, Tableau, Google, Linkedin, SAP, PayPal, Groupon, Intel, Asana, Snapchat, Grab, Apple, Visa, Evernote, Goldman-sachs, Lyft, Facebook, Splunk, Bloomberg, Cisco, Goldman Sachs, Ibm, Meta, Tiktok, Walmart Global Tech, Zoho, Accenture, Autodesk, CEDCOSS, Disney, Docusign, Flipkart, Infosys, Intuit, Makemytrip, Paytm, Ripple, Sigmoid, Snap, TCS, Tekion, Turing, Unity, WarnerMedia, Wells Fargo, Yandex, ZS Associates, Spotify, Wish, Amazon, Apple, Microsoft, Google, Visa, PayPal, Oracle, Qualtrics, Adobe, Nutanix, Uber, Facebook, eBay, Bloomberg, Cisco, Goldman Sachs, Ibm, Meta, SAP, ServiceNow, Tiktok, Walmart Global Tech, Yahoo, Zoho, Atlassian, ByteDance, D. E. Shaw, Deltax, Epam Systems, Flipkart, Infosys, Lyft, Paytm, PhonePe, Roblox, Swiggy, TCS, Turing, UKG, Wissen Technology, Yandex, Zepto
 
 ---
 
@@ -2641,6 +2642,159 @@ public:
     }
 };
 ```
+---
+### 9 Longest Consecutive Sequence [Medium]
+
+- https://leetcode.com/problems/longest-consecutive-sequence/description/
+> Spotify, Wish, Amazon, Apple, Microsoft, Google, Visa, PayPal, Oracle, Qualtrics, Adobe, Nutanix, Uber, Facebook, eBay, Bloomberg, Cisco, Goldman Sachs, Ibm, Meta, SAP, ServiceNow, Tiktok, Walmart Global Tech, Yahoo, Zoho, Atlassian, ByteDance, D. E. Shaw, Deltax, Epam Systems, Flipkart, Infosys, Lyft, Paytm, PhonePe, Roblox, Swiggy, TCS, Turing, UKG, Wissen Technology, Yandex, Zepto
+
+---
+
+**Ques**
+
+Given an array of integers nums, return the length of the longest consecutive sequence of elements that can be formed.
+
+A consecutive sequence is a sequence of elements in which each element is exactly 1 greater than the previous element. The elements do not have to be consecutive in the original array.
+
+You must write an algorithm that runs in O(n) time.
+
+Example 1:
+```
+Input: nums = [2,20,4,10,3,4,5]
+
+Output: 4
+Explanation: The longest consecutive sequence is [2, 3, 4, 5].
+```
+Example 2:
+```
+Input: nums = [0,3,2,5,4,6,1,1]
+
+Output: 7
+```
+Constraints:
+```
+0 <= nums.length <= 1000
+-10^9 <= nums[i] <= 10^9
+```
+
+Recommended Time & Space Complexity
+```
+You should aim for a solution as good or better than O(n) time and O(n) space, where n is the size of the input array.
+```
+
+Hint 1
+```
+A brute force solution would be to consider every element from the array as the start of the sequence and count the length of the sequence formed with that starting element. This would be an O(n^2) solution. Can you think of a better way?
+```
+
+Hint 2
+```
+Is there any way to identify the start of a sequence? For example, in [1, 2, 3, 10, 11, 12], only 1 and 10 are the beginning of a sequence. Instead of trying to form a sequence for every number, we should only consider numbers like 1 and 10.
+```
+
+Hint 3
+```
+We can consider a number num as the start of a sequence if and only if num - 1 does not exist in the given array. We iterate through the array and only start building the sequence if it is the start of a sequence. This avoids repeated work. We can use a hash set for O(1) lookups by converting the array to a hash set.
+```
+---
+
+**Solutions**
+- given
+  - array of nos
+- to find
+  - max no. of possible numbers which when arranged
+    - consecutive
+    - inc by exactly 1
+- edge cases
+  - array is empty
+  - array containing negative same elements
+  - array containing 2 consecutive sub arrays ,one subarray is larger than other 
+- Wrong Solution
+  - sort the array
+  - cons=0
+  - traverse
+    - if difference bw 2 elements == 1
+    - cons++
+  - return cons
+```cpp
+// Wrong Solution
+class Solution {
+public:
+    int longestConsecutive(vector<int>& nums) {
+        sort(nums.begin(),nums.end());
+        int cons = 0;
+        for (int i=1; i<nums.size(); i++){
+            if (nums[i]-nums[i-1]==1){cons++;}
+        }
+        return cons+1;// +1 as we want nos. not number of differences (i.e. at for loop we started with 1 :) )
+    }
+};
+```
+```cpp
+// Wrong Solution
+class Solution {
+public:
+    int longestConsecutive(vector<int>& nums) {
+        if (nums.size()==0){return 0;}
+        sort(nums.begin(),nums.end());
+        int cons = 0;
+        for (int i=1; i<nums.size(); i++){
+            if (nums[i]-nums[i-1]==1){cons++;}
+        }
+        return cons+1;// +1 as we want nos. not number of differences (i.e. at for loop we started with 1 :) )
+    }
+};
+```
+```cpp
+// Wrong Solution
+class Solution {
+public:
+    int longestConsecutive(vector<int>& nums) {
+        if (nums.size()==0){return 0;}
+        sort(nums.begin(),nums.end());
+        int cons = 0;
+        for (int i=1; i<nums.size(); i++){
+            if (abs(nums[i])-abs(nums[i-1])==1){cons++;}
+        }
+        return cons+1;// +1 as we want nos. not number of differences (i.e. at for loop we started with 1 :) )
+    }
+};
+```
+```cpp
+// Wrong Solution
+class Solution {
+public:
+    int longestConsecutive(vector<int>& nums) {
+        if (nums.size()==0){return 0;}
+        sort(nums.begin(),nums.end());
+        int cons = 0;
+        for (int i=1; i<nums.size(); i++){
+            if (abs(abs(nums[i])-abs(nums[i-1]))==1){cons++;}
+        }
+        return cons+1;// +1 as we want nos. not number of differences (i.e. at for loop we started with 1 :) )
+    }
+};
+```
+```cpp
+// Wrong Solution
+class Solution {
+public:
+    int longestConsecutive(vector<int>& nums) {
+        if (nums.size()==0){return 0;}
+        sort(nums.begin(),nums.end());
+        int cons = 0;
+        vector<int> con;
+        for (int i=1; i<nums.size(); i++){
+            if (nums[i]-nums[i-1]==1){cons++;}
+            if (nums[i]-nums[i-1]>1){con.push_back(cons);cons=0;}
+        }
+        sort(con.rbegin(),con.rend());
+        if(con.size()==0){return cons+1;}// either there is null in the name of consecutive, or array must be blanck because array was never filled at case of only one sub array all done in 1st if check
+        return con[0]+1;// +1 as we want nos. not number of differences (i.e. at for loop we started with 1 :) )
+    }
+};
+```
+---
 
 
 
@@ -2707,8 +2861,7 @@ and no #, just nested - lines plaintext
 # TotalCompanyTags
 
 **TotalCompanyTags**
-> Baidu, Airbnb, Netease, Cisco, Amazon, Aetion, Box, Mathworks, Zoom, Google, Cloudera, Intel, Indeed, Godaddy, Walmart Global Tech, Salesforce, Didi, Affirm, Vmware, Yandex, Microsoft, Adobe, Alibaba, Jpmorgan, Linkedin, Citadel, Emc, Groupon, Intuit, Twitter, Nvidia, Twilio, Valve, Expedia, Yahoo, Zoho, Bookingcom, Wish, Zillow, Morgan-stanley, Drawbridge, Paypal, Huawei, Dropbox, Radius, Zomato, Roblox, Accenture, Goldman-sachs, Lyft, Yelp, Splunk, Bloomberg, Samsung, Bytedance, Servicenow, Quora, Goldman Sachs, Blackrock, Ebay, Ge-digital, Oracle, Qualcomm, Tencent, Uber, Tableau, Spotify, Morgan Stanley, American Express, Sap, Ibm, Deutsche-bank, Snapchat, Dell, Apple, Visa, Works-applications, Facebook, Factset, Audible, Google, Adobe, Facebook, Twilio, Salesforce, Affirm, Docusign, Yahoo, Cisco, Servicenow, Blackrock, Goldman Sachs, Ebay, Vmware, Tiktok, Bookingcom, Electronic-arts, Amazon, Wish, Microsoft, Yandex, Oracle, Qualtrics, Bloomberg, Adobe, Alation, Uber, Nutanix, Jpmorgan, Tesla, Mathworks, Zulily, Google, Hulu, Ibm, Snapchat, Apple, Intuit, Visa, Goldman-sachs, Yelp, Facebook, Walmart Global Tech, Bytedance, Yahoo, Cisco, Vmware, Ebay, Pocket-gems, Amazon, Microsoft, Oracle, Adobe, Uber, Spotify, Google, Linkedin, Hulu, Snapchat, Apple, Goldman-sachs, Yelp, Facebook, Bloomberg, Microsoft, Google, Linkedin, Square, Facebook, Twitter, Bloomberg, Amazon, Meta, Oracle, CrowdStrike, OpenAI, Snowflake, Salesforce, ByteDance, Yahoo, ServiceNow, Blackrock, eBay, VMware, Amazon, Microsoft, Oracle, Qualtrics, Adobe, Uber, Nutanix, Tableau, Google, Linkedin, SAP, PayPal, Groupon, Intel, Asana, Snapchat, Grab, Apple, Visa, Evernote, Goldman-sachs, Lyft, Facebook, Splunk, Bloomberg, Cisco, Goldman Sachs, Ibm, Meta, Tiktok, Walmart Global Tech, Zoho, Accenture, Autodesk, CEDCOSS, Disney, Docusign, Flipkart, Infosys, Intuit, Makemytrip, Paytm, Ripple, Sigmoid, Snap, TCS, Tekion, Turing, Unity, WarnerMedia, Wells Fargo, Yandex, ZS Associates
-
+> Baidu, Airbnb, Netease, Cisco, Amazon, Aetion, Box, Mathworks, Zoom, Google, Cloudera, Intel, Indeed, Godaddy, Walmart Global Tech, Salesforce, Didi, Affirm, Vmware, Yandex, Microsoft, Adobe, Alibaba, Jpmorgan, Linkedin, Citadel, Emc, Groupon, Intuit, Twitter, Nvidia, Twilio, Valve, Expedia, Yahoo, Zoho, Bookingcom, Wish, Zillow, Morgan-stanley, Drawbridge, Paypal, Huawei, Dropbox, Radius, Zomato, Roblox, Accenture, Goldman-sachs, Lyft, Yelp, Splunk, Bloomberg, Samsung, Bytedance, Servicenow, Quora, Goldman Sachs, Blackrock, Ebay, Ge-digital, Oracle, Qualcomm, Tencent, Uber, Tableau, Spotify, Morgan Stanley, American Express, Sap, Ibm, Deutsche-bank, Snapchat, Dell, Apple, Visa, Works-applications, Facebook, Factset, Audible, Google, Adobe, Facebook, Twilio, Salesforce, Affirm, Docusign, Yahoo, Cisco, Servicenow, Blackrock, Goldman Sachs, Ebay, Vmware, Tiktok, Bookingcom, Electronic-arts, Amazon, Wish, Microsoft, Yandex, Oracle, Qualtrics, Bloomberg, Adobe, Alation, Uber, Nutanix, Jpmorgan, Tesla, Mathworks, Zulily, Google, Hulu, Ibm, Snapchat, Apple, Intuit, Visa, Goldman-sachs, Yelp, Facebook, Walmart Global Tech, Bytedance, Yahoo, Cisco, Vmware, Ebay, Pocket-gems, Amazon, Microsoft, Oracle, Adobe, Uber, Spotify, Google, Linkedin, Hulu, Snapchat, Apple, Goldman-sachs, Yelp, Facebook, Bloomberg, Microsoft, Google, Linkedin, Square, Facebook, Twitter, Bloomberg, Amazon, Meta, Oracle, CrowdStrike, OpenAI, Snowflake, Salesforce, ByteDance, Yahoo, ServiceNow, Blackrock, eBay, VMware, Amazon, Microsoft, Oracle, Qualtrics, Adobe, Uber, Nutanix, Tableau, Google, Linkedin, SAP, PayPal, Groupon, Intel, Asana, Snapchat, Grab, Apple, Visa, Evernote, Goldman-sachs, Lyft, Facebook, Splunk, Bloomberg, Cisco, Goldman Sachs, Ibm, Meta, Tiktok, Walmart Global Tech, Zoho, Accenture, Autodesk, CEDCOSS, Disney, Docusign, Flipkart, Infosys, Intuit, Makemytrip, Paytm, Ripple, Sigmoid, Snap, TCS, Tekion, Turing, Unity, WarnerMedia, Wells Fargo, Yandex, ZS Associates, Spotify, Wish, Amazon, Apple, Microsoft, Google, Visa, PayPal, Oracle, Qualtrics, Adobe, Nutanix, Uber, Facebook, eBay, Bloomberg, Cisco, Goldman Sachs, Ibm, Meta, SAP, ServiceNow, Tiktok, Walmart Global Tech, Yahoo, Zoho, Atlassian, ByteDance, D. E. Shaw, Deltax, Epam Systems, Flipkart, Infosys, Lyft, Paytm, PhonePe, Roblox, Swiggy, TCS, Turing, UKG, Wissen Technology, Yandex, Zepto
 ---
 End-of-File
 
