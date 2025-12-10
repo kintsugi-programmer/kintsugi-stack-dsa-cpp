@@ -962,6 +962,77 @@ int main(){
     - 1sec = 10^8 ops
     - tlpmt = 10^8 / 500
 - Approach
+  - given 
+    - n teams in tournament
+    - each match
+      - each pair of teams match up once
+      - after every match
+        - 2 int, as result of match, 2 goals of 2 teams
+    - efficiency of team = total no. of goals in each of its matches. - total opponents score in each of its matches.
+  - to find
+    - effiency array of each team, one missing
+    - a1, a2, a3, ... ,an-1
+    - n-1 teams
+    - efficiency of missing team?
+      - it can be uniquely determined
+  - input
+    - t(tests)
+    - n(teams) 1
+    - effiencies of n-1 teams 1
+    - n(teams) 2
+    - effiencies of n-1 teams 2
+    - ...
+  - output
+    - missing effiency 1
+    - missing effiency 2
+    - ...
+- Approach 1
+  - suppose 4 teams
+    - n1 n2 n3 n4 teams
+      - matches (in pairs)
+        - n1 n2 => scores a1 b1
+        - n1 n3 a2 c1
+        - n1 n4 a3 d1
+        - n2 n3 b2 c2
+        - n2 n4 b3 d2
+        - n3 n4 d3 c3
+    - e1 e2 e3 e4 eff.s
+  - so
+    - e1 = a1 + a2 + a3 - b1 - c1 - d1 = 3
+    - e2 = b1 + b2 + b3 - a1 - c2 - d2 = -4
+    - e3 = c1 + c2 + c3 - a2 - b2 - d3 = 5
+    - e4 = d1 + d2 + d3 - a3 - b3 - c3
+    - e1 + e2 + e3 + e4 = 0 (oh, just found out !!! )
+      - e4 = -(e1+e2+e3) (SOLVED!!!)
+      - e4 = -(3-4+5) = -4
+```cpp
+#include<bits/stdc++.h>
+using namespace std;
+int main(){
+    // Read Question and Analyse it Bit-by-bit 
+    // write all pts in depth, leave no missing dots
+    // then dots will connect easily and will give you answer
+    ios::sync_with_stdio(0);
+    cin.tie(0);
+    int t=0;// safe ,no to garbage entry
+    cin>>t;
+    while(t--){
+        int n=0;// safe ,no to garbage entry
+        cin>>n;
+        n--; // we have n-1 entries
+        int res=0;// safe ,no to garbage entry
+        while(n--){
+            int buff=0;// safe ,no to garbage entry
+            cin>>buff;
+            res+=buff;
+        }
+        res=res*(-1);
+        cout<<res<<"\n";
+
+    }
+    return 0;
+}
+``` 
 
 ## 10 Target Practice
 - https://codeforces.com/problemset/problem/1873/C
@@ -1100,6 +1171,9 @@ int main(){
 
 # TipsCollectedFromExperiences
 
+- Read Question and Analyse it Bit-by-bit 
+  - write all pts in depth, leave no missing dots
+  - then dots will connect easily and will give you answer
 - when check TC& SC of program, don't consider TestCasesLoop&Spaces in counting
 - 1sec = 10^8 Operations
 - if 1sec =  totalTests 
