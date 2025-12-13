@@ -2794,6 +2794,76 @@ public:
     }
 };
 ```
+- Wrong Solution
+    - store diffrences frequencies
+    - return freq of '1'
+```cpp
+// Wrong Solution
+class Solution {
+public:
+    int longestConsecutive(vector<int>& nums) {
+        if (nums.size()==0){return 0;}
+        // vector<int> diff;
+        sort(nums.begin(),nums.end());
+        unordered_map<int,int> freq;
+        for ( int i=1; i<nums.size(); i++){
+            // diff.push_back(nums[i]-nums[i-1]);
+            freq[nums[i]-nums[i-1]]++;
+        };
+        return freq[1]+1;
+    }
+};
+```
+- Solution 4 -- optimal
+  - now using sort() leads to `O(n(log(n)))`
+  - here we approach for more optimial way
+  - suppose `[100,4,200,1,3,2]`
+  - number line visualize
+    - <-....1,2,3,4.....100.....200....->
+    - 3 sequences of consecutive stuff
+      - elements : 4,1,1
+    - how would human find a answer?
+      - find the bigger sequence
+    - how to distinct 3 seqences?
+      - observe that all sequences first element don't have it's left neightbour (i.e. element-1)
+      - it's obvious
+      - use this fact
+    - store numbers as set and play with it
+    - so process is this :
+      - [100,4,200,1,3,2]
+      - traverse array
+        - is 100 is first element
+          - check 100-1 => 99 exists
+            - no
+          - Yes
+            - append in sequence as 1st
+            - search for 2nd element
+              - does 100+1 => 101 exists
+                - NO
+                - i.e. sequence ends
+        - 4 check
+          - 3 yes
+            - its not 1st element
+        - 200 check
+          - 199 no
+          - 201 no
+          - single sequence
+        - 1 check
+          - 0 no
+          - 2 yes
+            - 3 yes
+              - 4 yes
+          - another sequence
+        - total seqence
+          - [100],1
+          - [200],1
+          - [1,2,3,4],4 => longest sequence
+  - this algo is effient as it iterate the same element as max twice
+  - TC: O(n)
+  - SC: O(n)
+```cpp
+```
+
 ---
 
 

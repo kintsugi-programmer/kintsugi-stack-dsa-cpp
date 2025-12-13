@@ -1173,6 +1173,8 @@ int main(){
 
 - Read Question and Analyse it Bit-by-bit 
   - write all pts in depth, leave no missing dots
+  - reconstruct the test cases with your written logic
+    - test cases are misleading and full of confusion
   - then dots will connect easily and will give you answer
 - when check TC& SC of program, don't consider TestCasesLoop&Spaces in counting
 - 1sec = 10^8 Operations
