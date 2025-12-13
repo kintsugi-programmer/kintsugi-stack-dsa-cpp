@@ -2709,6 +2709,7 @@ We can consider a number num as the start of a sequence if and only if num - 1 d
   - array is empty
   - array containing negative same elements
   - array containing 2 consecutive sub arrays ,one subarray is larger than other 
+- Imp. Ques.
 - Wrong Solution
   - sort the array
   - cons=0
