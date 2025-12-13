@@ -2814,7 +2814,258 @@ public:
     }
 };
 ```
+- Solution 1 -- brute force
+  - TLE at LC
+  - A consecutive sequence grows by checking whether the next number (num + 1, num + 2, …) exists in the set.
+  - The brute-force approach simply starts from every number in the list and tries to extend a consecutive streak as far as possible.
+  - For each number, we repeatedly check if the next number exists, increasing the streak length until the sequence breaks.
+  - Even though this method works, it does unnecessary repeated work because many sequences get recomputed multiple times.
+  - Algorithm
+    - Convert the input list to a set for O(1) lookups.
+    - Initialize res to store the maximum streak length.
+    - For each number num in the original list:
+      - Start a new streak count at 0.
+      - Set curr = num.
+      - While curr exists in the set:
+        - Increase the streak count.
+        - Move to the next number (curr += 1).
+    - Update res with the longest streak found so far.
+    - Return res after checking all numbers.
+```cpp
+// Solution 1 -- brute force
+
+class Solution {
+public:
+    int longestConsecutive(vector<int>& nums) {
+        int res=0; // max streak length
+        unordered_set<int> store(nums.begin(),nums.end());// set with O(1) lookups
+        for (int num: nums){ // traverse
+            int streak =0;//streak
+            int curr = num; // current num
+            while(store.find(curr) != store.end()){ // if number existe in set
+                // if yes
+                streak++; // inc streak
+                curr++; // let curr=cur+1, move to next
+            }
+            res = max(res,streak);// check with max
+
+        }
+        return res;
+
+    }
+};
+// Time & Space Complexity
+//     Time complexity: O(n2)O(n2)
+//     Space complexity: O(n)O(n)
+
+```
+- Solution 2
+  - Sorting
+  - Intuition
+    - If we sort the numbers first, then all consecutive values will appear next to each other.
+    - This makes it easy to walk through the sorted list and count how long each consecutive sequence is.
+    - We simply move forward while the current number matches the expected next value in the sequence.
+    - Duplicates don’t affect the result—they are just skipped—while gaps reset the streak count.
+    - This approach is simpler and more organized than the brute force method because sorting places all potential sequences in order.
+  - Algorithm
+    - If the input list is empty, return 0.
+    - Sort the array in non-decreasing order.
+    - Initialize:
+      - res to track the longest streak,
+      - curr as the first number,
+      - streak as 0,
+      - index i = 0.
+    - While i is within bounds:
+      - If nums[i] does not match curr, reset:
+        - curr = nums[i]
+        - streak = 0
+      - Skip over all duplicates of curr by advancing i while nums[i] == curr.
+      - Increase streak by 1 since we found the expected number.
+      - Increase curr by 1 to expect the next number in the sequence.
+      - Update res with the maximum streak found so far.
+    - Return res after scanning the entire list.
+```cpp
+// Solution 2
+class Solution {
+public:
+    int longestConsecutive(vector<int>& nums) {
+        if (nums.size()==0) return 0;
+        sort(nums.begin(),nums.end());
+        int 
+        res = 0,
+        curr = nums[0],
+        streak = 0,
+        i = 0;
+
+        while ( i<nums.size()){
+            if(curr!=nums[i]){
+                curr=nums[i];
+                streak=0;
+            }
+            while(
+                i<nums.size()
+                &&
+                nums[i] == curr
+            ){i++;}
+            streak++;
+            curr++;
+            res=max(res,streak);
+
+
+        }return res;
+
+    }
+};
+// Time & Space Complexity
+
+//     Time complexity: O(nlog⁡n)O(nlogn)
+//     Space complexity: O(1)O(1) or O(n)O(n) depending on the sorting algorithm.
+
+```
+```cpp
+class Solution {
+public:
+    int longestConsecutive(vector<int>& nums) {
+
+        // Edge case: no elements → no sequence
+        if (nums.empty()) return 0;
+
+        // Step 1: Sort the array so consecutive numbers come together
+        sort(nums.begin(), nums.end());
+
+        int res = 0;          // stores the longest sequence length found
+        int curr = nums[0];   // current expected number in the sequence
+        int streak = 0;       // length of the current consecutive sequence
+        int i = 0;            // index pointer
+
+        // Step 2: Traverse the sorted array
+        while (i < nums.size()) {
+
+            // If current number does NOT match the expected number,
+            // this means the previous sequence is broken
+            if (curr != nums[i]) {
+                curr = nums[i];   // start a new sequence from nums[i]
+                streak = 0;       // reset streak
+            }
+
+            // Skip all duplicate values
+            // duplicates should not increase streak
+            while (i < nums.size() && nums[i] == curr) {
+                i++;
+            }
+
+            // We successfully found the expected number → extend sequence
+            streak++;
+
+            // Update the maximum result
+            res = max(res, streak);
+
+            // Now expect the next consecutive number
+            curr++;
+        }
+
+        return res;
+    }
+};
+// Time & Space Complexity
+
+//     Time complexity: O(nlog⁡n)O(nlogn)
+//     Space complexity: O(1)O(1) or O(n)O(n) depending on the sorting algorithm.
+
+
+```
+- Solution 3
+  - TLE at LC
+  - Hashset
+  - Intuition
+    - Avoid recounting the same consecutive sequence multiple times.
+    - Start counting only when a number is the beginning of a sequence.
+    - A number is a valid start if (num - 1) does not exist in the set.
+    - This ensures each sequence is counted exactly once.
+    - From a valid start, keep checking num + 1, num + 2, and so on.
+    - Each number contributes to the sequence only one time.
+  - Algorithm
+    - Convert the input list into a set for O(1) lookups.
+    - Initialize longest to store the maximum sequence length.
+    - For each number num in the set:
+      - If num - 1 is not present in the set:
+        - This number is the start of a sequence.
+        - Initialize length = 1.
+        - While num + length exists in the set:
+          - Increment length.
+        - Update longest with the maximum value.
+    - Return longest as the final answer.
+```cpp
+// Solution 3
+class Solution {
+public:
+    int longestConsecutive(vector<int>& nums) {
+        unordered_set<int> numSet(nums.begin(), nums.end());
+        int longest=0;
+        for (int num: nums){
+            if (numSet.find(num-1) == numSet.end()){
+                int length = 1;
+
+                while(numSet.find(num+length)!=numSet.end()){
+                    length++;
+                }
+
+                longest = max(longest, length);
+            }
+        }
+        return longest;
+    }
+};
+
+// Time & Space Complexity
+
+//     Time complexity: O(n)O(n)
+//     Space complexity: O(n)O(n)
+
+```
+```cpp
+class Solution {
+public:
+    int longestConsecutive(vector<int>& nums) {
+
+        // Store all numbers in a hash set for O(1) lookup
+        unordered_set<int> numSet(nums.begin(), nums.end());
+
+        int longest = 0;  // stores the maximum consecutive sequence length
+
+        // Iterate through each unique number in the set
+        for (int num : numSet) {
+
+            // Check if this number is the START of a sequence
+            // A number is a start only if (num - 1) does not exist
+            if (numSet.find(num - 1) == numSet.end()) {
+
+                int length = 1;  // current sequence length starts at 1
+
+                // Extend the sequence forward as long as consecutive numbers exist
+                while (numSet.find(num + length) != numSet.end()) {
+                    length++;
+                }
+
+                // Update the longest sequence found so far
+                longest = max(longest, length);
+            }
+        }
+
+        // Return the length of the longest consecutive sequence
+        return longest;
+    }
+};
+
+// Time & Space Complexity
+
+//     Time complexity: O(n)O(n)
+//     Space complexity: O(n)O(n)
+
+
+```
 - Solution 4 -- optimal
+  - hashmaps
   - now using sort() leads to `O(n(log(n)))`
   - here we approach for more optimial way
   - suppose `[100,4,200,1,3,2]`
@@ -2861,9 +3112,104 @@ public:
   - this algo is effient as it iterate the same element as max twice
   - TC: O(n)
   - SC: O(n)
-```cpp
-```
+  - Intuition
+    - When inserting a new number, it may extend a sequence on the left,
+      extend a sequence on the right, or merge two sequences together.
+    - Instead of scanning forward or backward, we only inspect neighbors.
+    - mp[num - 1] gives the length of the sequence ending just before num.
+    - mp[num + 1] gives the length of the sequence starting just after num.
+    - Adding left length, right length, and 1 gives the merged sequence length.
+    - Only boundary values are updated to avoid repeated work.
+  - Algorithm
+    - Create a hash map mp to store sequence lengths at boundaries.
+    - Initialize res = 0 to track the longest sequence.
+    - For each number num in the input:
+      - If num already exists in mp, skip it.
+      - Get left = mp[num - 1].
+      - Get right = mp[num + 1].
+      - Compute length = left + right + 1.
+      - Store length at mp[num].
+      - Update left boundary:
+        mp[num - left] = length.
+      - Update right boundary:
+        mp[num + right] = length.
+      - Update res with the maximum value.
+    - Return res.
 
+```cpp
+// Solution 4
+class Solution {
+public:
+    int longestConsecutive(vector<int>& nums) {
+        unordered_map<int,int> mp;
+        int res=0;
+        for (int i=0; i<nums.size(); i++){
+            int num = nums[i];
+            if (!mp[num]){
+                mp[num] = mp[num - 1] + mp[num + 1] + 1;
+                mp[num - mp[num - 1]] = mp[num];
+                mp[num + mp[num + 1]] = mp[num];
+                res = max(res, mp[num]);
+            }
+        }
+        return res;
+    }
+};
+// Time & Space Complexity
+
+//     Time complexity: O(n)O(n)
+//     Space complexity: O(n)O(n)
+
+
+```
+```cpp
+class Solution {
+public:
+    int longestConsecutive(vector<int>& nums) {
+
+        // Hash map that stores the length of consecutive sequences
+        // Only meaningful at sequence boundaries
+        unordered_map<int, int> mp;
+
+        int res = 0;  // stores the longest sequence length
+
+        for (int num : nums) {
+
+            // If num already exists, skip it (avoids duplicates)
+            if (mp[num]) continue;
+
+            // Length of sequence ending just before num
+            int left = mp[num - 1];
+
+            // Length of sequence starting just after num
+            int right = mp[num + 1];
+
+            // New sequence length after inserting num
+            int len = left + right + 1;
+
+            // Store the sequence length for current number
+            mp[num] = len;
+
+            // Update the LEFT boundary of the merged sequence
+            mp[num - left] = len;
+
+            // Update the RIGHT boundary of the merged sequence
+            mp[num + right] = len;
+
+            // Update the global maximum
+            res = max(res, len);
+        }
+
+        return res;
+    }
+};
+// Time & Space Complexity
+
+//     Time complexity: O(n)O(n)
+//     Space complexity: O(n)O(n)
+
+
+```
 ---
 
 
