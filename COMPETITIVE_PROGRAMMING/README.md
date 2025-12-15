@@ -1098,6 +1098,13 @@ int main()
 - https://codeforces.com/problemset/problem/1873/C
 - implementationmath, *800
 - Analysis
+  - tc and sc
+    - 1sec = 10^8 ops
+    - tlpt = 1sec
+    - 1 test = 10^8 ops
+    - 1 test = 1000 mtest
+    - => tlpmt = 10^8 / 10^3 = 10^5 ops = O(n^5) max allowed and n = 10 (10x10matrix)
+    - mlpt = 256mb
   - given board 
   - 10x10
   - each ring deeper, more points, outermost is 1, innermost is 5
@@ -1162,7 +1169,22 @@ int main()
       - 5,5
   - this not 2D Array
   - this is char incoming
-- Approach
+- Approach 1 -- brute force
+  - The grid is fixed at 10×10 and consists of 5 concentric square rings, where the outermost ring gives 1 point and each inner ring gives one more point, up to 5 at the center
+    - For every test case, we scan the grid cell by cell
+      - When a cell contains `'X'`, we must determine which ring it belongs to
+        - We simulate rings using two boundaries: `bound1` starting at 0 and `bound2` starting at 9
+          - Ring 1 checks the outer boundary (row or column equal to 0 or 9)
+          - Ring 2 checks the next inner boundary (1 or 8)
+          - This continues until ring 5
+        - If the current cell lies on any side of the current boundary square
+          - `(row == bound1 || row == bound2 || col == bound1 || col == bound2)`
+          - The current ring number is returned as the score
+        - After each ring check, the boundaries are moved inward (`bound1++`, `bound2--`)
+      - The returned ring score is added to the total score
+    - After processing all cells, the accumulated score is printed
+  - The idea works because each cell belongs to exactly one concentric square ring, and shrinking boundaries correctly model these rings without needing an extra 2D scoring array
+
 ```cpp
 #include<bits/stdc++.h>
 using namespace std;
@@ -1226,7 +1248,167 @@ int main(){
     }
     return 0;
 }
+// Approach 1: Time complexity is O(1) per test case (100 cells × 5 rings, all constants) and space complexity is O(1).
 ```
+- Approach 2 -- optimal
+  - The grid is fixed at 10×10 and forms 5 concentric square rings with scores from 1 (outermost) to 5 (innermost)
+    - For each test case, the grid is read cell by cell
+      - When a cell contains `'X'`, its score depends only on how close it is to the nearest border
+        - Compute the distance from the cell to all four edges:
+          - top → `i`
+          - left → `j`
+          - bottom → `9 - i`
+          - right → `9 - j`
+        - The minimum of these four values gives the ring index (0-based)
+          - `0 → outer ring`, `1 → second ring`, …, `4 → center`
+        - Add `1` to convert the index into the actual score
+          - `score += min({i, j, 9 - i, 9 - j}) + 1`
+      - Repeat for all 100 cells
+    - After processing the grid, output the total score
+  - The intuition is that every step away from the border moves one ring inward, so the closest border uniquely determines the ring of any cell
+```cpp
+#include<bits/stdc++.h>
+using namespace std;
+
+int calScore(int row, int col, char c){
+    int top = row;
+    int left = col;
+    int bottom = 9- row;
+    int right = 9-col;
+    return min({top,bottom,left,right})+1; // fallback
+    
+}
+void miniTest(){
+    int finalScore=0;
+    for (int row=0; row<10; row++){
+        for (int col=0; col<10; col++){
+            char c;
+            cin>>c;
+            if (c=='X') finalScore+=calScore(row,col,c);
+        }
+
+    }
+    cout<<finalScore<<"\n";
+}
+int main(){
+    ios::sync_with_stdio(0);
+    cin.tie(0);;
+    int t;
+    cin>>t;
+    while(t--){
+        miniTest();
+    }
+    return 0;
+}
+
+// Approach 2: Time complexity is O(1) per test case (100 cells, constant work per cell) and space complexity is O(1).
+```
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+
+    while (t--) {
+        int score = 0;
+        for (int i = 0; i < 10; i++) {
+            for (int j = 0; j < 10; j++) {
+                char c;
+                cin >> c;
+                if (c == 'X') {
+                    score += min({i, j, 9 - i, 9 - j}) + 1;
+                }
+            }
+        }
+        cout << score << '\n';
+    }
+}
+```
+- Approach 3 -- optimal
+  - A predefined 10×10 `score` matrix stores the score of each cell based on its concentric ring on the target
+  - The number of test cases `t` is read, and each test case is processed independently
+  - For each test case, a 10×10 character grid is read row by row and stored
+  - The grid is scanned cell by cell to check for the presence of `'X'` (an arrow hit)
+  - Whenever an `'X'` is found, the corresponding value from the `score` matrix is added to `total_score`
+  - After scanning all 100 cells, the final accumulated score is printed for that test case
+  - Time complexity is O(1) per test case (fixed 10×10 grid), and space complexity is O(1) since all data structures are of constant size
+
+```cpp
+#include<bits/stdc++.h>
+using namespace std;
+
+// Predefined score matrix representing the target's rings
+// Each element represents the score for that position on the target
+const int score[10][10] = {
+	{1,1,1,1,1,1,1,1,1,1},
+	{1,2,2,2,2,2,2,2,2,1},
+	{1,2,3,3,3,3,3,3,2,1},
+	{1,2,3,4,4,4,4,3,2,1},
+	{1,2,3,4,5,5,4,3,2,1},
+	{1,2,3,4,5,5,4,3,2,1},
+	{1,2,3,4,4,4,4,3,2,1},
+	{1,2,3,3,3,3,3,3,2,1},
+	{1,2,2,2,2,2,2,2,2,1},
+	{1,1,1,1,1,1,1,1,1,1}
+};
+
+int calScore(int row, int col, char c){
+    return score[row][col]; 
+    
+}
+void miniTest(){
+    int finalScore=0;
+    for (int row=0; row<10; row++){
+        for (int col=0; col<10; col++){
+            char c;
+            cin>>c;
+            if (c=='X') finalScore+=calScore(row,col,c);
+        }
+
+    }
+    cout<<finalScore<<"\n";
+}
+int main(){
+    ios::sync_with_stdio(0);
+    cin.tie(0);;
+    int t;
+    cin>>t;
+    while(t--){
+        miniTest();
+    }
+    return 0;
+}
+
+// Time complexity is O(1) per test case (fixed 10×10 grid), and space complexity is O(1) since all data structures are of constant size
+```
+
+- Approach 1 -- brute force
+  - To make the product of all elements equal to 0, at least one element must be 0
+    - So we only need to convert one element to 0 with minimum operations
+  - Each operation changes a number by +1 or -1
+    - Therefore, converting any element Ai to 0 takes |Ai| steps
+  - Intuition:
+    - The element closest to 0 needs the fewest steps
+      - For [2, 3, 4] → closest is 2 → 2 steps
+      - For [-2, -3, -4] → take absolute values [2, 3, 4] → closest is 2 → 2 steps
+  - Steps:
+    - Read N
+    - For each element:
+      - Convert it to absolute value (represents steps needed to reach 0)
+    - Find the minimum value among all absolute values
+      - This value is the answer
+  - Optimization:
+    - Sorting is not required (O(N log N))
+    - Direct minimum scan works in O(N)
+  - Complexity:
+    - Time Complexity: O(N)
+    - Space Complexity: O(N) (can be reduced to O(1))
+
 
 
 # TipsCollectedFromExperiences
