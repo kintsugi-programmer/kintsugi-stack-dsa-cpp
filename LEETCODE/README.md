@@ -287,17 +287,6 @@
     // }
     // // You may forget this while focusing on knowledge
 ```
-  - to check if character is alphanumeric
-    - check if character ASCII is under bounds of alphanumeric
-    - use && instead of || in each check as it's logically incorrect and char bypass the check 
-    - check if lies in a to z
-      - `( c >= 97 && c <= 122)`
-    - else check if lies in A to Z
-      - `( c >= 65 && c <= 90)`
-    - else check if lies in 0 to 9
-      - `( c >= 48 && c <= 57)`
-  - `isalnum()` checks if char is alphanumeric
-  - string ops like `tolower()`,`toupper()`, when applies to number chars , throw no errors and skip
 - Hashmap/ Unordered Map
 ```cpp
     // Hashmap/ Unordered Map
@@ -3238,6 +3227,38 @@ int main(){
     return 0;
 }
 ```
+- Character Arithmatics Again
+  - to check if character is alphanumeric
+    - check if character ASCII is under bounds of alphanumeric
+    - use && instead of || in each check as it's logically incorrect and char bypass the check 
+    - check if lies in a to z
+      - `( c >= 97 && c <= 122)`
+    - else check if lies in A to Z
+      - `( c >= 65 && c <= 90)`
+    - else check if lies in 0 to 9
+      - `( c >= 48 && c <= 57)`
+```cpp
+    bool isCharAlphaNum(char c){
+        return (
+            ( c>=97 && c<=122 ) ||
+            ( c>=65 && c<=90 ) ||
+            ( c>=48 && c<=57 )
+        );
+    }
+```
+  - to check if character is alphanumeric smarter way
+    - just compare chars
+```cpp
+    bool isCharAlphaNum(char c){
+        return (
+            ( c>='A' && c<='Z' ) ||
+            ( c>='a' && c<='z' ) ||
+            ( c>='0' && c<='9' )
+        );
+    }
+```
+  - `isalnum()` checks if char is alphanumeric
+  - string ops like `tolower()`,`toupper()`, when applies to number chars , throw no errors and skip
 
 ---
 ### 10 Valid Palindrome [Easy]
@@ -3457,6 +3478,7 @@ public:
 //       - Extra string used to store alphanumeric characters
 ```
 - Solution 2
+  - Reverse String
   - Initialize an empty string `ss`
     - Traverse each character of the input string `s`
       - If the character is alphanumeric
@@ -3492,22 +3514,122 @@ public:
 //     - O(n)
 //   - Space Complexity (SC)
 //     - O(n)
-
-
 ```
-- Solution 3 -- optimised
+```cpp
+class Solution {
+public:
+    bool isPalindrome(string s) {
+        string newStr = "";
+        for (char c : s) {
+            if (isalnum(c)) {
+                newStr += tolower(c);
+            }
+        }
+        return newStr == string(newStr.rbegin(), newStr.rend());
+    }
+};
+```
+- Solution 3 -- optimal 
+  - Two Pointers
   - Solution 3 is better than Solution 1
+    - Solution 1 may have slight better time complexity but solution 3 have better memory complexity
     - thought
       - even though this seems as Solution 1
         - but, this is better
         - because even you go till half of solution 1
         - but, this is better, as it goes till the step where mismatch comes
         - but thinking of that its same, goes till the step where mismatch comes in Solution 1
-        - NO
+          - but Solution 1 is strict after lot of alterations
+          - Solution 3 is Dynamic
+        - YES
     - another thought
-      - this Solution 3 is better than Solution 1 as it doesn't uses the array
+      - this Solution 3 is better than Solution 1 as it doesn't uses the another array
+      - and it doesn't play on the half cal
+        - as using `i<j`
+          - at `even` case, 
+            - then `s[i=leftmiddle]` and `s[j=rightmiddle]` are compared
+          - & at `odd` case, 
+            - then `s[i=middle-1]` and `s[j=middle+1]` are compared 
+            - and `s[middle]` is leave out as there is no need to check it in odd array for palindrome
+      - and it doesn't uses outside func like `isalnum()`
       - YES
+  - Algorithm: Valid Palindrome (Two Pointers)
+    - Initialize pointers i = 0 (start) and j = n - 1 (end)
+    - While i < j
+      - While i < j and s[i] is non-alphanumeric, increment i
+      - While i < j and s[j] is non-alphanumeric, decrement j
+      - If lowercase(s[i]) != lowercase(s[j]), return false
+      - Increment i and decrement j
+    - Return true
+    - Time Complexity: O(n)
+    - Space Complexity: O(1)
+
 ```cpp
+// Solution 3
+class Solution {
+public:
+    bool isPalindrome(string s) {
+        int i =0;
+        int j =s.size() -1;
+
+        while (i<j){
+            while(i<j && !isCharAlphaNum(s[i])){i++;}// NOT IF. Because if skips only one invalid character, but while skips all consecutive invalid characters before comparison. and if you proceed after if thinking that something inc. that is logical error as it inside inc by 1 and then at end too execute and inc by 1
+            while(i<j && !isCharAlphaNum(s[j])){j--;}
+            if(isCharAlphaNum(s[i]) && isCharAlphaNum(s[j])){if(tolower(s[i])!=tolower(s[j])) return false;}
+
+            i++;j--;// after checking and found out no mismatch, we ought to move to next 
+        }
+        return true;
+    }
+
+    // bool isCharAlphaNum(char c){
+    //     return (
+    //         ( c>=97 && c<=122 ) ||
+    //         ( c>=65 && c<=90 ) ||
+    //         ( c>=48 && c<=57 )
+    //     );
+    // }
+
+    bool isCharAlphaNum(char c){
+        return (
+            ( c>='A' && c<='Z' ) ||
+            ( c>='a' && c<='z' ) ||
+            ( c>='0' && c<='9' )
+        );
+    }
+
+};
+
+    // - Time Complexity: O(n)
+    // - Space Complexity: O(1)
+```
+```cpp
+class Solution {
+public:
+    bool isPalindrome(string s) {
+        int l = 0, r = s.length() - 1;
+
+        while (l < r) {
+            while (l < r && !alphaNum(s[l])) {
+                l++;
+            }
+            while (r > l && !alphaNum(s[r])) {
+                r--;
+            }
+            if (tolower(s[l]) != tolower(s[r])) {
+                return false;
+            }
+            l++; r--;
+        }
+        return true;
+    }
+
+    bool alphaNum(char c) {
+        return (c >= 'A' && c <= 'Z' ||
+                c >= 'a' && c <= 'z' ||
+                c >= '0' && c <= '9');
+    }
+};
 ```
 ---
 
