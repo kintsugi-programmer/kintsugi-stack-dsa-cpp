@@ -23,6 +23,7 @@
   - [08 A How Much Does Daytona Cost?](#08-a-how-much-does-daytona-cost)
   - [09 Goals of Victory](#09-goals-of-victory)
   - [10 Target Practice](#10-target-practice)
+  - [11 Ambitious Kid](#11-ambitious-kid)
 - [TipsCollectedFromExperiences](#tipscollectedfromexperiences)
 - [Array Coloring \[ONSIGHT\]](#array-coloring-onsight)
 
@@ -1387,7 +1388,41 @@ int main(){
 // Time complexity is O(1) per test case (fixed 10×10 grid), and space complexity is O(1) since all data structures are of constant size
 ```
 
-- Approach 1 -- brute force
+## 11 Ambitious Kid
+- https://codeforces.com/problemset/problem/1866/A
+- math, *800
+- Analysis
+  - What the question gives:
+    - An array of N integers (can be positive, negative, or zero)
+    - One operation allows increasing or decreasing any single element by 1
+    - Unlimited operations are allowed on any elements
+  - What the question asks:
+    - Find the minimum number of operations needed so that
+      - the product of all elements in the array becomes 0
+    - eg: [2,3,4] mul = 24
+      - op1(-1): [1,3,4] mul = 12
+      - op2(-1): [0,3,4] mul = 0 !!!
+    - eg: [-2,3,4] mul = -24
+      - op1(+1): [-1,3,4] mul = -12
+      - op2(+1): [0,3,4] mul = 0 !!!
+  - Key observation:
+    - A product is 0 if and only if at least one element is 0
+    - min(A1, A2 ... An) = solution
+  - tc 
+    - tlpt 1sec
+    - mlpt 256mb
+    - 1sec = 10^8 ops
+    - ops per testcase = 10^8 / 1 = 10^8
+    - total minitests = 1
+    - tlpmt = 10^8 ops
+    - N = 10^5
+    - O(N^2) => 10^10 => NO
+    - O(N log2N) => YES
+    - O(N) => YES
+    - O(log2N) => YES
+    - O(1) => YES
+    - Expected TC => O(N^2)
+- Approach 1 -- brute force -- optimal
   - To make the product of all elements equal to 0, at least one element must be 0
     - So we only need to convert one element to 0 with minimum operations
   - Each operation changes a number by +1 or -1
@@ -1402,14 +1437,60 @@ int main(){
       - Convert it to absolute value (represents steps needed to reach 0)
     - Find the minimum value among all absolute values
       - This value is the answer
-  - Optimization:
-    - Sorting is not required (O(N log N))
-    - Direct minimum scan works in O(N)
   - Complexity:
     - Time Complexity: O(N)
-    - Space Complexity: O(N) (can be reduced to O(1))
-
-
+    - Space Complexity: O(N) 
+```cpp
+#include<bits/stdc++.h>
+using namespace std;
+int main(){
+    int n;
+    cin >> n;
+    vector<int> v1(n,0);
+    for (int i=0; i<n;i++){
+        int i1 =0;
+        cin>>i1;
+        v1[i]=(i1>=0) ? i1: (i1*-1); // or v1[i] = abs(i1);
+    }
+    cout<<*min_element(v1.begin(),v1.end());// min_element & max_element return pointer
+    // not sort then v1[1] as its nlogn
+    return 0;
+}
+// TC O(n)
+// SC O(n)
+```
+- Approach 2 -- optimal
+  - Read integer N
+  - Read the array of N integers
+  - Initialize a variable min_ops to a very large value
+    - This will store the minimum operations required
+  - For each element in the array:
+    - Compute the absolute value |Ai|
+      - This represents the number of operations needed to make Ai equal to 0
+    - Update min_ops with the minimum of current min_ops and |Ai|
+  - Output min_ops
+    - This is the minimum number of operations needed to make the product of the array equal to 0
+  - Reasoning:
+    - The product becomes 0 if at least one element is 0
+    - Making the element closest to 0 reach 0 requires the fewest operations
+  - Complexity:
+    - Time Complexity: O(N)
+    - Space Complexity: O(N)
+```cpp
+#include<bits/stdc++.h>
+using namespace std;
+int main()
+{   long long n; cin>>n;
+    long long a[n];
+    for ( int i=0; i< n; i++){cin>> a[i];} //n
+    long long min_ops = INT_MAX;
+    for ( int i=0; i< n; i++){min_ops=min(min_ops,abs(a[i]));} //n
+    cout<<min_ops;
+    return 0;
+}
+// TC O(n)
+// SC O(n)
+```
 
 # TipsCollectedFromExperiences
 
