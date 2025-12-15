@@ -19,6 +19,8 @@
     - [7 Encode and Decode Strings \[Medium\]](#7-encode-and-decode-strings-medium)
     - [8 Product of Array Except Self \[Medium\]](#8-product-of-array-except-self-medium)
     - [9 Longest Consecutive Sequence \[Medium\]](#9-longest-consecutive-sequence-medium)
+  - [Two Pointers](#two-pointers)
+    - [10 Valid Palindrome \[Easy\]](#10-valid-palindrome-easy)
 - [Template](#template)
   - [Topic](#topic)
     - [Sr.No. Question \[Easy/Medium/Hard\]](#srno-question-easymediumhard)
@@ -3205,15 +3207,119 @@ public:
     }
 };
 // Time & Space Complexity
-
 //     Time complexity: O(n)O(n)
 //     Space complexity: O(n)O(n)
 
 
 ```
+
 ---
 
+## Two Pointers
+**TotalCompanyTags**
+> Wish, Zenefits, Amazon, Apple, Microsoft, Yandex, Google, American Express, Linkedin, Wayfair, Oracle, Cisco, Adobe, Uber, Facebook, eBay, Bloomberg, Deloitte, Goldman Sachs, Meta, PayPal, SAP, ServiceNow, Spotify, Tiktok, Visa, Yahoo, Zoho, Accenture, Axon, Bank Of America, Cadence, Capgemini, Epam Systems, Infosys, Intel, RBC, Shopee, Tinkoff, Toast, Turing, VK, Wipro
 
+---
+
+**PreReqs**
+```cpp
+#include<bits/stdc++.h>
+int main(){
+   
+    return 0;
+}
+```
+
+---
+### 10 Valid Palindrome [Easy]
+
+- https://leetcode.com/problems/valid-palindrome/
+> Wish, Zenefits, Amazon, Apple, Microsoft, Yandex, Google, American Express, Linkedin, Wayfair, Oracle, Cisco, Adobe, Uber, Facebook, eBay, Bloomberg, Deloitte, Goldman Sachs, Meta, PayPal, SAP, ServiceNow, Spotify, Tiktok, Visa, Yahoo, Zoho, Accenture, Axon, Bank Of America, Cadence, Capgemini, Epam Systems, Infosys, Intel, RBC, Shopee, Tinkoff, Toast, Turing, VK, Wipro
+---
+
+**Ques**
+
+Given a string s, return true if it is a palindrome, otherwise return false.
+
+A palindrome is a string that reads the same forward and backward. It is also case-insensitive and ignores all non-alphanumeric characters.
+
+Note: Alphanumeric characters consist of letters (A-Z, a-z) and numbers (0-9).
+
+Example 1:
+```
+Input: s = "Was it a car or a cat I saw?"
+
+Output: true
+
+Explanation: After considering only alphanumerical characters we have "wasitacaroracatisaw", which is a palindrome.
+```
+Example 2:
+```
+Input: s = "tab a cat"
+
+Output: false
+
+Explanation: "tabacat" is not a palindrome.
+```
+Constraints:
+```
+    1 <= s.length <= 1000
+    s is made up of only printable ASCII characters.
+```
+
+
+Recommended Time & Space Complexity
+```
+You should aim for a solution with O(n) time and O(1) space, where n is the length of the input string.
+```
+Hint 1
+```
+A brute force solution would be to create a copy of the string, reverse it, and then check for equality. This would be an O(n) solution with extra space. Can you think of a way to do this without O(n) space?
+```
+Hint 2
+```
+Can you find the logic by observing the definition of pallindrome or from the brute force solution?
+```
+Hint 3
+```
+A palindrome string is a string that is read the same from the start as well as from the end. This means the character at the start should match the character at the end at the same index. We can use the two pointer algorithm to do this efficiently.
+
+```
+---
+
+**Solutions**
+
+```cpp
+```
+- Analysis
+  - 
+- edge cases
+  - uppercase lowercase char, mean the same
+  - special characters need to ignore
+  - spaces need to ignore
+  - consider the numbers and letters only
+  - at odd cases need to ignore the middle char
+- Wrong Solution
+```cpp
+class Solution {
+public:
+    bool isPalindrome(string s) {
+        string ss ="";
+        for (int i=0; i<s.size(); i++){
+            if (s[i]!=' '){
+                ss+=tolower(s[i]);
+            }
+        }
+        int half = ss.size()%2 == 0 ? (ss.size()/2) : ((ss.size()/2)+1);
+        for (int i=0; i<half; i++){
+            if(ss[i]!=ss[ss.size()-i]) return false;
+        }
+        return true;
+    }
+};
+```
+
+---
 
 
 
@@ -3278,7 +3384,7 @@ and no #, just nested - lines plaintext
 # TotalCompanyTags
 
 **TotalCompanyTags**
-> Baidu, Airbnb, Netease, Cisco, Amazon, Aetion, Box, Mathworks, Zoom, Google, Cloudera, Intel, Indeed, Godaddy, Walmart Global Tech, Salesforce, Didi, Affirm, Vmware, Yandex, Microsoft, Adobe, Alibaba, Jpmorgan, Linkedin, Citadel, Emc, Groupon, Intuit, Twitter, Nvidia, Twilio, Valve, Expedia, Yahoo, Zoho, Bookingcom, Wish, Zillow, Morgan-stanley, Drawbridge, Paypal, Huawei, Dropbox, Radius, Zomato, Roblox, Accenture, Goldman-sachs, Lyft, Yelp, Splunk, Bloomberg, Samsung, Bytedance, Servicenow, Quora, Goldman Sachs, Blackrock, Ebay, Ge-digital, Oracle, Qualcomm, Tencent, Uber, Tableau, Spotify, Morgan Stanley, American Express, Sap, Ibm, Deutsche-bank, Snapchat, Dell, Apple, Visa, Works-applications, Facebook, Factset, Audible, Google, Adobe, Facebook, Twilio, Salesforce, Affirm, Docusign, Yahoo, Cisco, Servicenow, Blackrock, Goldman Sachs, Ebay, Vmware, Tiktok, Bookingcom, Electronic-arts, Amazon, Wish, Microsoft, Yandex, Oracle, Qualtrics, Bloomberg, Adobe, Alation, Uber, Nutanix, Jpmorgan, Tesla, Mathworks, Zulily, Google, Hulu, Ibm, Snapchat, Apple, Intuit, Visa, Goldman-sachs, Yelp, Facebook, Walmart Global Tech, Bytedance, Yahoo, Cisco, Vmware, Ebay, Pocket-gems, Amazon, Microsoft, Oracle, Adobe, Uber, Spotify, Google, Linkedin, Hulu, Snapchat, Apple, Goldman-sachs, Yelp, Facebook, Bloomberg, Microsoft, Google, Linkedin, Square, Facebook, Twitter, Bloomberg, Amazon, Meta, Oracle, CrowdStrike, OpenAI, Snowflake, Salesforce, ByteDance, Yahoo, ServiceNow, Blackrock, eBay, VMware, Amazon, Microsoft, Oracle, Qualtrics, Adobe, Uber, Nutanix, Tableau, Google, Linkedin, SAP, PayPal, Groupon, Intel, Asana, Snapchat, Grab, Apple, Visa, Evernote, Goldman-sachs, Lyft, Facebook, Splunk, Bloomberg, Cisco, Goldman Sachs, Ibm, Meta, Tiktok, Walmart Global Tech, Zoho, Accenture, Autodesk, CEDCOSS, Disney, Docusign, Flipkart, Infosys, Intuit, Makemytrip, Paytm, Ripple, Sigmoid, Snap, TCS, Tekion, Turing, Unity, WarnerMedia, Wells Fargo, Yandex, ZS Associates, Spotify, Wish, Amazon, Apple, Microsoft, Google, Visa, PayPal, Oracle, Qualtrics, Adobe, Nutanix, Uber, Facebook, eBay, Bloomberg, Cisco, Goldman Sachs, Ibm, Meta, SAP, ServiceNow, Tiktok, Walmart Global Tech, Yahoo, Zoho, Atlassian, ByteDance, D. E. Shaw, Deltax, Epam Systems, Flipkart, Infosys, Lyft, Paytm, PhonePe, Roblox, Swiggy, TCS, Turing, UKG, Wissen Technology, Yandex, Zepto
+> Baidu, Airbnb, Netease, Cisco, Amazon, Aetion, Box, Mathworks, Zoom, Google, Cloudera, Intel, Indeed, Godaddy, Walmart Global Tech, Salesforce, Didi, Affirm, Vmware, Yandex, Microsoft, Adobe, Alibaba, Jpmorgan, Linkedin, Citadel, Emc, Groupon, Intuit, Twitter, Nvidia, Twilio, Valve, Expedia, Yahoo, Zoho, Bookingcom, Wish, Zillow, Morgan-stanley, Drawbridge, Paypal, Huawei, Dropbox, Radius, Zomato, Roblox, Accenture, Goldman-sachs, Lyft, Yelp, Splunk, Bloomberg, Samsung, Bytedance, Servicenow, Quora, Goldman Sachs, Blackrock, Ebay, Ge-digital, Oracle, Qualcomm, Tencent, Uber, Tableau, Spotify, Morgan Stanley, American Express, Sap, Ibm, Deutsche-bank, Snapchat, Dell, Apple, Visa, Works-applications, Facebook, Factset, Audible, Google, Adobe, Facebook, Twilio, Salesforce, Affirm, Docusign, Yahoo, Cisco, Servicenow, Blackrock, Goldman Sachs, Ebay, Vmware, Tiktok, Bookingcom, Electronic-arts, Amazon, Wish, Microsoft, Yandex, Oracle, Qualtrics, Bloomberg, Adobe, Alation, Uber, Nutanix, Jpmorgan, Tesla, Mathworks, Zulily, Google, Hulu, Ibm, Snapchat, Apple, Intuit, Visa, Goldman-sachs, Yelp, Facebook, Walmart Global Tech, Bytedance, Yahoo, Cisco, Vmware, Ebay, Pocket-gems, Amazon, Microsoft, Oracle, Adobe, Uber, Spotify, Google, Linkedin, Hulu, Snapchat, Apple, Goldman-sachs, Yelp, Facebook, Bloomberg, Microsoft, Google, Linkedin, Square, Facebook, Twitter, Bloomberg, Amazon, Meta, Oracle, CrowdStrike, OpenAI, Snowflake, Salesforce, ByteDance, Yahoo, ServiceNow, Blackrock, eBay, VMware, Amazon, Microsoft, Oracle, Qualtrics, Adobe, Uber, Nutanix, Tableau, Google, Linkedin, SAP, PayPal, Groupon, Intel, Asana, Snapchat, Grab, Apple, Visa, Evernote, Goldman-sachs, Lyft, Facebook, Splunk, Bloomberg, Cisco, Goldman Sachs, Ibm, Meta, Tiktok, Walmart Global Tech, Zoho, Accenture, Autodesk, CEDCOSS, Disney, Docusign, Flipkart, Infosys, Intuit, Makemytrip, Paytm, Ripple, Sigmoid, Snap, TCS, Tekion, Turing, Unity, WarnerMedia, Wells Fargo, Yandex, ZS Associates, Spotify, Wish, Amazon, Apple, Microsoft, Google, Visa, PayPal, Oracle, Qualtrics, Adobe, Nutanix, Uber, Facebook, eBay, Bloomberg, Cisco, Goldman Sachs, Ibm, Meta, SAP, ServiceNow, Tiktok, Walmart Global Tech, Yahoo, Zoho, Atlassian, ByteDance, D. E. Shaw, Deltax, Epam Systems, Flipkart, Infosys, Lyft, Paytm, PhonePe, Roblox, Swiggy, TCS, Turing, UKG, Wissen Technology, Yandex, Zepto, Wish, Zenefits, Amazon, Apple, Microsoft, Yandex, Google, American Express, Linkedin, Wayfair, Oracle, Cisco, Adobe, Uber, Facebook, eBay, Bloomberg, Deloitte, Goldman Sachs, Meta, PayPal, SAP, ServiceNow, Spotify, Tiktok, Visa, Yahoo, Zoho, Accenture, Axon, Bank Of America, Cadence, Capgemini, Epam Systems, Infosys, Intel, RBC, Shopee, Tinkoff, Toast, Turing, VK, Wipro
 ---
 End-of-File
 
