@@ -1694,6 +1694,11 @@ long long freq1 = freq_map.begin()->second;
 long long freq2 = freq_map.rbegin()->second;
 
 ```
+- 11R800, you can use `INT_MAX` `INT_MIN` to initialise Extreme Value and compare as reference and play with it
+```cpp
+    long long min_ops = INT_MAX;
+    for ( int i=0; i< n; i++){min_ops=min(min_ops,abs(a[i]));} //n
+```
 
 # Array Coloring [ONSIGHT]
 - https://codeforces.com/problemset/problem/1857/A
