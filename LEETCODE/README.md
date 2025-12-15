@@ -250,6 +250,54 @@
     // Char l comes 3 times
 
 ```
+- Character Arithmatics
+```cpp
+    // Character Arithmatics
+    // char types are internally represented as numbers (like ASCII values). This allows you to perform math on them
+    char c1 = 'a';
+    char c2 = 'b';
+    char c3 = 'c';
+    int i1 = (c3 - c1); //2
+    cout<<i1<<endl; //2
+    // ASCII Values
+    // 'a' = 97
+    // 'z' = 122
+    // 'A' = 65
+    // 'Z' = 90
+    // '0' = 48
+    // '9' = 57
+
+    // Calculate the 0-based index for any character 
+    char mychar = 'e';
+    int index = mychar - 'a'; 
+    std::cout << "The character '" << mychar << "' has an index of: " << index << std::endl;
+    // The character 'e' has an index of: 4
+
+    // General Looping tip
+    // for (int i=0; i<s.size(); i++){
+    //     counts[s[i]-97]++;
+    // }
+    // for (int i=0; i<s.size(); i++){
+    //     counts[t[i]-97]--;
+    // }
+    // // you can just put them in one loop na
+    // for (int i=0; i<s.size(); i++){
+    //     counts[s[i]-97]++;
+    //     counts[t[i]-97]--;
+    // }
+    // // You may forget this while focusing on knowledge
+```
+  - to check if character is alphanumeric
+    - check if character ASCII is under bounds of alphanumeric
+    - use && instead of || in each check as it's logically incorrect and char bypass the check 
+    - check if lies in a to z
+      - `( c >= 97 && c <= 122)`
+    - else check if lies in A to Z
+      - `( c >= 65 && c <= 90)`
+    - else check if lies in 0 to 9
+      - `( c >= 48 && c <= 57)`
+  - `isalnum()` checks if char is alphanumeric
+  - string ops like `tolower()`,`toupper()`, when applies to number chars , throw no errors and skip
 - Hashmap/ Unordered Map
 ```cpp
     // Hashmap/ Unordered Map
@@ -293,45 +341,6 @@
         momos2[nums1[i]]=i; // not momos2[nums[i]]++ as it dont make sense
         // or momos2.insert( { nums[i] , i } );
     }
-```
-- Character Arithmatics
-```cpp
-    // Character Arithmatics
-    // char types are internally represented as numbers (like ASCII values). This allows you to perform math on them
-    char c1 = 'a';
-    char c2 = 'b';
-    char c3 = 'c';
-    int i1 = (c3 - c1); //2
-    cout<<i1<<endl; //2
-    // ASCII Values
-    // 'a' = 97
-    // 'b' = 98
-    // 'y' = 121
-    // 'z' = 122
-    // 'A' = 65
-    // 'B' = 66
-    // 'Y' = 89
-    // 'Z' = 90
-
-    // Calculate the 0-based index for any character 
-    char mychar = 'e';
-    int index = mychar - 'a'; 
-    std::cout << "The character '" << mychar << "' has an index of: " << index << std::endl;
-    // The character 'e' has an index of: 4
-
-    // General Looping tip
-    // for (int i=0; i<s.size(); i++){
-    //     counts[s[i]-97]++;
-    // }
-    // for (int i=0; i<s.size(); i++){
-    //     counts[t[i]-97]--;
-    // }
-    // // you can just put them in one loop na
-    // for (int i=0; i<s.size(); i++){
-    //     counts[s[i]-97]++;
-    //     counts[t[i]-97]--;
-    // }
-    // // You may forget this while focusing on knowledge
 ```
 - Pair
 ```cpp
@@ -3288,37 +3297,218 @@ A palindrome string is a string that is read the same from the start as well as 
 ---
 
 **Solutions**
-
-```cpp
-```
 - Analysis
-  - 
+  - The question asks to check whether a given string is a **palindrome**
+    - A palindrome reads the same forward and backward
+  - The comparison is **case-insensitive**
+    - Uppercase and lowercase letters are treated as the same
+  - All **non-alphanumeric characters** must be ignored
+    - Spaces, punctuation, and symbols do not affect the result
+    - Only letters (A–Z, a–z) and digits (0–9) are considered
+  - After ignoring invalid characters and normalizing case
+    - The remaining characters form the actual string to check
+  - The task is to return:
+    - `true` if the cleaned string is a palindrome
+    - `false` otherwise
+  - eg
+    - Input string:
+      "Was it a car or a cat I saw?"
+    - Step 1: Remove non-alphanumeric characters
+      → "WasitacaroracatIsaw"
+    - Step 2: Convert all letters to lowercase
+      → "wasitacaroracatisaw"
+    - Step 3: Compare characters from both ends
+      - First and last characters match
+      - Second and second-last match
+      - This continues until the middle
+    - Since all mirrored characters are equal
+      → The string is a palindrome
+      → Output is `true`
 - edge cases
   - uppercase lowercase char, mean the same
   - special characters need to ignore
   - spaces need to ignore
   - consider the numbers and letters only
   - at odd cases need to ignore the middle char
-- Wrong Solution
+- Solution 1 -- brute force
+  - similar to 2 pointer approach
+  - thought: to check if character is alphanumeric
+    - check if character ASCII is under bounds of alphanumeric
+    - use && instead of || in each check as it's logically incorrect and char bypass the check 
+    - check if lies in a to z
+      - `( c >= 97 && c <= 122)`
+    - else check if lies in A to Z
+      - `( c >= 65 && c <= 90)`
+    - else check if lies in 0 to 9
+      - `( c >= 48 && c <= 57)`
+    - YES
+  - Initialize an empty string `ss`
+    - Traverse each character of the input string `s`
+      - If character is a letter (`A–Z` or `a–z`)
+        - Convert to lowercase
+        - Append to `ss`
+      - Else if character is a digit (`0–9`)
+        - Append to `ss`
+      - Else
+        - Ignore the character
+  - Check if `ss` is a palindrome
+    - Compute `half = length(ss) / 2`
+      - For each index `i` from `0` to `half - 1`
+        - Compare `ss[i]` with `ss[length(ss) - 1 - i]`
+          - If mismatch found
+            - Return false
+  - If all characters match
+    - Return true
+  - Time Complexity (TC)
+    - O(n)
+      - One pass to filter characters
+      - One pass to compare palindrome
+  - Space Complexity (SC)
+    - O(n)
+      - Extra string used to store alphanumeric characters
 ```cpp
+// Solution 1
 class Solution {
 public:
     bool isPalindrome(string s) {
         string ss ="";
         for (int i=0; i<s.size(); i++){
-            if (s[i]!=' '){
+            if (
+                // s[i]!=' ' 
+                // && 
+                    // ( 
+                        (s[i]>=97 && s[i]<= 122) // a to z check
+                        // NO to s[i]>=97 || s[i]<= 122 as it's logically incorrect and char bypass the check 
+                    || 
+                        (s[i]>=65 && s[i]<= 90) // A to Z check
+                        // && instead of ||
+                    // ) 
+                )
+                {
                 ss+=tolower(s[i]);
             }
+            else if (s[i]>=48 && s[i]<= 57){
+                                        // && instead of ||
+                ss+=s[i]; // nos
+            }
         }
-        int half = ss.size()%2 == 0 ? (ss.size()/2) : ((ss.size()/2)+1);
+        // int half = ss.size()%2 == 0 ? (ss.size()/2) : ((ss.size()/2));
+        int half = ss.size() / 2 ;
         for (int i=0; i<half; i++){
-            if(ss[i]!=ss[ss.size()-i]) return false;
+            if(ss[i]!=ss[ss.size()-1-i]) return false; // remember ss.size()-1 is last index, not ss.size()
         }
+
+        // if (ss.size%2==0){ //even alphanumeric chars
+
+        // }
+        // else if (ss.size%2==0){ //odd alphanumeric chars
+
+        // }
         return true;
     }
 };
-```
 
+//   - Time Complexity (TC)
+//     - O(n)
+//       - One pass to filter characters
+//       - One pass to compare palindrome
+//   - Space Complexity (SC)
+//     - O(n)
+//       - Extra string used to store alphanumeric characters
+```
+- `isalnum()` checks if char is alphanumeric
+- string ops like `tolower()`,`toupper()`, when applies to number chars , throw no errors and skip
+```cpp
+// Solution 1
+class Solution {
+public:
+    bool isPalindrome(string s) {
+        string ss ="";
+        for (int i=0; i<s.size(); i++){
+            if (
+                isalnum(s[i]) //`isalnum()` checks if char is alphanumeric
+                )
+                {
+                ss+=tolower(s[i]);
+            }
+        }
+        // int half = ss.size()%2 == 0 ? (ss.size()/2) : ((ss.size()/2));
+        int half = ss.size() / 2 ;
+        for (int i=0; i<half; i++){
+            if(ss[i]!=ss[ss.size()-1-i]) return false; // remember ss.size()-1 is last index, not ss.size()
+        }
+
+        // if (ss.size%2==0){ //even alphanumeric chars
+
+        // }
+        // else if (ss.size%2==0){ //odd alphanumeric chars
+
+        // }
+        return true;
+    }
+};
+
+//   - Time Complexity (TC)
+//     - O(n)
+//       - One pass to filter characters
+//       - One pass to compare palindrome
+//   - Space Complexity (SC)
+//     - O(n)
+//       - Extra string used to store alphanumeric characters
+```
+- Solution 2
+  - Initialize an empty string `ss`
+    - Traverse each character of the input string `s`
+      - If the character is alphanumeric
+        - Convert it to lowercase
+        - Append it to `ss`
+  - Create a reversed copy of the cleaned string
+    - Copy `ss` into `rss`
+    - Reverse `rss`
+  - Compare both strings
+    - Traverse from index `0` to `ss.size() - 1`
+      - If any character in `ss` does not match the corresponding character in `rss`
+        - Return false
+  - If all characters match
+    - Return true
+  - Time Complexity (TC)
+    - O(n)
+  - Space Complexity (SC)
+    - O(n)
+```cpp
+// Solution 2
+class Solution {
+public:
+    bool isPalindrome(string s) {
+        string ss ="";
+        for (int i=0; i<s.size(); i++){if (isalnum(s[i])) ss+=tolower(s[i]);}
+        string rss = ss;
+        reverse(rss.begin(),rss.end());
+        for (int i=0; i<ss.size(); i++){if ( ss[i] != rss[i]) return false;}
+        return true;
+    }
+};
+//   - Time Complexity (TC)
+//     - O(n)
+//   - Space Complexity (SC)
+//     - O(n)
+
+
+```
+- Solution 3 -- optimised
+  - Solution 3 is better than Solution 1
+    - thought
+      - even though this seems as Solution 1
+        - but, this is better
+        - because even you go till half of solution 1
+        - but, this is better, as it goes till the step where mismatch comes
+        - but thinking of that its same, goes till the step where mismatch comes in Solution 1
+        - NO
+    - another thought
+      - this Solution 3 is better than Solution 1 as it doesn't uses the array
+      - YES
+```cpp
+```
 ---
 
 
