@@ -24,6 +24,7 @@
   - [09 Goals of Victory](#09-goals-of-victory)
   - [10 Target Practice](#10-target-practice)
   - [11 Ambitious Kid](#11-ambitious-kid)
+  - [12 Sequence Game](#12-sequence-game)
 - [TipsCollectedFromExperiences](#tipscollectedfromexperiences)
 - [Array Coloring \[ONSIGHT\]](#array-coloring-onsight)
 
@@ -1492,9 +1493,129 @@ int main()
 // SC O(n)
 ```
 
+## 12 Sequence Game
+- https://codeforces.com/problemset/problem/1862/B
+- constructive algorithms, *800
+- Analysis
+  - tc 
+    - tlpt = 2 sec
+    - 1sec = 10^8 ops
+    - mlpt =256 mb
+    - mt max = 10^4
+    - n = 2*10^5
+    - 1 test = 2* 10^8 ops
+    - tlpmt = 2*10^8 / 10^4 = 2*10^4
+    - ???
+  - Ques
+    - Tema and Vika Plays a game
+    - Vika  : a= +ve int, len m
+    - b= new sequence, acc to rule
+      - a1 as 1st element
+      - then ai( 2<= i <= m ) such that ai-1 <= ai
+      - length od this seq n
+    - eg: 
+      - a=[4,3,2,6,3,3]
+      - b=[4,6,3]
+    - then vika gives b to tema and tema tries to gues s seq a
+    - help vika to guess atleast 1 num.
+  - Note that the length of the sequence you output should not exceed the input sequence length by more than two times.
+  - Test Cases
+    - input
+      - t (1<=t<=10^4)
+      - n
+      - b1 b2 .. bn
+      - The sum of the values of n over all test cases does not exceed 2*10^5
+    - for each test, output gives 2 lines
+      - m
+      - a1 a2 ... am
+    - mt1
+      - 3
+      - 4 6 3
+      - out  
+      - 6
+      - 4 3 2 6 3 3
+    - mt2
+      - 3
+      - 1 2 3
+      - out
+      - 3
+      - 1 2 3
+      - In the second sample, Vika could have chosen the original sequence.
+    - mt3
+      - 5
+      - 1 7 9 5 7
+      - out
+      - 6
+      - 1 7 9 3 5 7
+    - mt4 
+      - 1
+      - 144
+      - out
+      - 1
+      - 144
+    - mt5
+      - 2
+      - 1 1
+      - out
+      - 2
+      - 1 1
+    - mt6
+      - 5
+      - 1 2 2 1 1
+      - out 
+      - 6
+      - 1 2 2 1 1 1
+    - If there are multiple suitable sequences, you can output any of them
+- Approach 1
+  - Based on Hint
+    - if `b[i-1]>b[i]`
+    - append `b[i]` twice
+  - insert all mini test elements into arr b
+  - then traverse b to append into arr a  
+    - use the hint
+  - Reasoning
+    - If there are multiple suitable sequences, you can output any of them. (in ques)
+    - don't confused by inputs and outputs given, use what question demands and make your own outputs
+```cpp
+#include<bits/stdc++.h>
+using namespace std;
+int main(){
+    ios::sync_with_stdio(0);
+    cin.tie(0);
+    int mt=0;
+    cin>>mt;
+    while(mt--){
+        int n=0;
+        cin>>n;
+        vector<int> b(n);
+        for(int i=0; i<n; i++){
+            cin>>b[i];
+        }
+        // input done
+        // main output
+        vector<int> a;
+        a.push_back(b[0]);
+        for(int i=1; i<n; i++){
+            if(b[i-1]>b[i]){
+                a.push_back(b[i]);
+            }
+            a.push_back(b[i]);
+        }
+        cout<<a.size()<<"\n";
+        for(int i=0;i<a.size(); i++){
+            cout<<a[i]<<" ";
+        }
+        cout<<"\n";   
+
+
+    }
+    return 0;
+}
+```
+
 # TipsCollectedFromExperiences
 
-- Read Question and Analyse it Bit-by-bit 
+- Read Question and Analyse it Bit-by-bit
   - write all pts in depth, leave no missing dots
   - reconstruct the test cases with your written logic
     - test cases are misleading and full of confusion
