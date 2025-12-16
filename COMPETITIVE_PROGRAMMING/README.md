@@ -205,7 +205,7 @@ int main(){
 // max_element(v.begin(), v.end()) O(n)
 // min_element(v.begin(), v.end()) O(n)
 ```
-- my code is more optimised than tut ;0
+- my code is more optimal than tut ;0
 
 ## 03 A Cover in Water
 - https://codeforces.com/problemset/problem/1900/A
@@ -432,7 +432,7 @@ int main(){
       - O(10^4)< tlpmt
       - O(n^4) = Expected TC = tcpmt
     - mlpt 256mB atq
-- Approach Optimised
+- Approach optimal
   - IF THE FIRST NUMBER IN THE INITIAL ARRAY IS 1, THEN ANSWER IS YES , ELSE ANSWER IS NO
   - if not 1st element is 1 ,then that element can never shift towards its desired side
   - this is technically bubble sort
@@ -561,7 +561,7 @@ int main(){
       - this helps in thinking solution limits and optimisation 
       - solution can be minimal, not exact O(n^3)
       - but still we got to know our limits
-- Approach Optimised
+- Approach optimal
   - => Generalise the condition
     - a1 + a2 = a2 + a3 = ... = an-1 = an atq
     - => ai-1 + ai = ai + ai+1
@@ -789,7 +789,7 @@ int main(){
 // TC O(2^5 *n*m) = O(32*n*m)
 // SC O(2^5*n) = O(32*n)
 ```
-- Approach Optimised Mine
+- Approach optimal Mine
   - SAME
   - input t testcases
   - each test cases
@@ -884,7 +884,7 @@ int main(){
     - O(100^3) = 10^6 NO
     - O(100^2) = 10^4 YES
     - Expected TC = tcpmt = O(n^2) 
-- Approach Optimised
+- Approach optimal
   - IF k is present in array anywhere, then answer is YES, else no
   - a = { a0,a1,a2,k,a4...an}
   - we haven't told lenght of subarray
@@ -1512,7 +1512,7 @@ int main()
     - b= new sequence, acc to rule
       - a1 as 1st element
       - then ai( 2<= i <= m ) such that ai-1 <= ai
-      - length od this seq n
+      - length of this seq n
     - eg: 
       - a=[4,3,2,6,3,3]
       - b=[4,6,3]
@@ -1566,7 +1566,7 @@ int main()
       - 6
       - 1 2 2 1 1 1
     - If there are multiple suitable sequences, you can output any of them
-- Approach 1
+- Approach 1 -- optimal
   - Based on Hint
     - if `b[i-1]>b[i]`
     - append `b[i]` twice
@@ -1611,6 +1611,45 @@ int main(){
     }
     return 0;
 }
+```
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main()
+{
+    int t; // Number of test cases
+    cin >> t;
+    while (t--)
+    {
+        long long n; // Length of sequence b
+        cin >> n;
+        vector<long long> b(n), a; // Vector b to store input sequence, vector a to store the reconstructed sequence
+        for (int i = 0; i < n; i++) // Loop to read the sequence b
+            cin >> b[i];
+        // Initial input of sequence b is completed
+
+        a.push_back(b[0]); // Always add the first element of b to a
+        for (int i = 1; i < n; i++) // Loop through the rest of the sequence b
+        {
+            if (b[i] >= b[i - 1])
+                a.push_back(b[i]); // If current element is greater than or equal to the previous, add it to a
+            else
+            {
+                a.push_back(b[i]); // Add the current element to a
+                a.push_back(b[i]); // Add the current element again to a to ensure a[i-1] <= a[i]
+            }
+        }
+        cout << a.size() << endl; // Output the size of the reconstructed sequence a
+        for (auto it : a) // Output each element of the sequence a
+            cout << it << " ";
+        cout << endl; // New line after each test case
+    }
+    return 0;
+}
+
+// Time Complexity (TC): O(n) = O(2*10^5)
+// Space Complexity (SC): O(n) = O(2*10^5)
 ```
 
 # TipsCollectedFromExperiences
