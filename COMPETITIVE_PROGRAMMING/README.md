@@ -1497,15 +1497,26 @@ int main()
 - https://codeforces.com/problemset/problem/1862/B
 - constructive algorithms, *800
 - Analysis
+  - backcreate/guessback/reverse engineering!!!
   - tc 
     - tlpt = 2 sec
     - 1sec = 10^8 ops
     - mlpt =256 mb
     - mt max = 10^4
-    - n = 2*10^5
+    - n max = 2*10^5
+    - Ques Line "The sum of the values of n over all test cases does not exceed 2*10^5"
+      - this sum of minitest element length <= 2*10^5
+      - its the main bottleneck
+      - so we can assume not 10^4, but only 1 test case with n = 2*10^5
+        - no need to cal tlpmt
     - 1 test = 2* 10^8 ops
-    - tlpmt = 2*10^8 / 10^4 = 2*10^4
-    - ???
+    - O(n^2) => (2*10^5)^2 => 4*10^10 > 2*10^4
+    - O(n^2) No (4*10^10 > 2*10^4)
+    - O(nlog2n) Yes ( < 2*10^4)
+    - O(n) Yes
+    - O(log2n) Yes
+    - ... O(1) Yes
+    - => so avoid making O(n^2) / 2 nested loops in code!!!
   - Ques
     - Tema and Vika Plays a game
     - Vika  : a= +ve int, len m
@@ -1516,6 +1527,19 @@ int main()
     - eg: 
       - a=[4,3,2,6,3,3]
       - b=[4,6,3]
+      - analysis
+```
+a 6 [4 3 2 6 3 3]
+     Y N N Y N Y
+b 3 [4     6   3]
+
+4 1st element YES => b1
+3>=4 => NO (ai-1 <= ai)
+2>=3 => NO
+6>=2 => YES => b2
+3>=6 => NO
+3>=3 => YES => b3
+```
     - then vika gives b to tema and tema tries to gues s seq a
     - help vika to guess atleast 1 num.
   - Note that the length of the sequence you output should not exceed the input sequence length by more than two times.
@@ -1534,6 +1558,13 @@ int main()
       - out  
       - 6
       - 4 3 2 6 3 3
+        ```
+        b [4 6 3]
+        possibilities
+        a [4 3 2 6 3 3] (as described in question)
+        a [4 6 3 3] also possibilities
+        ... so on , make/guess any, if fits the rule then good !!!
+        ```
     - mt2
       - 3
       - 1 2 3
@@ -1547,6 +1578,21 @@ int main()
       - out
       - 6
       - 1 7 9 3 5 7
+        ```
+        b 1 < 7 < 9 > 5 < 7
+        a 1   7   9 ..5   7
+
+        9 and 5 can't relate as b coming from a 
+        untill and unless there is unlikely element which exists in a which is <9 and <5
+
+        possibilities
+
+        1 7 9 3 5 7
+        1 7 9 6 5 7
+        1 7 9 5 5 7
+        ... so on
+
+        ```
     - mt4 
       - 1
       - 144
@@ -1570,6 +1616,16 @@ int main()
   - Based on Hint
     - if `b[i-1]>b[i]`
     - append `b[i]` twice
+    ```
+    a1 a2 a3 a4 ... am
+    to b1 b2 b3 b4 ... bn
+    where generally b1<b2<b3<b4... ( as only ai-1 < ai are inserted in the array of b)
+
+    there can be numerous possibilities ( a1>a2<a3)
+    one of them can be like (a1>a2=a3), we are only considering this possibility and reverse enginner it.. 
+    so if b1<b2>b3<b4 (where b3 dont make sense)
+    then a would be b1<b2<b3=b3<b4 (to make sense)
+    ```
   - insert all mini test elements into arr b
   - then traverse b to append into arr a  
     - use the hint
@@ -1588,21 +1644,21 @@ int main(){
         int n=0;
         cin>>n;
         vector<int> b(n);
-        for(int i=0; i<n; i++){
+        for(int i=0; i<n; i++){ //n
             cin>>b[i];
         }
         // input done
         // main output
         vector<int> a;
-        a.push_back(b[0]);
-        for(int i=1; i<n; i++){
+        a.push_back(b[0]); //1
+        for(int i=1; i<n; i++){ // n
             if(b[i-1]>b[i]){
-                a.push_back(b[i]);
+                a.push_back(b[i]); //1
             }
             a.push_back(b[i]);
         }
         cout<<a.size()<<"\n";
-        for(int i=0;i<a.size(); i++){
+        for(int i=0;i<a.size(); i++){ // n
             cout<<a[i]<<" ";
         }
         cout<<"\n";   
@@ -1611,6 +1667,9 @@ int main(){
     }
     return 0;
 }
+
+// Time Complexity (TC): O(n) = O(2*10^5)
+// Space Complexity (SC): O(n) = O(2*10^5)
 ```
 ```cpp
 #include <bits/stdc++.h>
