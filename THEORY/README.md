@@ -130,6 +130,8 @@
         - For further details on what the course covers, users should **scroll down**.
         - Users are encouraged to **get started** when they are ready.
 
+---
+
 # Data Structure and Algorithms
 
 ## Arrays
@@ -3585,8 +3587,6 @@ Think of bit shifting like a queue of people sitting in a row of chairs. **Left 
 ---
 
 # Advanced Algorithms
-
----
 
 ## Arrays
 
