@@ -23,6 +23,11 @@
   - [Recursion](#recursion)
     - [Factorial](#factorial)
     - [Fibonacci](#fibonacci)
+  - [Sorting](#sorting)
+    - [Insertion Sort](#insertion-sort)
+    - [Merge Sort](#merge-sort)
+    - [Quick Sort](#quick-sort)
+    - [Bucket Sort](#bucket-sort)
   - [Prompt for Notes Formatting](#prompt-for-notes-formatting)
 
 
@@ -763,6 +768,357 @@ Think of a **Singly Linked List** like a **one-way train** where each car only k
             - Precise values like $n+1$ or $n-1$ in the exponent do not matter in Big O notation.
             - Multiplying by a constant (like $2 \times 2^n$) also results in the same Big O complexity.
             - **Final Complexity**: The recursive solution is bounded by $O(2^n)$.
+
+## Sorting
+
+### Insertion Sort
+
+- **Introduction to Sorting**
+    - Sorting is a fundamental topic used frequently with various algorithms, each having specific tradeoffs.
+    - It is most commonly applied to **arrays**, but can also be used for **linked lists** and other data structures.
+    - The goal is typically to arrange elements in **ascending order** (increasing, e.g., 1, 2, 3) or **decreasing order** (e.g., 6, 4, 3).
+    - **Example target:** Transform an unsorted array into a sorted one like.
+
+- **Main Algorithm Idea: Subproblems**
+    - The algorithm works by breaking the problem into subproblems.
+    - **Step 1:** Consider the first element of the array. Any array consisting of only one value is considered sorted by default.
+    - **Step 2:** Sort the first two values.
+    - **Step 3:** Sort the first three values.
+    - **Step 4:** Continue this process, increasing the sorted portion by one element each time, until the entire array is sorted.
+    - **Implementation:** While this could be solved using recursion, it is more effectively done **iteratively** using loops.
+
+- **The Insertion Process**
+    - The name "insertion sort" comes from taking one value and inserting it into an already sorted array.
+    - **Iteration start:** The loop starts at the **second element** (index 1) because the first element (the subarray of size one) is already sorted.
+    - **Assumption:** At any point in the loop, every value before the current position is already in sorted order.
+    - **Goal:** Determine where to put the current value relative to the sorted subarray.
+    - **Comparison logic:**
+        - Compare the current value to its left neighbor.
+        - **If the value is larger:** It stays where it is.
+        - **If the value is equal:** It also stays where it is; it will be sorted either way, whether in ascending or descending order.
+        - **Important optimization:** If the current value is greater than its immediate left neighbor, it is automatically greater than all values to the left of that neighbor (since they are already sorted). No further comparisons are needed for that iteration.
+
+- **Detailed Step-by-Step Logic**
+    - **Pointers:**
+        - `i`: The outer loop pointer, starting at index 1 and moving to the end of the list.
+        - `j`: The inner pointer used to compare the current value to its neighbors on the left.
+    - **Inner Loop Conditions:**
+        - The algorithm checks if `j` is within bounds (e.g., `j >= 0`) to avoid index out of bounds errors.
+        - It checks if the value at `j + 1` is less than the value at `j`.
+    - **The Swap Mechanism:**
+        - If the value at `j + 1` is less than the value at `j`, a swap is performed.
+        - **Step A:** Place the value originally at `j + 1` into a **temporary variable**.
+        - **Step B:** Move the value at `j` to the `j + 1` position.
+        - **Step C:** Move the value from the temporary variable to the `j` position.
+        - **Step D:** Decrement `j` by one to continue comparing the value with the next neighbor to the left.
+    - **Termination:** The inner loop stops when the value is no longer smaller than its left neighbor or when `j` moves out of bounds (becomes less than zero).
+
+- **Supported Data Types**
+    - Insertion sort can be applied to any set of values as long as there is a way to compare two values.
+    - **Integers:** Sorted numerically.
+    - **Characters:** Sorted alphabetically (e.g., A, B, C).
+    - **Strings:** Sorted the same way a dictionary sorts words (e.g., "apple" comes before "banana").
+
+- **Stability in Sorting**
+    - **Definition of Stable Sorting:** An algorithm that preserves the original relative order of equal values when there is a tie.
+    - **Definition of Unstable Sorting:** There is no guarantee that the original relative order of equal values will be preserved.
+    - **Example:** In an array, a stable sort ensures the first '7' remains before the second '7' in the final sorted list.
+    - **Insertion Sort Stability:** Insertion sort is a **stable** algorithm.
+        - During comparison, if two values are equal, the algorithm does not swap them.
+        - Because ties do not trigger swaps, the original relative order is maintained.
+
+- **Time Complexity Analysis**
+    - **Best-Case Time Complexity:**
+        - Occurs when the input array is **already sorted**.
+        - The outer loop iterates through the list once.
+        - The inner `while` loop condition is never met because every value is already greater than its left neighbor.
+        - Result: **Big O(N)** (linear time).
+    - **Worst-Case Time Complexity:**
+        - Occurs when the input array is in **reverse order**.
+        - For every value the algorithm iterates through, the inner loop must execute the maximum number of times to shift the value all the way to the left.
+        - The number of operations follows a pattern like 1 + 2 + 3 + ... + (n-1).
+        - **Visualizing Worst Case:**
+            - If we imagine an N x N grid (N squared), the work done by insertion sort is approximately **half of N squared** (N^2 / 2).
+            - In Big O notation, constants like "1/2" are ignored.
+        - Result: **Big O(N^2)** (quadratic time).
+
+- **Summary of Characteristics**
+    - **Type:** Iterative sorting algorithm.
+    - **Stability:** Stable.
+    - **Best-Case Runtime:** O(N).
+    - **Worst-Case Runtime:** O(N^2).
+    - **Tradeoff:** While simple and stable, other sorting algorithms exist with better worst-case time complexities than N squared.
+
+### Merge Sort
+
+- Merge Sort Overview
+    - Merge sort is one of the most common and efficient sorting algorithms.
+    - The main idea is to take an input array and split it into two approximately equal halves.
+    - These halves are then split again into smaller approximately equal halves.
+    - This splitting continues until the array can no longer be split, resulting in individual elements.
+    - The goal is to break the original problem of sorting the entire array into smaller subproblems.
+    - Example:
+        - For an array like, you cannot split it exactly in half because there is an odd number of values.
+        - It is split approximately into a first half (3, 2) and a second half (4).
+        - These subarrays are then treated as subproblems to be sorted.
+
+- Divide and Conquer Technique
+    - Merge sort uses a technique called "divide and conquer".
+    - This means taking the original problem, dividing it into subproblems, and solving those subproblems before solving the original problem.
+    - This problem naturally lends itself to recursion because of the way it splits into subproblems until it reaches a base case.
+    - It is specifically a "two-branch recursion" because the array is split into two halves at each step.
+    - Dividing by two at each step is what makes the algorithm efficient.
+
+- The Base Case
+    - The base case occurs when a subarray has a single element.
+    - A single element is technically already a sorted array.
+    - Length check:
+        - The length of a subarray is calculated as: `(ending index - starting index) + 1`.
+        - If the length is less than or equal to 1, it is a base case and the array is returned.
+        - Example: If an element is at index 0, the calculation is `(0 - 0) + 1 = 1`.
+
+- The Merging Process
+    - Once you have two sorted arrays (even if they are single elements), you merge them back together in sorted order.
+    - This merging step is why the algorithm is called "merge sort".
+    - Step-by-Step Merging Example (Left Side):
+        - Start with. Split into individual elements and.
+        - Compare the two values: 2 is smaller than 3.
+        - Place 2 in the first position and 3 in the second.
+    - Two-Pointer Technique:
+        - To merge two sorted halves into the original array, use two pointers.
+        - One pointer starts at the beginning of the left array and another starts at the beginning of the right array.
+        - Smallest values are at the beginning of each sorted array.
+        - Compare the values at the pointers.
+        - The smaller value is inserted into the next position of the original array.
+        - Shift the pointer of the array that provided the value to the next position.
+        - A third pointer is used in the output (original) array to track where to insert the next element.
+    - Handling Out-of-Bounds:
+        - Continue the algorithm until one pointer goes out of bounds (runs out of elements).
+        - Once one array is empty, fill in all remaining elements from the non-empty array into the remaining spots of the original array.
+        - Example: If the right array has 6, 7, and 8 left after the left array is exhausted, just move 6, 7, and 8 over.
+
+- Implementation Logic
+    - The function typically takes the array, a starting index (`s`), and an ending index (`e`).
+    - Using indices prevents the need to create new variables for every subarray split.
+    - Calculating the Middle:
+        - Find the middle index (`m`) by: `(starting index + ending index) / 2`.
+        - Most programming languages round this result down.
+        - Example: For indices 0 and 1, `(0+1)/2 = 0.5`, which rounds down to 0.
+    - Recursive Calls:
+        - Call `mergeSort` for the left half: from `s` to `m`.
+        - Call `mergeSort` for the right half: from `m + 1` to `e`.
+        - After these calls, the two halves are expected to be sorted.
+    - Final Merge Call:
+        - Merge the left half (`s` to `m`) and the right half (`m + 1` to `e`).
+    - Memory Management:
+        - During the merge step, extra memory is required.
+        - Temporary arrays (copies) of the left and right halves are created so original values are not lost during the overwrite process.
+
+- Time Complexity Analysis
+    - Depth of Recursion (Levels):
+        - The number of levels is determined by how many times a number `n` can be divided by 2 until it reaches 1.
+        - Algebraically: $n / 2^x = 1$, which rearranges to $n = 2^x$.
+        - Solving for $x$ (the number of levels) using logarithms: $x = \log_2 n$.
+        - Therefore, there are $\log n$ levels in the algorithm.
+    - Work Per Level:
+        - At each level, the merge step requires iterating through every element of the input array to put them back in order.
+        - This results in $O(n)$ time complexity for each level.
+    - Total Time Complexity:
+        - Multiply the number of levels by the work per level: $\log n \times n$.
+        - Overall Big O time complexity is $O(n \log n)$.
+        - This is much more efficient than $O(n^2)$ algorithms like insertion sort.
+        - Comparison: $n \log n$ vs $n$:
+            - Decrementing a value (linear) is much slower than repeatedly dividing it by 2.
+            - Example: With a value of 8, decrementing takes 8 steps to reach 1 ($8, 7, 6, 5, 4, 3, 2, 1$), while dividing by 2 takes only 3 steps ($8 \rightarrow 4 \rightarrow 2 \rightarrow 1$).
+
+- Space Complexity
+    - The memory complexity is $O(n)$.
+    - This is because extra memory is needed for the temporary arrays used during the merge step, which is roughly the size of the original input array.
+
+- Stability
+    - Merge sort is a **stable** sorting algorithm.
+    - A stable algorithm preserves the original order of elements when there is a tie (equal values).
+    - To ensure stability in code:
+        - When comparing elements from the left and right arrays during a merge, if the values are equal, choose the element from the **left** array.
+        - Logic: An element in the left array appeared before the element in the right array in the original order.
+        - Code condition: `if left_element <= right_element`, then insert the left element.
+
+### Quick Sort
+
+- **Introduction to Quicksort**
+    - Quicksort is a common sorting algorithm that shares many similarities with merge sort.
+    - Unlike merge sort, which splits arrays into equal halves, quicksort uses a random value called a **pivot** to partition the array.
+    - For convenience, the **rightmost value** in the input array is usually selected as the pivot value.
+    - The core idea is to iterate through every value before the pivot and compare them to it.
+    - Values that are **less than or equal to the pivot** are moved to the **left partition**,.
+    - Values that are **greater than the pivot** are moved to the **right partition**.
+
+- **The Partitioning Process**
+    - Partitioning can be performed **in place**, meaning it does not require allocating extra memory or arrays,,.
+    - The process uses **two pointers**:
+        - One pointer scans through the input array,.
+        - A second pointer (the left pointer) tracks the position where the next value less than or equal to the pivot should be inserted,.
+    - **Step-by-Step Logic**:
+        - The left pointer starts at the beginning of the array (index `s`),,.
+        - As the iteration pointer moves, if it finds a value less than or equal to the pivot, that value is swapped with the value at the left pointer,.
+        - After such a swap, the left pointer shifts one position to the right,.
+        - If the current value is greater than the pivot, the iteration pointer moves on, but the left pointer stays put,,.
+        - Once the iteration reaches the pivot index, one final swap is performed between the pivot and the value at the current left pointer,.
+    - **Outcome of Partitioning**:
+        - The pivot value is now in its **correct sorted position**,.
+        - Everything to the left of the pivot is less than or equal to it,.
+        - Everything to the right of the pivot is greater than it,.
+        - Note: The left and right sides are not necessarily sorted yet; they are only partitioned.
+
+- **Walkthrough Example**
+    - Input Array: `` with pivot `3`,,.
+    - 1. Compare 6 to 3: 6 is not less than or equal to 3. Do nothing. Iteration pointer moves.
+    - 2. Compare 2 to 3: 2 is less than or equal to 3. Swap 6 and 2. Array becomes ``. Left pointer moves to the second spot.
+    - 3. Compare 4 to 3: 4 is not less than or equal to 3. Do nothing.
+    - 4. Compare 1 to 3: 1 is less than or equal to 3. Swap 6 and 1. Array becomes ``. Left pointer moves to the third spot.
+    - 5. Reach pivot: Swap pivot `3` with value at left pointer `4`. Array becomes ``.
+    - 6. Result: Pivot `3` is in place. Left partition is ``, right partition is ``.
+
+- **Recursion and Base Case**
+    - Quicksort is a recursive algorithm.
+    - After the initial partition, quicksort is called recursively on the left side and the right side,.
+    - The pivot itself is excluded from these recursive calls because it is already in its final position,.
+    - **Base Case**: If the length of a subarray is less than or equal to one, the array is already sorted, and the function returns.
+    - The process continues until the subproblems reach individual elements, which are sorted by definition,.
+
+- **Time Complexity**
+    - **Average Case: O(n log n)**,.
+        - This occurs when the pivot splits the array into roughly equal halves,.
+        - Each level requires iterating through the input (O(n)), and there are log n levels,.
+    - **Worst Case: O(n^2)**,.
+        - This occurs when the input is already sorted (or reverse sorted) and the rightmost element is always chosen as the pivot,.
+        - In this scenario, the height of the recursion tree becomes `n` because the partitions are highly unequal.
+    - **Optimizations**:
+        - To avoid the worst case, one can use a more sophisticated pivot selection, such as choosing the middle value among the leftmost, rightmost, and center elements.
+
+- **Space Complexity and Stability**
+    - **Space Complexity**: Quicksort is more advantageous than merge sort because it does not require extra memory for arrays; it performs swaps **in place**,.
+    - **Stability**: Quicksort is generally **not stable**,.
+        - It does not preserve the relative order of duplicate values.
+        - **Example of Instability**:
+            - If you have two "7" values (Red 7 and Yellow 7) and a pivot of 5, the partitioning process may swap them such that Yellow 7 ends up before Red 7, changing their original relative order,.
+
+- **Code Logic for Partitioning (Python-style logic)**
+    ```python
+    # Logic based on the sources
+    def partition(arr, s, e):
+        pivot = arr[e] # Naive way: rightmost element
+        left_ptr = s 
+        
+        for i in range(s, e):
+            if arr[i] <= pivot:
+                # Swap current element with left_ptr element
+                temp = arr[left_ptr]
+                arr[left_ptr] = arr[i]
+                arr[i] = temp
+                left_ptr += 1
+        
+        # Final swap of pivot to the correct index
+        arr[e] = arr[left_ptr]
+        arr[left_ptr] = pivot
+        return left_ptr
+    ```
+   ,,.
+
+- **Summary Comparison**
+    - Better than insertion sort in general efficiency.
+    - Average efficiency is comparable to merge sort (O(n log n)), but worst case is worse (O(n^2)),.
+    - Most people consider it an efficient algorithm despite the theoretical O(n^2) worst case.
+
+- **Analogy for Understanding**
+    - Imagine a teacher organizing students by height. The teacher picks one student (the pivot) and tells everyone shorter to stand on the left and everyone taller to stand on the right. The pivot student then stands exactly between those two groups. The teacher then repeats this for the group on the left and the group on the right until every single student is in the correct order.
+
+### Bucket Sort
+
+- **BUCKET SORT OVERVIEW**
+    - **Definition and Efficiency**
+        - Bucket sort is a unique sorting algorithm because it can run in **big O of n** ($O(n)$) time, even in the worst-case scenario.
+        - It is considered super efficient compared to other algorithms that run in $O(n \log n)$ time.
+    - **The "Forbidden Technique" and Constraints**
+        - Bucket sort is referred to as a "**forbidden technique**" or "forbidden jutsu" because it is very rare that you are actually able to use it.
+        - It can only be used if the problem has specific constraints on the values being sorted.
+        - The primary constraint is that all values must fit within a **finite range**.
+        - Example constraint: If you are guaranteed the only values in the array are 0, 1, and 2, you can use bucket sort.
+
+- **RANGE REQUIREMENTS**
+    - The range of values is the difference between the minimum and maximum possible values, such as 0 and 2.
+    - While standard 32-bit or 64-bit integers have a range (approximately $-2^{31}$ to $2^{31}$), this range is usually too large for bucket sort to be practical.
+    - Typical ranges that qualify for bucket sort are relatively small, such as 0 to 100, 1,000, 10,000, or even 100,000.
+
+- **THE BUCKET SORT PROCESS**
+    - **Creating Buckets**
+        - For every single value in the specified range, you create a "bucket".
+        - The name "bucket sort" comes from this process of creating a bucket for every possible value.
+        - In an example with values 0, 1, and 2, you create an array of three buckets where the indexes represent the values.
+        - Values map to positions; for example, 0 maps to index 0, 1 maps to index 1, and 2 maps to index 2.
+        - Mapping is not always a direct 1:1 match to the index; for instance, a value like 4 could be arbitrarily mapped to a specific spot in the count array.
+    - **Phase 1: Counting Occurrences**
+        - You iterate through the input array to count how many times each value appears.
+        - Each bucket (index) in your counts array will store the number of times that specific value occurs in the input.
+        - **Steps for counting:**
+            - 1. Initialize the `counts` array with zeros for every possible value in the range.
+            - 2. Use an index pointer `i` to move from the beginning to the end of the input array.
+            - 3. For each value encountered, go to that value's index in the `counts` array and increment it by one.
+            - 4. Example: If the first value is 2, increment `counts`. If the next is 1, increment `counts`.
+        - You only need to pass through the input array **one time** to finish counting.
+    - **Phase 2: Overwriting the Input Array**
+        - Once counting is complete, the original input values are no longer needed.
+        - Unlike other sorting algorithms, bucket sort **does not swap** values; it simply overwrites them.
+        - You fill the original array in order: first all the zeros, then all the ones, then all the twos.
+        - **Algorithm logic for overwriting:**
+            - Use an outer loop with a variable `n` to iterate through every position in the `counts` array.
+            - Use an inner loop to iterate a number of times equal to the value stored in `counts[n]`.
+            - Use a third pointer `i` (starting at 0) to track where to fill the next value in the original array.
+            - **Example step-by-step:**
+                - If `counts` is 2, the inner loop runs twice. It puts the value 0 into `arr` and `arr`, then increments `i` each time.
+                - Move to the next bucket where `n` is 1. If `counts` is 1, the inner loop runs once, placing the value 1 at `arr` and incrementing `i`.
+                - Move to the next bucket where `n` is 2. If `counts` is 3, the inner loop runs three times, placing the value 2 at `arr`, `arr`, and `arr`.
+        - When the outer loop pointer `n` goes out of bounds of the counts array, the sorting is finished and the array is returned.
+
+- **COMPLEXITY ANALYSIS**
+    - **Time Complexity**
+        - The overall time complexity is **big O of n** ($O(n)$).
+        - Although the overwriting phase uses nested loops, it is not $O(n^2)$.
+        - The inner loop only executes a total of $n$ times across the entire process because the `i` pointer only moves from the beginning of the array to the end once.
+        - Total time is $O(n)$ for the counting pass plus $O(n)$ for the overwriting pass, which equals $O(2n)$ and reduces to **$O(n)$** because constants are ignored.
+    - **Space Complexity**
+        - Bucket sort requires extra memory for the `counts` array.
+        - The size of this array is determined by the **range** of values (from $m$ to $n$).
+        - If the range is a fixed constant size, the extra memory is considered **big O of 1** ($O(1)$) space complexity.
+
+- **STABILITY AND PRACTICALITY**
+    - **Stability**
+        - Bucket sort is **not a stable** sorting algorithm.
+        - It does not care about the relative order of identical values because it overwrites them based on counts rather than moving the original elements.
+        - **Making it stable:** It is technically possible to make it stable by using a **linked list** for each bucket.
+        - Instead of just counting, you would add each encountered element to a linked list for that bucket, then reconstruct the array from those lists.
+        - However, bucket sort is rarely used with anything other than a standard array.
+    - **When to Use**
+        - Use bucket sort if you are given an input where values are guaranteed to be within a specific, small range.
+        - In this specific case, it is more efficient than any other sorting algorithm.
+        - For general inputs without range constraints, **Merge Sort** or **Quick Sort** are preferred, with Merge Sort being more common.
+
+- **ALGORITHM SUMMARY (PSEUDOCODE LOGIC)**
+    ```text
+    // Phase 1: Counting
+    For each value in input_array:
+        counts[value] += 1
+    
+    // Phase 2: Overwriting
+    i = 0
+    For n from 0 to counts.length:
+        For j from 0 to counts[n]:
+            input_array[i] = n
+            i += 1
+    ```
+   
+- **ANALOGY**
+    - Bucket sort is like sorting a collection of colored tokens (red, blue, yellow) by simply counting how many of each you have. Instead of rearranging the actual tokens, you throw them away and lay out new ones in the right order based on your count: all red first, then all blue, then all yellow. You end up with a sorted line, but you don't care which specific red token was which.
 
 ## Prompt for Notes Formatting
 
