@@ -20,6 +20,9 @@
     - [Singly Linked Lists](#singly-linked-lists)
     - [Doubly Linked Lists](#doubly-linked-lists)
     - [Queues](#queues)
+  - [Recursion](#recursion)
+    - [Factorial](#factorial)
+    - [Fibonacci](#fibonacci)
   - [Prompt for Notes Formatting](#prompt-for-notes-formatting)
 
 
@@ -600,11 +603,178 @@ Think of a **Singly Linked List** like a **one-way train** where each car only k
 
 **Analogy:** Think of a queue like a line at a grocery store checkout. The first person to join the line is the first person served and the first to leave (FIFO). If the store had to shift every single person forward physically every time the person at the front left (like an array implementation), it would be very inefficient. Instead, the cashier just looks at whoever is next in line (like moving a head pointer in a linked list), which is a quick and constant process regardless of how long the line is.
 
+## Recursion
+
+### Factorial
+
+- **Recursion and Factorial Fundamentals**
+    - Recursion is a vital concept for data structures and algorithms that will be used throughout the course.
+    - It is often difficult to understand initially, so it is introduced using **one branch recursion** through a math formula: **n factorial**.
+    - **Definition of n Factorial:**
+        - It is a shorthand for writing $n * (n - 1) * (n - 2)$ all the way until reaching the base number, which is 1.
+        - **Example:** 5 factorial (5!) is $5 * 4 * 3 * 2 * 1$, which equals 120.
+        - While recursion is useful for learning, you do not strictly need it for this calculation; a loop is often the easiest way.
+
+- **The Logic of Recursion and Sub-problems**
+    - Recursion is centered on the idea of **sub-problems**.
+    - A complex problem is broken down into a slightly smaller version of the same problem.
+    - **Example Logic:** 5 factorial is the same as $5 * 4!$ because 4 factorial is $(4 * 3 * 2 * 1)$.
+    - **General Equation:** $n! = n * (n - 1)!$.
+    - By using this equation, a big problem (n!) is reduced to a smaller sub-problem ((n - 1)!).
+
+- **Visualizing Recursion with Decision Trees**
+    - The best way to represent recursion is through a **decision tree**.
+    - In the case of factorials, it is called **one branch recursion** because there is only one decision/path to follow at each step.
+    - To compute 5!, the tree shows that we must first solve the sub-problem of 4! before we can multiply it by 5.
+
+- **Recursive Implementation and Code Structure**
+    - A recursive function for factorials typically takes an integer and returns an integer.
+    - **The Recursive Step:**
+        - This is when the function calls itself to solve the sub-problem.
+        - In the code, this looks like calling the same function you are currently inside.
+        - **Logic:** `return n * factorial(n - 1)`.
+    - **The Base Case:**
+        - This is the point where the series ends and the multiplication stops.
+        - In math, **1 factorial is mapped to the constant 1**, so no further calculation is needed at that point.
+        - **Math Note:** 0 factorial is also defined as 1.
+        - **Importance:** Without a base case, the function would call itself infinitely, leading to increasingly negative numbers, and it would never return to compute the original result.
+    - **Recursive Code Example:**
+        ```python
+        def factorial(n):
+            # Base Case
+            if n <= 1:
+                return 1
+            
+            # Recursive Step
+            return n * factorial(n - 1)
+        ```
+        - The `n <= 1` condition is used to handle both the base case of 1 and the zero case.
+
+- **Step-by-Step Execution Trace (Using 5 Factorial)**
+    - **1. Going Down (The Calls):**
+        - Input 5: Not <= 1, so it calls `5 * factorial(4)`.
+        - Input 4: Not <= 1, so it calls `4 * factorial(3)`.
+        - Input 3: Not <= 1, so it calls `3 * factorial(2)`.
+        - Input 2: Not <= 1, so it calls `2 * factorial(1)`.
+        - Input 1: **Base Case reached**. It returns 1.
+    - **2. Going Back Up (The Returns):**
+        - The call for 2! receives 1, calculates $2 * 1$, and returns **2** to its parent.
+        - The call for 3! receives 2, calculates $3 * 2$, and returns **6** to its parent.
+        - The call for 4! receives 6, calculates $4 * 6$, and returns **24** to its parent.
+        - The original call for 5! receives 24, calculates $5 * 24$, and returns the final result: **120**.
+
+- **Complexity Analysis**
+    - **Time Complexity:**
+        - The complexity is **Big O of N (O(n))**, where n is the input value.
+        - This is because there are n total steps or multiplications to perform.
+        - This is identical to the time complexity of a standard for or while loop.
+    - **Memory (Space) Complexity:**
+        - The recursive solution has **Big O of N (O(n)) memory complexity**.
+        - This is **worse** than a loop because each function call must be saved in memory.
+        - Every function call is "put on hold" while waiting for its sub-problem to return.
+        - When the code reaches the base case (1!), all n function calls are "alive" and taking up space in memory at the same time.
+        - Each function call stores its own input parameter and tracking information.
+
+- **Iterative (Non-Recursive) Solution**
+    - The non-recursive approach is more memory-efficient as it typically uses a single variable.
+    - **Iterative Logic:**
+        - Initialize a `result` variable to 1.
+        - Use a `while` loop that runs as long as `n > 1`.
+        - Multiply the `result` by `n`, then decrement `n` by 1 in each iteration.
+        - This calculates $n * (n-1) * (n-2)...$ until n reaches 1.
+    - **Iterative Code Example:**
+        ```python
+        def factorial_iterative(n):
+            result = 1
+            while n > 1:
+                result = result * n
+                n = n - 1
+            return result
+        ```
+    - This approach avoids the O(n) memory overhead of the recursive call stack.
+
+### Fibonacci
+
+- **TWO-BRANCH RECURSION: THE FIBONACCI EXAMPLE**
+    - **General Mathematical Formula**
+        - To calculate the nth Fibonacci number, the formula is: $F(n) = F(n-1) + F(n-2)$.
+        - This means you take the $n-1$ Fibonacci number and the $n-2$ Fibonacci number and add them together to get the nth value.
+    - **The Necessity of Base Cases**
+        - Without base cases, calculating a Fibonacci number (like the fifth one) would continue forever.
+        - **Defined Base Cases**:
+            - The zeroth Fibonacci number is 0.
+            - The first Fibonacci number is 1.
+        - **Example: Calculating the Second Fibonacci Number (F(2))**:
+            - Formula: $F(2) = F(2-1) + F(2-2)$.
+            - This simplifies to $F(1) + F(0)$.
+            - Using the base cases: $1 + 0 = 1$.
+            - Therefore, the second Fibonacci number is 1.
+        - **Example: Calculating the Third Fibonacci Number (F(3))**:
+            - Formula: $F(3) = F(3-1) + F(3-2)$.
+            - This simplifies to $F(2) + F(1)$.
+            - Since $F(2) = 1$ and $F(1) = 1$, the calculation is $1 + 1$.
+            - Therefore, the third Fibonacci number is 2.
+    - **Recursion vs. Looping**
+        - Fibonacci numbers can be calculated in a straightforward way by looping through them, which allows for calculating values as high as desired.
+        - The recursive solution is actually less efficient than looping, but it is used to illustrate "two-branch recursion".
+    - **The Recursive Decision Tree for F(5)**
+        - A decision tree is used to visualize the recursive subproblems.
+        - **Level 1**: To compute $F(5)$, the problem is broken into $F(4)$ and $F(3)$.
+        - **Level 2 (Left Path)**: $F(4)$ is broken into $F(3)$ and $F(2)$.
+        - **Level 2 (Right Path)**: $F(3)$ is broken into $F(2)$ and $F(1)$.
+        - **Further Breakdown**:
+            - $F(3)$ breaks into $F(2)$ and $F(1)$.
+            - $F(2)$ breaks into $F(1)$ and $F(0)$.
+        - This process continues until every branch reaches a base case ($0$ or $1$).
+    - **Code Implementation and Logic**
+        - **Base Case Code**:
+            - Individual cases: `if n == 0: return 0` and `if n == 1: return 1`.
+            - **Condensed version**: `if n <= 1: return n`.
+            - This works because if $n$ is 1, it returns 1, and if $n$ is 0, it returns 0.
+        - **Recursive Case Code**:
+            - The function must compute the $n-1$ and $n-2$ values, add them together, and return that integer value.
+            ```python
+            # Representative logic based on the description
+            if n <= 1:
+                return n
+            return recursive_fib(n - 1) + recursive_fib(n - 2)
+            ```
+    - **Executing the Recursive Steps for F(5)**
+        - The code executes down the tree and returns values back up once base cases are hit.
+        - **Calculating F(2)**: Reaches base cases $F(1)$ (returns 1) and $F(0)$ (returns 0). Adding them ($1 + 0$) returns 1.
+        - **Calculating F(3)**: Uses results from $F(2)$ (which is 1) and $F(1)$ (which is 1). Adding them returns 2.
+        - **Calculating F(4)**: Uses results from $F(3)$ (which is 2) and $F(2)$ (which is 1). Adding them returns 3.
+        - **Calculating F(5)**: Uses results from $F(4)$ (which is 3) and $F(3)$ (which is 2). Adding them returns the final result: 5.
+    - **Time Complexity Analysis**
+        - **Loop Technique**: The time complexity is $O(N)$.
+        - **Recursive Technique**: The complexity is much higher and requires analyzing the decision tree.
+        - **Tree Height**:
+            - The height of the tree (number of levels) is $n$.
+            - For $F(5)$, the longest path is $5 \to 4 \to 3 \to 2 \to 1$, resulting in roughly 5 levels.
+        - **Branching and Doubling**:
+            - Each node generally breaks into two subproblems because there are two branches in the recursive tree.
+            - Theoretically, the number of terms doubles at every level: $1 \to 2 \to 4 \to 8...$.
+            - The number of values in the last level is roughly $2^n$.
+        - **The Power Series and Upper Bounds**:
+            - In a series where values double (1, 2, 4, 8), the series is dominated by the last term.
+            - The last term ($2^n$) is greater than or equal to all previous terms combined.
+            - Therefore, $2^n$ serves as an upper bound for the total number of values in the decision tree.
+        - **Big O Constants**:
+            - Precise values like $n+1$ or $n-1$ in the exponent do not matter in Big O notation.
+            - Multiplying by a constant (like $2 \times 2^n$) also results in the same Big O complexity.
+            - **Final Complexity**: The recursive solution is bounded by $O(2^n)$.
+
 ## Prompt for Notes Formatting
 
 ```
 Create super depth notes in Markdown (.md) format with 100% information preserved, no loss. Use simple grammar and keep everything clear, direct, and well-structured. using headings, subheadings,paragraphs, statements and code blocks when needed. Include every detail, definition, example, and step exactly from the source. transform the given content into clean, readable .md format.
 and no #, just nested - lines plaintext
+```
+
+```
+\to => => 
+\times => *
+$ => ** or `
 ```
 
 ---
