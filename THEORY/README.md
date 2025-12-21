@@ -31,6 +31,13 @@
   - [Binary Search](#binary-search)
     - [Search Array](#search-array)
     - [Search Range](#search-range)
+  - [Tree](#tree)
+    - [Binary Tree](#binary-tree)
+    - [Binary Search Trees (BST)](#binary-search-trees-bst)
+    - [BST Insert and Remove](#bst-insert-and-remove)
+    - [DFS](#dfs)
+    - [BFS](#bfs)
+    - [BST Sets and Maps](#bst-sets-and-maps)
   - [Prompt for Notes Formatting](#prompt-for-notes-formatting)
 
 
@@ -1297,6 +1304,630 @@ To think of binary search simply, imagine you are looking for a specific page in
 - **Conclusion**
     - This method allows the core binary search template to be extended to various types of problems by searching a space of values rather than a physical data structure.
 
+## Tree
+
+### Binary Tree
+
+- Binary Trees Overview
+    - General Complexity and Relationship to Other Structures
+        - Binary trees are considered the most complicated data structure covered so far.
+        - Understanding them requires using almost every topic previously covered in the course.
+        - They are similar to linked lists because they utilize nodes containing specific values.
+        - These values can be anything: integers, characters, strings, or objects.
+    - Basic Structure
+        - A node contains a value (for example, the integer 2).
+        - Nodes use pointers to connect to each other.
+        - As the name "binary" implies, each node has two pointers.
+        - While linked lists use "next" and "previous" pointers, binary trees use "left" and "right" pointers.
+        - Conventionally, these pointers are drawn pointing downwards to show relationships.
+    - Tree Relationships
+        - Parent and Child Relationships
+            - If a pointer connects one node to another node below it, the lower node is called the child.
+            - The node from which the pointer originates is considered the parent node.
+            - A parent can have a left child and a right child.
+            - Example: If a node with the value 2 points to a node with the value 1 on the left, the node with 1 is the left child of the node with 2.
+        - Sibling Relationships
+            - Nodes that share the same parent are considered sibling nodes.
+            - Example: If a parent node has both a left child (value 1) and a right child (value 3), those two children are siblings.
+        - Ancestors and Descendants
+            - A descendant is any child or any node that exists beneath a specific node in the tree.
+            - For the root node, every other node in the tree is considered a descendant.
+            - An ancestor is any node in the parent chain above a specific node, such as its parent or grandparent.
+            - The root node has no ancestors because it has no parents.
+    - Key Terminology
+        - Root Node
+            - The single node at the very top of the binary tree is called the root node.
+            - Every tree is guaranteed to have exactly one root node.
+        - Leaf Nodes
+            - Nodes that do not have any children (neither a left nor a right child) are called leaf nodes.
+            - Their pointers point to a default value of null.
+            - Every binary tree is guaranteed to have at least some leaf nodes.
+        - Visualization
+            - Computers draw trees "upside down" compared to nature.
+            - In nature, roots are at the bottom and leaves are at the top; in computer science, the root is at the top and leaves are at the bottom.
+    - Rules of Binary Trees
+        - No Cycles
+            - A binary tree is not allowed to have cycles.
+            - You cannot have a pointer from a leaf node point back up to the root node.
+            - You cannot connect two adjacent (sibling) nodes together, as this would form a cycle.
+            - Even if the pointers were undirected (allowing movement in both directions), there should be no cycles in the graph.
+        - Connectivity
+            - All nodes in a binary tree must be connected together.
+            - You cannot have a "floating" node that is not connected to the rest of the cohesive binary tree.
+    - Measuring Nodes: Height and Depth
+        - Height of a Node
+            - Height is measured by finding the longest path from a specific node down to its lowest descendant.
+            - It is calculated by counting the number of nodes in that longest path.
+            - Example: A single leaf node has a height of 1.
+            - Example: If a node has a descendant, and the path from that node to the descendant contains two nodes, the height is 2.
+            - Example: If a node has a left path of three nodes and a right path of two nodes, the height of that node is 3 because 3 is the longest path.
+            - Note: Some textbooks measure the height of a single node as 0 instead of 1.
+        - Depth of a Node
+            - Depth is measured as the path from a specific node up to the root node.
+            - Measurement Method 1 (Node Count): Count the number of nodes in the path to the root.
+                - The depth of the root node is 1.
+                - The depth of a child of the root is 2.
+                - The depth of a grandchild is 3.
+            - Measurement Method 2 (Pointer Count): Some people count the pointers (edges) connecting the nodes instead.
+                - In this case, the depth of the root node would be 0.
+    - Programming Implementation
+        - General Structure
+            - A tree node is similar to a linked list node.
+            - It contains a value property (e.g., an integer) and two pointers for the children.
+        - Code Logic
+            - When creating a tree node, you initialize the value.
+            - The left and right pointers are initially set to null.
+            - To add a child, you reassign the null pointer to a new child tree node.
+        - Example Structure:
+            ```
+            class TreeNode {
+                int value;
+                TreeNode left;
+                TreeNode right;
+
+                TreeNode(int val) {
+                    this.value = val;
+                    this.left = null;
+                    this.right = null;
+                }
+            }
+            ```
+            - To connect nodes: The root node's left pointer is assigned to the left child node, and its right pointer is assigned to the right child node.
+
+### Binary Search Trees (BST)
+
+- **Core Concept and Sorted Property**
+    - Binary search trees, or BSTs for short, are a special type of binary tree that possess a certain sorted property.
+    - While they are not literally sorted in the same way an array is, their property allows them to be used in a manner similar to a sorted array, specifically for binary search algorithms.
+    - The guarantee of a BST is that for every single node in the tree, every node in the left subtree must have a value less than the root value.
+    - Conversely, every single node in the right subtree must have a value greater than the root value.
+    - This rule applies to subtrees, which are smaller sections of the entire BST structure.
+
+- **Handling Duplicates and Structure Validation**
+    - Generally speaking, binary search trees do not contain duplicate values, so the left and right subtrees contain values strictly less than or strictly greater than the root, respectively.
+    - To determine if a structure is a valid BST, every node must be checked against these rules.
+    - For example, if a tree has a root of 2, a right child of 3, and a left child of 1, it is valid because 1 < 2 and 3 > 2.
+    - However, if that same tree had a node with the value 4 in the left subtree, it would be invalid because 4 is not less than 2.
+    - In such a case, the 4 would need to be moved to the right subtree to satisfy the BST requirements.
+
+- **The Recursive Definition**
+    - The definition of a binary search tree is recursive, meaning the sorted property must be true for every single node in the tree, not just the root.
+    - The property applies to the entire tree as well as every individual subtree.
+    - From the perspective of any specific node, that node acts as its own tree; even though it has a parent, it must maintain the same sorted properties as any other BST.
+    - For example, if a node has a value of 3, any value in its left subtree must be less than 3, and any value in its right subtree must be greater than 3.
+    - If a value like 4 is placed in the left subtree of the node 3, it violates the recursive property because 4 is not less than 3.
+
+- **Searching in a BST**
+    - The sorted property allows for efficient searching, achieving the same benefits as a sorted array.
+    - In an unsorted structure, finding a target requires looking at every individual element, resulting in $O(n)$ time complexity.
+    - With a BST, searching can be done in $\log n$ time because the sorted property allows the algorithm to follow the same logic as a binary search.
+    - **Step-by-Step Search Example (Target: 5)**
+        - 1. Start at the root node (e.g., value 2).
+        - 2. Compare the target (5) to the root (2).
+        - 3. Since 5 is greater than 2, the search eliminates the root and the entire left subtree.
+        - 4. Move to the right child (e.g., value 3).
+        - 5. Compare the target (5) to the current node (3).
+        - 6. Since 5 is greater than 3, eliminate any left children and move to the right child (e.g., value 4).
+        - 7. Compare the target (5) to the current node (4).
+        - 8. Since 5 is greater than 4, move to the right.
+        - 9. If the next node is null, the search is complete, and the target was not found.
+        - 10. The algorithm would return false if the target is not found and true if it is located.
+
+- **Search Algorithm Implementation**
+    - Because binary trees are recursive, a recursive algorithm is the easiest and most common way to traverse and search them.
+    - Although recursion is not strictly required, it is preferred due to the tree's structure.
+    - Searching a BST is considered "one branch recursion" because, at each node, a comparison is made and the algorithm only proceeds in one direction (left or right).
+    - There is no need to explore both branches, which is what makes the search efficient.
+    - **Recursive Logic Steps:**
+        - The search function accepts the root of a binary tree and a target value.
+        - **Base Case:** If the current node is null, return false because the search has run out of nodes without finding the target.
+        - **Comparison 1:** Check if the target is greater than the current node's value; if so, recursively call the search function on the right child.
+        - **Comparison 2:** Check if the target is less than the current node's value; if so, recursively call the search function on the left child.
+        - **Comparison 3:** If the target is neither greater nor less than the current value, it must be equal; return true.
+        - The result (true or false) is then returned back up through the parent recursive calls until the original call is resolved.
+
+- **Time Complexity and Balance**
+    - The time complexity for searching a BST is $\log n$, similar to binary search.
+    - This efficiency depends on the assumption that every comparison eliminates roughly half of the remaining possibilities.
+    - However, the search is only $\log n$ if the tree is "roughly balanced".
+    - **Defining a Balanced Tree:**
+        - A tree is balanced if, for every single subtree (including the root), the heights of the left and right subtrees differ by no more than one.
+        - For example, if a root has a left subtree of height 1 and a right subtree of height 2, it is balanced because the difference is one.
+        - If a leaf node has subtrees of height 0 and 0, the difference is zero, and it is balanced.
+    - **Unbalanced Trees:**
+        - A tree might not be balanced; for instance, it could be a long string of nodes resembling a linked list.
+        - In an unbalanced tree, you cannot go "halfway" between nodes, and the search may not eliminate half the possibilities with each step.
+        - In the worst case, the time complexity for an unbalanced BST is Big $O(n)$.
+    - **General Complexity:**
+        - Technically, the time complexity of a search is Big $O(h)$, where $h$ is the height of the tree.
+        - For an imbalanced tree, $h$ equals $n$.
+        - For a balanced tree, $h$ equals $\log n$ because the structure is multiplied by two at every level.
+
+- **BST vs. Sorted Arrays**
+    - A common question is why one should use a BST when a sorted array already allows for $\log n$ searches.
+    - The primary downside of sorted arrays is the cost of adding or removing values while maintaining the sorted property.
+    - In an array, removing or adding a value requires shifting all subsequent values, which takes $O(n)$ time.
+    - In a binary search tree, both inserting and deleting values can be achieved in $\log n$ time.
+    - This ability to perform insertions and deletions efficiently while maintaining search speed is the main benefit of using a binary search tree.
+
+- **Summary Analogy**
+    - Searching a balanced BST is like using a directory where every choice you make immediately throws away half of the remaining pages you don't need to look at. However, if the tree is unbalanced, it is like a directory where every page just tells you to look at the very next page, forcing you to read the whole book one page at many times until you find what you need.
+
+### BST Insert and Remove
+
+- **Binary Search Tree (BST) Operations: Insert and Remove**
+
+- **Overview of BST Benefits**
+    - The primary benefit of binary search trees over sorted arrays is the efficiency of operations.
+    - We can insert and remove nodes in O(log n) time, provided the tree is roughly balanced.
+    - In a balanced tree, the height is approximately equal to log n.
+
+- **BST Insertion**
+    - **General Strategy**
+        - Inserting a node involves traversing the height of the tree.
+        - The goal is to find the correct position to insert the node.
+        - While there can be multiple valid BST configurations after an insertion, the preferred method is to insert the node as a **leaf node** because it is easier to implement.
+        - Advanced data structures, like the **AVL tree**, can implement balanced binary search trees where insert and remove operations automatically result in a balanced tree.
+    - **The Insertion Process**
+        - Start at the root node.
+        - Traverse the tree using the same logic as a search operation.
+        - Compare the value to be inserted with the current node's value:
+            - If the value is **greater** than the current node, move to the **right subtree**.
+            - If the value is **less** than the current node, move to the **left subtree**.
+        - Typically, duplicate values do not exist in a BST; if a value already exists, another one is not inserted.
+    - **Step-by-Step Examples**
+        - **Inserting 6 into a tree with root 4**:
+            - Start at the root (4).
+            - 6 is greater than 4, so move down to the right.
+            - If the right child is null, create a new node with the value 6.
+            - The parent node (4) reassigns its right pointer to the newly returned node (6).
+        - **Inserting 5 into the same tree**:
+            - Start at the root (4). 5 is greater than 4, go right to node 6.
+            - 5 is less than 6, so go to the left subtree.
+            - The left child of 6 is null, so create a node with value 5.
+            - Node 6 assigns its left pointer to node 5.
+        - **Inserting 2 into the same tree**:
+            - Start at the root (4). 2 is not greater than 4, it is less than 4.
+            - Call insert on the left subtree.
+            - If the left child is null (base case), create node 2 and return it.
+            - Node 4 assigns its left pointer to node 2.
+    - **Recursive Implementation and Logic**
+        - The function is passed a node (root) and a value.
+        - **Base Case**: If the current node is **null**, create the new node and return it.
+        - If not at the base case:
+            - If the value is greater than the root value, call `insert` on the right subtree and assign the result back to the root's right pointer.
+            - Once the insertion is done, the function returns the current node (root) up to its parent to maintain connections.
+            - Only one branch (if/else if) executes per recursive call.
+    - **Time Complexity of Insert**
+        - The complexity is O(height of the tree).
+        - Because the process only visits one node per level (either going left or right, never both), it is the same as searching.
+        - In a balanced tree, this is **O(log n)**.
+
+- **Finding the Minimum Value**
+    - **Purpose**
+        - Finding the minimum is required for the `remove` function.
+    - **Logic**
+        - In a BST, the smallest element is located all the way to the **left**.
+        - Because all values less than a node are in its left subtree, traversing left repeatedly leads to the minimum.
+    - **Implementation**
+        - Assign a pointer to the starting node.
+        - While the pointer is not null and the left child is not null, move the pointer to the left child.
+        - Once the left pointer is null, the current node is the minimum; return this node.
+        - This is not necessarily recursive; it can be done with a simple loop, similar to traversing a linked list.
+
+- **BST Removal**
+    - **Overview**
+        - Removing a node is more complicated than inserting.
+        - The process begins by searching for the node with the target value.
+    - **Case 1: Zero or One Child (Simple Case)**
+        - This applies if the node to be removed has no children or just a single child.
+        - **Zero children**: If a node is a leaf, the function returns `null` to the parent, effectively disconnecting the node.
+        - **One child**: If the node has one child, the function returns that child to the parent. The parent's pointer then bypasses the removed node and points directly to the child.
+        - Example: Removing node 3 (which has child 2) from parent 4:
+            - 3 is less than 4, so we find 3. 3 has node 2 on the left and null on the right.
+            - Since the right pointer is null, return the left child (2) to node 4.
+            - Node 4's left pointer now points directly to node 2.
+    - **Case 2: Two Children (Difficult Case)**
+        - This applies when the node to be removed has both a left and a right child.
+        - Removing such a node directly would disconnect its descendants.
+        - **Resolution Strategy**:
+            - Replace the target node's value with a value from one of its descendants to maintain the BST property.
+            - The best values to use for replacement are either the **minimum value from the right subtree** or the **maximum value from the left subtree**.
+        - **Steps using the Right Subtree Minimum**:
+            - 1. Find the minimum node in the right subtree.
+            - 2. Change the value of the node-to-be-removed to the value of that minimum node.
+            - 3. Recursively call the `remove` function on the right subtree to delete the original minimum node.
+        - **Logic for Validity**:
+            - The minimum value from the right subtree is guaranteed to be greater than all nodes in the left subtree (because it came from the right) and less than or equal to all other nodes in the right subtree.
+            - The node being recursively removed (the former minimum) is guaranteed to have **at most one child** (a right child), because if it had a left child, it wouldn't be the minimum. This ensures the recursive call hits Case 1.
+    - **Example: Removing the Root (4) with children 3 and 6**
+        - Node 4 has two children. Find the minimum of the right subtree (e.g., node 5).
+        - Update node 4's value to 5.
+        - Call `remove(right_subtree, 5)`.
+        - Node 5 in the right subtree is found; since it has no left child, its right child (even if null) is returned to its parent (node 6).
+        - Node 4 is now effectively node 5, and the original node 5 is gone.
+    - **Time Complexity of Remove**
+        - In the worst case, we traverse the height of the tree twice: once to find the node and its minimum replacement, and once to perform the final removal of the replacement node.
+        - Since 2 is a constant, the complexity remains **O(log n)** for a balanced tree.
+        - This O(log n) performance for both insertion and removal is the key advantage of BSTs over sorted arrays.
+
+- **Code Logic Summary for Remove**
+    - ```python
+      # Logic for removal branching
+      if value > root.val:
+          root.right = remove(root.right, value)
+      elif value < root.val:
+          root.left = remove(root.left, value)
+      else:
+          # Node found
+          if not root.left:
+              return root.right # Covers 0 or 1 child (right)
+          elif not root.right:
+              return root.left # Covers 1 child (left)
+          else:
+              # Case with 2 children
+              min_node = findMin(root.right)
+              root.val = min_node.val
+              root.right = remove(root.right, min_node.val)
+      return root
+      ```
+     
+
+***
+
+**Analogy for BST Insertion:**
+Think of inserting a new book into a library organized by a specific system. You start at the main entrance (the root) and look at a sign. If your book's category is "higher" than the sign, you go to the right wing; if "lower," you go to the left. You keep following signs at every junction until you find an empty spot on a shelf (a null leaf position) where the book fits perfectly while keeping the whole library in order.
+
+### DFS
+
+- **Introduction to Tree Traversal**
+    - **Goal of Traversal**
+        - With a sorted array, iterating left to right is simple.
+        - We want to achieve the same with a Binary Search Tree (BST): iterate through all values in sorted order.
+        - This process is not as simple as an array, but the logic remains going "left to right".
+    - **Inorder Traversal Concept**
+        - Traversing the tree in sorted order is called "Inorder Traversal".
+        - **Recursive Definition**:
+            - Start at the root.
+            - Smallest values are known to be in the left subtree.
+            - Process the entire left subtree first.
+            - Process the current value.
+            - Process the right subtree (where values are greater).
+
+- **Detailed Step-by-Step Traversal Example**
+    - **Scenario**: A tree with root 4, left child 3, left-left child 2.
+    - **Execution Trace**:
+        - Start at Root (4). Go to left subtree (3).
+        - At Node (3), go to left subtree (2).
+        - At Node (2), try to go left. It is null (no values less than 2).
+        - **Print Node (2)**: This is the first value processed.
+        - Check right subtree of (2). It is null. Return to parent (3).
+        - **Print Node (3)**: We returned from its left subtree, so now we process 3.
+        - Check right subtree of (3). It is null. Return to parent (4).
+        - **Print Node (4)**: We returned from its entire left subtree, so now we process 4.
+        - Check right subtree of (4). It exists (Node 6). Proceed to 6.
+    - **Continuing down the Right Subtree (Node 6)**:
+        - Before printing 6, go to its left subtree (Node 5).
+        - At Node (5), left is null (base case).
+        - **Print Node (5)**.
+        - Right of 5 is null (base case). Return to parent (6).
+        - **Print Node (6)**: Left side of 6 is done.
+        - Go to right subtree of 6 (Node 7).
+        - Left of 7 is null. **Print Node (7)**. Right of 7 is null.
+    - **Observation**:
+        - For every node, the order was: Left -> Current Node -> Right.
+        - This mimics going through an array in sorted order using pointers and recursion.
+
+- **Inorder Traversal Implementation**
+    - **Code Structure**:
+        - It is a recursive function taking a `root` node.
+        - **Base Case**: If the current node is `null`, return (nothing to traverse).
+        - **Recursive Step 1**: Call function on `node.left`.
+        - **Operation**: Print/Process `node.val`.
+        - **Recursive Step 2**: Call function on `node.right`.
+    - **Time Complexity**:
+        - In the worst case (and pretty much every case), we must visit every single node once.
+        - Time Complexity: **O(N)**, where N is the size of the tree.
+        - This is equivalent to traversing a sorted array; it cannot be less than O(N).
+
+- **Tree Sort (Sorting with BST)**
+    - **Concept**:
+        - If given random values in an arbitrary order, they can be sorted using a BST.
+        - First, build the BST by inserting each value. Then, perform inorder traversal to get a sorted array.
+    - **Time Complexity Analysis**:
+        - **Building the Tree**:
+            - Inserting one value into a balanced BST is O(log N).
+            - Doing this for N values is **O(N * log N)**.
+        - **Traversing the Tree**:
+            - Inorder traversal takes **O(N)**.
+        - **Total Complexity**:
+            - Equation: O(N log N + N).
+            - As N becomes large, N log N grows faster than N.
+            - We drop the smaller term. The time complexity is dominated by **O(N log N)**.
+    - **Comparison**:
+        - This performance is similar to Merge Sort and Quick Sort.
+
+- **Types of Tree Traversals (Depth First Search Variants)**
+    - **1. Inorder Traversal** (Discussed above)
+        - Order: Left -> Root -> Right.
+        - Use: Getting values in sorted order.
+    - **2. Pre-order Traversal**
+        - **Definition**: Visit the root node *before* visiting its children recursively.
+        - **Order**: Root -> Left Subtree -> Right Subtree.
+        - **Implementation**: Swap the print line to the top, before the recursive calls.
+            ```text
+            function preorder(node):
+                if node is null return
+                print node.val        <-- Happened first
+                preorder(node.left)
+                preorder(node.right)
+            ```
+    - **3. Post-order Traversal**
+        - **Definition**: Visit the children (left and right) *before* visiting the root node.
+        - **Order**: Left Subtree -> Right Subtree -> Root.
+        - **Implementation**: Swap the print line to the bottom, after the recursive calls.
+            ```text
+            function postorder(node):
+                if node is null return
+                postorder(node.left)
+                postorder(node.right)
+                print node.val        <-- Happened last
+            ```
+    - **4. Reverse Order Traversal**
+        - **Goal**: Iterate values from largest to smallest (e.g., 7, 6, 5, 4...).
+        - **Order**: Right Subtree -> Root -> Left Subtree.
+        - **Implementation**:
+            - Recursively do the right subtree first.
+            - Print the value.
+            - Recursively do the left subtree.
+
+- **Depth First Search (DFS)**
+    - **Definition**:
+        - Inorder, Pre-order, and Post-order are all examples of **Depth First Search (DFS)**.
+        - As the name implies, the search goes "depth first".
+    - **Mechanism**:
+        - Start at a node and go as deep as possible in one direction before backing up.
+        - Example: Go to the left child, then that node's left child, all the way to the bottom (leaf) first.
+        - You do not process a layer at a time; you plunge to the bottom of a specific branch immediately.
+        - This behavior applies regardless of whether you process the node before (pre) or after (post) the children.
+    - **Time Complexity**:
+        - For all DFS traversals (Inorder, Pre, Post, Reverse), the complexity is **O(N)**.
+
+- **Breadth First Search (BFS) Preview**
+    - **Concept**:
+        - The opposite of DFS is Breadth First Search (BFS).
+    - **Mechanism**:
+        - Traverses layer by layer.
+        - Example: Visit the root (layer 1), then all direct children (layer 2), then all grandchildren (layer 3).
+        - It does not reach the bottom immediately like DFS.
+
+### BFS
+
+- **Introduction to Breadth-First Search (BFS)**
+    - BFS is an algorithm used to traverse trees layer by layer.
+    - It can be applied to any tree, regardless of whether it has the sorted property of a binary search tree or not.
+    - **Core Concept**:
+        - Traverse the closest nodes first, then the next layer of closest nodes, and continue this pattern.
+        - This is the opposite of Depth-First Search (DFS), which goes all the way to the bottom before traversing other nodes.
+    - **Direction**:
+        - Typically, BFS goes from left to right, though this is not strictly necessary.
+        - For trees, left to right is the standard approach.
+    - **Alternative Name**:
+        - BFS is also called "Level Order Traversal" because it processes the tree level by level.
+
+- **Traversal Logic and Challenges**
+    - **Example Walkthrough**:
+        - If traversing a tree with root 4, left child 3, and right child 6:
+            - First, print the root: 4.
+            - Move to the next layer and traverse left to right: print 3, then print 6.
+        - After printing 6, the algorithm must determine how to reach the children of the previous layer (nodes 2, 5, and 7).
+    - **Implementation Strategy**:
+        - BFS does not suit recursion well because you do not recursively traverse one branch fully before moving to the next.
+        - It requires an **iterative** approach.
+    - **Process**:
+        - Process a node (e.g., 4).
+        - Process all children of that node from left to right (e.g., 3 and 6).
+        - Process all children of those nodes (e.g., children of 3, then children of 6).
+
+- **Data Structure Requirement**
+    - As nodes are processed, their children must be stored to be processed later.
+    - **The Queue**:
+        - The required data structure is a **Queue** (First In, First Out).
+        - When a node is processed, its children are added to the queue in left-to-right order.
+        - Example: After processing 4, add 3 and 6 to the queue.
+        - Since 3 was added first, it is processed first, ensuring the current level finishes before the next begins.
+    - **Storage**:
+        - It is important to store the actual **node** in the queue, not just the value.
+        - Storing the node preserves the pointers to the left and right children, which are needed for traversal.
+
+- **Algorithm Implementation (Python)**
+    - **Setup**:
+        - Use a double-ended queue (called a `deque` in Python).
+        - Initialize the queue with the root node.
+            - If the tree is empty, nothing is added.
+    - **Level Tracking (Optional but Useful)**:
+        - It is possible to count levels (Level 0, Level 1, etc.) while printing.
+        - This adds a few extra lines of code but makes the output clearer.
+    - **The Code Structure**:
+        ```python
+        # Conceptual Python Code based on description
+        queue = deque([root])
+        level = 0
+        while len(queue) > 0:
+            print("Level:", level)
+            for i in range(len(queue)):
+                curr = queue.popleft()
+                print(curr.val)
+                if curr.left:
+                    queue.append(curr.left)
+                if curr.right:
+                    queue.append(curr.right)
+            level += 1
+        ```
+    - **Step-by-Step Code Execution**:
+        - **Outer Loop**: Runs as long as the length of the queue is greater than zero.
+        - **Inner Loop**:
+            - Takes a "snapshot" of the queue length at the start of the level.
+            - Example: If the queue has length 1 (root), the loop runs once.
+            - This ensures we only process nodes belonging to the current level before moving to children added during this step.
+        - **Operations inside Inner Loop**:
+            - **Pop**: Remove element from the left (opposite side of push) to maintain FIFO.
+            - **Print**: Output the value of the node.
+            - **Add Children**:
+                - Check if the left child is non-null. If yes, add to queue.
+                - Check if the right child is non-null. If yes, add to queue.
+                - Important: Add left before right to maintain left-to-right traversal order.
+        - **Level Increment**: After the inner loop finishes (level processed), increment the level counter.
+
+- **Detailed Trace Example**
+    - **Tree Structure**: Root (4) -> Children (3, 6) -> Grandchildren (2 from node 3; 5, 7 from node 6).
+    - **Initialization**: Queue contains.
+    - **Level 0**:
+        - Queue length is 1.
+        - Pop 4, print it.
+        - Add Left (3) to queue.
+        - Add Right (6) to queue.
+        - Inner loop finishes. Level increments.
+    - **Level 1**:
+        - Queue contains. Length is 2.
+        - **Process 3**:
+            - Pop 3 (leftmost).
+            - Add Left child (2) to queue.
+            - Right child is null (do nothing).
+        - **Process 6**:
+            - Pop 6.
+            - Add Left child (5) to queue.
+            - Add Right child (7) to queue.
+        - Queue now looks like (children of the previous level).
+    - **Level 2**:
+        - **Process 2**: Pop 2. No children to add.
+        - **Process 5**: Pop 5. No children to add.
+        - **Process 7**: Pop 7. No children to add.
+    - **Termination**:
+        - Queue is empty. Length is not greater than zero. Algorithm stops.
+
+- **Time Complexity Analysis**
+    - **Confusion regarding Nested Loops**:
+        - Seeing a `for` loop inside a `while` loop often leads people to assume the complexity is $O(n^2)$, but this is incorrect for BFS.
+    - **Actual Complexity**: **$O(n)$**.
+    - **Reasoning**:
+        - Every node is traversed exactly once.
+        - For each node, a constant number of operations are performed:
+            1.  Printing the node.
+            2.  Appending the node to the queue.
+            3.  Popping the node from the queue.
+        - The total operations equal some constant $C$ times $N$ (number of nodes), which reduces to $O(n)$.
+        - The complexity is determined by the size of the data structure (number of nodes).
+
+- **Summary**
+    - BFS is likely the second most common tree algorithm after DFS (or potentially the most common).
+    - It is a fundamental algorithm that will appear again in future contexts.
+
+### BST Sets and Maps
+
+- **Sets and Maps Overview**
+    - Sets and maps are data structures that are commonly implemented using binary search trees.
+    - **Sets**
+        - A set is essentially a collection of values, for example, 1, 2, 3.
+        - While it is similar to having an array, the word "set" usually implies that there is a different underlying data structure being used rather than an array.
+        - One implementation of a set could be a binary search tree.
+            - If you have values 1, 2, 3 in a binary search tree, the structure would look different than an array.
+        - The advantage of implementing a set with a binary search tree instead of an array is that you can search for values, insert values, and remove values in $O(\log n)$ time.
+    - **Maps**
+        - **Concept and Example**
+            - To understand why maps are important, consider the example of a phone book sorted in alphabetical order from A to Z based on the name of the person,.
+            - Although phone books are not used much anymore, they serve as a good example.
+            - A phone book contains a list of names, such as Alice, Brad, and Colin.
+            - These names are listed in alphabetical order.
+            - The important detail is that we do not just care about the name itself; every name is mapped to something else.
+            - This mapping is where the word "map" comes from.
+            - In this example, every name is mapped to a phone number.
+                - Alice might map to 1 2 3.
+                - Brad might map to 4 5 6.
+                - Colin maps to something else.
+        - **Key-Value Pairings**
+            - The goal is to store information while sorting by the name.
+            - For every name, we want to possess other information.
+            - This is called a key-value pairing.
+            - You map a key to a value, and the data structure is typically sorted by the key.
+
+- **Internal Structure and Nodes**
+    - **Difference between Sets and Maps**
+        - In the simple case of a set using a binary tree, the nodes just have key values.
+        - When using a map, each node has a key, which decides how to structure the binary tree for sorting.
+        - However, each node in a map also has an associated value.
+    - **The Value Component**
+        - In the phone book example, the value would be the phone number.
+        - The value can also be its own object if desired.
+        - It can contain multiple values or all information about a person, such as their phone number, social security number, and email.
+    - **Efficiency**
+        - The structure is sorted by the key.
+        - Searching for someone in the phone book is efficient because we search by the names.
+        - We can search in logarithmic time because the data is sorted by name.
+        - Once the name (key) is found, we have access to all the information about the person (the value).
+
+- **Implementation and Interfaces**
+    - **Underlying Data Structures**
+        - Sets and maps can be implemented using binary search trees.
+        - The binary search tree acts as the underlying data structure.
+        - This is similar to stacks, where the stack is the interface or data structure allowing push and pop operations, but underneath it is implemented with dynamic arrays.
+        - Similarly, queues are implemented with linked lists or sometimes dynamic arrays.
+        - Sets and maps can also be implemented with other data structures, such as hashmaps and hash sets, which will be discussed later.
+    - **Tradeoffs**
+        - Depending on the implementation used (e.g., BST versus hashmap), there will be different tradeoffs.
+        - For binary search tree implementations, the time complexities are those previously discussed for BSTs.
+
+- **Language-Specific Terminology and Support**
+    - **Terminology**
+        - Depending on the programming language, these structures have different names.
+        - For binary search trees, a set is typically called an ordered set or a tree set.
+        - For maps, it is called an ordered map or a tree map.
+    - **Java**
+        - Java has a built-in tree map.
+        - You can create a tree map where the key is a string and the value is a string.
+        - You can also use integers and other types.
+    - **C++**
+        - C++ has native tree maps, which are simply called "maps".
+    - **Python**
+        - Python does not really have native tree maps.
+        - You can install other packages, such as the `sorted dict` package, which is essentially a tree map under the hood.
+    - **JavaScript**
+        - JavaScript does not really have native tree maps either.
+        - There are other packages available for JavaScript that implement tree maps.
+
+- **Interview Context**
+    - **Common Scenarios**
+        - In real interviews, it is most common to implement a tree map or run an algorithm on a tree map, such as searching or inserting.
+        - It is not super common to need the built-in tree map.
+    - **Handling Missing Native Support**
+        - If you need a tree map and are using Python or JavaScript, the interviewer will most likely let you assume that an object or interface already exists that you can use.
+        - You do not necessarily have to implement it from scratch if that is not the specific problem.
+    - **Implementation Questions**
+        - Sometimes the interview question itself is to implement the data structure or parts of it from scratch.
+    - **Key Requirements**
+        - The most important thing is understanding the interface a tree map would have.
+        - You must understand operations like insert, remove, search, iterate, and in-order traversal.
+        - You must also understand the associated time complexities of those operations.
 
 ## Prompt for Notes Formatting
 
