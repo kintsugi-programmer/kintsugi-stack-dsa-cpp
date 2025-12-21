@@ -58,6 +58,22 @@
     - [2-Dimension DP](#2-dimension-dp)
   - [Bit Operator](#bit-operator)
     - [Bit Operator](#bit-operator-1)
+- [Advanced Algorithms](#advanced-algorithms)
+  - [Arrays](#arrays-1)
+    - [Kadanes Algorithm](#kadanes-algorithm)
+    - [Sliding Window Fixed](#sliding-window-fixed)
+    - [Sliding Window Variable](#sliding-window-variable)
+    - [Two Pointers](#two-pointers)
+    - [Prefix Sums](#prefix-sums)
+  - [Linked Lists](#linked-lists-1)
+    - [Fast and Slow Pointers](#fast-and-slow-pointers)
+  - [Tries](#tries)
+    - [Trie](#trie)
+    - [Union Find](#union-find)
+    - [Segment Tree](#segment-tree)
+    - [Iterative DFS](#iterative-dfs)
+  - [Heaps](#heaps)
+    - [Heaps](#heaps-1)
 - [Others](#others)
   - [Prompts](#prompts)
     - [Notes Formatting](#notes-formatting)
@@ -3457,6 +3473,965 @@ To understand this, imagine building a brick wall from the bottom up; you only n
 
 **Analogy for Understanding Bit Shifting:**
 Think of bit shifting like a queue of people sitting in a row of chairs. **Left shifting** is like everyone moving one chair to the left; the person at the far left falls off the end and disappears, while a new person (a zero) sits in the empty chair on the right. **Right shifting** is the same process in reverse: everyone moves right, the person on the far right disappears, and a new zero sits in the chair on the far left. Just as adding a zero to the end of a decimal number (`15 -> 150`) multiplies it by 10, adding a zero to the end of a binary number multiplies it by 2.
+
+# Advanced Algorithms
+
+## Arrays
+
+### Kadanes Algorithm
+
+- **Kadane's Algorithm Overview**
+    - This algorithm is named after a person and, while not considered a hard algorithm compared to others, it is fundamental and important due to the many lessons it offers.
+    - It shares significant overlap with other algorithmic patterns, specifically **two pointers** and **sliding window**.
+    - Technically, it is classified as both a **dynamic programming** and a **greedy algorithm**.
+
+- **The Problem Statement**
+    - The input is an array of integers which can be positive or negative.
+    - The objective is to return a **non-empty subarray** from the array that has the largest possible sum.
+    - Definition of a **subarray**: It must be a **contiguous** subarray, meaning you cannot have gaps or "holes" between elements.
+    - Variation - **All Negative Values**:
+        - If the array contains only negative numbers, you cannot return zero because the subarray must be non-empty.
+        - In this case, you return the largest individual value (even if it is negative).
+        - For example, in an all-negative array where -1 is the largest value, -1 is the sum returned; making the subarray larger would only result in a more negative sum.
+    - Result: The algorithm returns the **sum** itself, not necessarily the subarray.
+
+- **The Brute Force Solution**
+    - The simplest approach is to calculate the sum of every possible subarray and track the maximum.
+    - **Logic**:
+        - Iterate through every possible starting position (i).
+        - For each starting position, iterate through every possible ending position (j) to find every subarray starting at i.
+        - This involves a nested loop structure.
+    - **Time Complexity**: $O(n^2)$, where $n$ is the size of the array, because you check every subarray starting at every position.
+    - **Initialization**:
+        - The `maxSum` is initialized to the first element of the array because the subarray must be non-empty.
+        - If empty subarrays were allowed, `maxSum` could be initialized to zero.
+        - Some programmers initialize `maxSum` to negative infinity or the minimum possible integer for the language used.
+    - **Edge Cases**:
+        - The algorithm assumes the input array is non-empty; if it were empty, finding a non-empty subarray would be impossible, and the code might throw an exception or return immediately.
+    - **Implementation Detail**:
+        - Two pointers (i and j) determine the boundaries of the current subarray.
+        - A `currentSum` variable tracks the sum as the inner loop progresses.
+        - If `currentSum > maxSum`, then `maxSum` is reassigned.
+
+- **Optimization and Logic of Kadane's Algorithm**
+    - To improve on $O(n^2)$, redundant work must be identified.
+    - **Core Insight**: 
+        - Positive numbers contribute to a larger sum, while negative numbers make the sum smaller.
+        - If a subarray has a positive sum, it is worth including in the next calculation because it contributes to the total.
+        - Even if a subarray contains a negative number, it is worth keeping if the overall sum remains positive and allows for a larger positive number later that "counteracts" the negative one.
+        - **When to Discard**: You should never add a negative previous sum to a current value because a negative value will never increase the total sum.
+    - **Comparison Choice**: The "current sum" at any given position is the largest subarray sum ending at that position. You choose the larger value between the current element alone or the current element plus the previous sum.
+
+- **The Linear Time Algorithm ($O(n)$)**
+    - This version does not require nested loops.
+    - **Variables**:
+        - `maxSum`: Initialized to the first element.
+        - `currentSum`: Tracks the sum of the current window.
+    - **Step-by-Step Logic**:
+        - Iterate through every number `n` in the input array.
+        - **Reset Check**: Before adding `n` to `currentSum`, check if `currentSum` is negative.
+        - If `currentSum < 0`, reset it to zero. This ensures you are not carrying over a "debt" that decreases the sum of the current element.
+        - Add `n` to `currentSum`.
+        - Update `maxSum` if `currentSum` is now greater than the existing `maxSum`.
+    - **Example Walkthrough (Array: [4, -1, 2, -7, 3, 4])**:
+        - Start: `maxSum = 4`, `currentSum = 0`.
+        - Element 4: `currentSum` becomes 4. `maxSum` stays 4.
+        - Element -1: `currentSum` becomes 3. `maxSum` stays 4.
+        - Element 2: `currentSum` (3 + 2) becomes 5. `maxSum` updated to 5.
+        - Element -7: `currentSum` (5 - 7) becomes -2. `maxSum` stays 5.
+        - Element 3: `currentSum` was negative, so it resets to 0, then adds 3. `currentSum = 3`. `maxSum` stays 5.
+        - Element 4: `currentSum` (3 + 4) becomes 7. `maxSum` updated to 7.
+        - End: Return 7.
+
+- **Sliding Window Variation (Returning Indices)**
+    - This variation is used if the problem asks for the start and end indices of the subarray rather than just the sum.
+    - **Pointers**:
+        - `L` (Left pointer): Represents the start of the window.
+        - `R` (Right pointer): Represents the end of the window.
+        - Use a capital 'L' in code to avoid confusion with the number '1'.
+        - `maxLeft` and `maxRight`: Store the indices of the window that produced the `maxSum`.
+    - **Rules**:
+        - `L` should never cross `R`.
+        - If `L == R`, the subarray has a length of 1.
+        - The window can grow or slide.
+    - **Logic for Index Tracking**:
+        - Initialize `L = 0` and iterate `R` from 0 to the end of the array.
+        - If `currentSum < 0`:
+            - Reset `currentSum = 0`.
+            - Move `L` to the current position of `R`. This starts a "fresh" window.
+        - Add the value at `R` to `currentSum`.
+        - If `currentSum > maxSum`:
+            - Update `maxSum`.
+            - Set `maxLeft = L` and `maxRight = R`.
+    - **Example Context**: If the max sum of 7 was found between index 4 and 5, the algorithm would return those specific pointers.
+
+- **Complexity Summary**
+    - **Time Complexity**: Linear $O(n)$ because it only requires a single pass through the array.
+    - **Space Complexity**: Efficient, as it only tracks a few variables (`maxSum`, `currentSum`, and pointers).
+
+- **Analogy for Understanding**
+    - Think of the `currentSum` as a traveler's bank account while walking across a path. Positive numbers are gifts of money, and negative numbers are tolls. If the traveler's account drops below zero (becomes negative), they are better off declaring bankruptcy (resetting to zero) and starting fresh at the next town rather than carrying that debt forward to future gifts. [This analogy is provided for clarity based on source logic in].
+
+### Sliding Window Fixed
+
+- **Problem Definition**
+    - The goal is to return **true** if there are **two elements** within a window of size **K** that are equal.
+    - "Within a window of size K" means the window can be **at most** of length K.
+    - The two elements must be **different elements** at different positions.
+    - You cannot say a window has two identical elements if you are just looking at the same position twice.
+
+- **Brute Force Approach**
+    - **Method**: Look at every possible window of size K in the array.
+    - **Example with K = 2**:
+        - Examine the first window of two values: Check if they are the same.
+        - If not, move to the next window of two values and check again.
+        - Continue this process until the end of the array is reached.
+        - If a window is found where the two values are equal, return true.
+    - **Window Constraints**:
+        - If a duplicate exists at a distance of 3, but K is fixed at 2, that duplicate will not be found because the window is too small.
+        - Brute force involves manually comparing the left element to every other element in that specific window.
+
+- **Pointer-Based Implementation (Brute Force Logic)**
+    - **Left Pointer**: Represents the **beginning** of the window.
+    - **Right Pointer**:
+        - Initialized to `left + 1`.
+        - It should **never** be at the same position as the left pointer to avoid comparing an element to itself.
+        - It is used to check if the value at the left pointer is equal to any other values within the window.
+    - **Shifting the Window**:
+        - Once the right pointer reaches the end of the window size (larger than K), the **left pointer is shifted** over.
+        - This shift creates a new window.
+    - **Loop Structure**:
+        - **Outer Loop**: Runs as many times as there are elements in the array (**N**).
+        - **Inner Loop**: Runs roughly **K** times (technically K - 1).
+    - **Boundary Management**:
+        - To avoid going out of bounds, the right pointer iterates from `left + 1` up to the **minimum** of the array length and `left + K`.
+    - **Small Window Edge Case**:
+        - Even if there aren't enough values to fill a window of size K (e.g., at the very end of the array), the window is still **valid** and must be checked.
+
+- **Complexity Analysis (Brute Force)**
+    - **Time Complexity**: **O(N * K)**.
+    - **Variable Relationship**: **K** will always be less than or equal to **N** because a window cannot be larger than the array itself.
+    - **Performance**: This is acceptable for small K values but becomes inefficient as the window size (K) increases.
+
+- **Optimized Sliding Window (Hash Set)**
+    - **Improvement**: Duplicate detection can be optimized using **hashing**.
+    - **Rolling Hash Set**:
+        - Maintain a hash set containing all values currently within the window.
+        - This avoids manually comparing every element to every other element.
+    - **Algorithm Steps**:
+        1. Use a **single loop** where the right pointer iterates through every position.
+        2. Before adding a new value to the set, check if it **already exists** in the hash set.
+        3. **Constant Time Operation**: Checking the hash set for a value is a constant time operation.
+        4. If the value exists in the set, a duplicate within the window has been found; **return true**.
+        5. If the value does not exist, **add it** to the hash set.
+        6. **Window Maintenance**:
+            - If the pointers representing the window exceed the size **K**, remove the **leftmost value** from the hash set.
+            - **Increment the left pointer** to shift the window.
+    - **Conclusion of Algorithm**:
+        - The process continues until the end of the array, even handling the smaller windows at the finish.
+        - If the entire array is processed and no duplicates are found within any window of size K, **return false**.
+
+- **Comparison to Variable Windows**
+    - This is a **fixed-size** sliding window case.
+    - It differs from **variable-length** windows (like the sliding window variation of **Kadane’s algorithm**) where the window size grows or shrinks dynamically based on certain conditions.
+
+- **Analogy for Understanding**
+    - Imagine you are looking at a long row of houses through a **fixed-size binoculars frame** that only lets you see 3 houses at a time. To find if two houses have the same color, you check the 3 houses currently in view. Instead of comparing house #1 to #2 and #3 every single time you move, you keep a **list (the Hash Set)** of the colors currently in your view. As you slide your view one house to the right, you cross off the color of the house that just left your view on the left and add the color of the new house appearing on the right. If the new house's color is already on your list, you've found a match within your view.
+
+### Sliding Window Variable
+
+- **Variable Length Sliding Window Problems**
+
+    - **Basic Example: Longest Subarray with the Same Value**
+        - **Problem Description**
+            - The goal is to find the length of the longest subarray where every position contains the same value.
+            - Essentially, you are looking for the longest string of consecutive duplicates.
+            - Example array: ``.
+                - There is a single four.
+                - There are two twos.
+                - There are three threes.
+                - The longest window is the one containing three threes, so the answer is three.
+
+        - **Sliding Window Approach (Manual Trace)**
+            - Initialize the **left (L)** and **right (R)** pointers at the same position (index 0).
+            - A single value is considered a valid window.
+            - Increment the right pointer.
+            - If the value at the right pointer is not equal to the value at the left pointer, the window is invalid.
+            - To make the window valid again, increment the left pointer until the values at both pointers are equal.
+            - In this specific case, the left pointer only needs to move once to meet the right pointer's position.
+            - Continue incrementing the right pointer and check if the values match the left pointer's value.
+            - Keep track of the **maximum length** seen so far.
+            - When the right pointer goes out of bounds, the process stops.
+
+        - **Code and Optimization**
+            - Initialize `longest_length` to 0.
+            - Initialize the left pointer to 0.
+            - Iterate through the array with a **for loop** using the right pointer (initialized to 0).
+            - Growth and Shrinkage:
+                - Grow the window until it becomes invalid.
+                - Shrink the window from the left side when a new, different value is found.
+            - **Optimization Detail**: Instead of incrementing the left pointer by one at a time, you can immediately set the **left pointer equal to the right pointer**. This is because if the right pointer found a new value, all values between the previous left pointer and the current right pointer were identical duplicates.
+            - This optimization does not change the overall time complexity.
+            - For such a simple problem, an inner loop is not strictly necessary.
+
+        - **Calculating Window Length**
+            - If the left pointer is at index 0 and the right pointer is at index 2, the length is 3.
+            - The formula is: `(right_pointer - left_pointer) + 1`.
+            - Example: `2 - 0 = 2`. Adding 1 gives the correct length of 3.
+
+    - **Advanced Example: Minimum Length Subarray with Target Sum**
+        - **Problem Description**
+            - Given an array of **all positive integers**, find the **minimum length** subarray where the sum is **greater than or equal to** a given **target value**.
+            - Example target: 6.
+            - Detail Importance: The fact that all values are **positive** is a hint for the solution.
+
+        - **Brute Force vs. Sliding Window**
+            - Brute Force: Check every single subarray, total them up, and keep track of the minimum length among those that meet or exceed the target.
+            - Sliding Window Logic:
+                - Because all values are positive, growing the window will only increase the sum.
+                - Once a window satisfies the target (sum >= target), adding more values will only make the window larger, not smaller.
+                - Therefore, once the target is reached, you must **shrink the window** from the left to find a potentially smaller valid window.
+
+        - **Manual Trace (Target = 6)**
+            - 1. Grow the window: Add values until the sum is 6 (e.g., ``). Current min length is 3.
+            - 2. To seek a smaller window, move the left pointer to the right.
+            - 3. Update the sum: Subtract the value removed from the left from the total sum. (Example: `6 - 2 = 4`).
+            - 4. Move the right pointer to add the next value. (Example: Add 2, sum becomes 6 again). Min length remains 3.
+            - 5. Shrink left again: (Example: `6 - 3 = 3`).
+            - 6. Move right: (Example: Add 4, sum becomes 7). Sum is >= 6, so window is valid.
+            - 7. Shrink left: (Example: `7 - 1 = 6`). This is a valid window of **length 2**. This is the new minimum.
+            - 8. Continue shrinking/growing until the right pointer is out of bounds.
+
+        - **Implementation and Logic**
+            - **Initialization**:
+                - `left_pointer` = 0.
+                - `total` (or `window_sum`) = 0.
+                - `length` = **positive infinity** (or `array_length + 1`) to ensure the first valid window reduces it via a `min` function.
+            - **Return Value**: If the length remains positive infinity at the end, return 0 (indicating no valid subarray was found). Otherwise, return the calculated minimum length.
+            - **Algorithm Steps**:
+                - 1. Use an outer loop to shift the right pointer.
+                - 2. Add the value at the right pointer to the `total`.
+                - 3. Use an **inner while loop** that runs as long as `total >= target`.
+                - 4. Inside the while loop:
+                    - Check if the current window is smaller than the current `min_length` and update if necessary.
+                    - Subtract the value at the left pointer from `total`.
+                    - Increment the `left_pointer`.
+
+    - **Time Complexity Analysis**
+        - **Big O Notation**: The time complexity is **O(n)** (linear time).
+        - **Why it is not O(n²)**:
+            - While there are nested loops (a for loop and a while loop), the inner loop does not execute N times for every iteration of the outer loop.
+            - The right pointer visits every position exactly once.
+            - The left pointer also visits positions only as it is incremented.
+            - The left pointer only moves forward and never reaches the end of the array more than once.
+            - In the worst case, the complexity is roughly **2 * n** (each element added once by R and removed once by L), which reduces to **O(n)**.
+            - The inner loop executes a **total of N times across the entire program execution**, not per outer loop iteration.
+
+    - **General Pattern**
+        - Variable length sliding window solutions typically use an **inner while loop**.
+        - This structure remains efficient and is a standard pattern for these types of problems.
+
+- **Analogy for Understanding**
+    - Imagine an **accordion** being pulled across a floor. The front end (right pointer) moves forward to cover more ground. If the accordion gets too long or reaches a specific goal, you pull the back end (left pointer) forward to shorten it. Even though you are moving both the front and the back, each part of the accordion only travels the length of the room once. In the end, the total movement is proportional to the size of the room, not the square of it.
+
+### Two Pointers
+
+- **Two Pointers and Sliding Window Relationship**
+  - Two pointers is a **very large and general topic** that covers many of the algorithms previously discussed.
+  - **Sliding window** is essentially a **subset** of two-pointer problems.
+  - The distinction between the two is generally based on the focus of the algorithm:
+    - In **two-pointer algorithms**, the primary focus is on the **two individual elements** that the pointers are pointing at.
+    - In **sliding window problems**, the focus is on the **entire window** between the pointers, such as every unique value or the total sum of all values within that window.
+  - Despite this distinction, two pointers and sliding window are considered **two sides of the same coin**.
+
+- **Simple Example: Checking for Palindromes**
+  - **Definitions and Logic**
+    - A **palindrome** is defined as something that remains the **same when reversed**.
+    - For this algorithm, **arrays and strings are essentially the same**, so the data type (integers, characters, etc.) does not matter.
+    - An example of a palindrome is `1, 2, 2, 1`; reversing it results in `1, 2, 2, 1`, which is identical to the original.
+  - **Two-Pointer Approach vs. Brute Force**
+    - While one could solve this by building a new array in reverse, using **two pointers** is easier because it requires **no extra space**.
+    - The process begins by **initializing a left pointer** at the very beginning and a **right pointer** at the very end of the array or string.
+    - The algorithm **compares the two individual elements** at each pointer.
+    - If the elements are equal, the **left pointer is incremented** (shifted right) and the **right pointer is decremented** (shifted left) to continue comparing.
+    - If any two elements are **not equal** (e.g., comparing a 2 to a 3), the algorithm immediately returns **false**, as it is not a palindrome.
+  - **Stopping Conditions**
+    - The process continues until the **pointers cross each other**.
+    - Once they cross, the algorithm can stop because every pair has been checked.
+    - Checking further would only repeat comparisons that have already been made.
+    - If the pointers cross and all pairs were equal, the input is a palindrome and the algorithm returns **true**.
+
+- **Complex Example: Two Sum with Sorted Input**
+  - **Problem Constraints**
+    - The input is a **sorted array**.
+    - The goal is to return the **indices of two separate elements** (different positions) that **sum up to a target value**.
+    - It is assumed that there is **exactly one solution**.
+  - **Brute Force vs. Optimized Strategy**
+    - A **brute force solution** involves comparing every possible pair of elements, which results in an **O(N²)** time complexity.
+    - Because the array is **sorted**, a more efficient two-pointer approach can be used.
+    - Initializing pointers at the **extremes** (smallest value at the left, largest at the right) provides useful information.
+  - **Shifting Logic Based on Sum**
+    - **Sum is too large:** If the sum of the smallest and largest elements is **greater than the target**, the largest element cannot be part of the solution. This is because the largest element added to even the smallest possible value is still too big; therefore, adding it to any other value would also be too big. In this case, the **right pointer is decremented** to decrease the sum.
+    - **Sum is too small:** If the sum is **smaller than the target**, the smallest element cannot be part of the solution. Since the array is sorted, all other available values are less than or equal to the current right element; thus, nothing added to the current smallest element will ever reach the target. In this case, the **left pointer is incremented** to increase the sum.
+  - **Walkthrough Example (Target = 7)**
+    - Suppose pointers are at `-1` (left) and `9` (right). Sum is `8`. This is **greater than 7**, so the right pointer moves left.
+    - New pair is `-1` and `8`. Sum is `7`. This is the target, and indices are returned.
+    - If the pair was `2` (left) and `7` (right), the sum is `9`. This is **too big**, so the right pointer moves to `4`.
+    - The new pair is `2` and `4`. Sum is `6`. This is **too small**, so the left pointer moves to `3`.
+    - Finally, `3 + 4 = 7`, which is the solution.
+
+- **Algorithm Mechanics and Complexity**
+  - **Initialization and Loop**
+    - Pointers are initialized at the edges of the array.
+    - The loop continues until the pointers meet or cross.
+    - Because a solution is guaranteed in this specific problem, the loop will never exit without finding one.
+  - **Time Complexity**
+    - This algorithm is **O(N)**.
+    - In the worst case, the pointers start at opposite ends and shift until they meet, meaning every position in the input array is looked at exactly once.
+  - **Pattern Name**
+    - This specific pattern of moving pointers from the ends toward each other based on conditional logic is sometimes called the **"shrinking window,"** though this name is not standard in the industry.
+
+- **Summary Implementation Logic**
+  ```python
+  # General Two-Pointer Template for Two Sum (Sorted)
+  left = 0
+  right = len(array) - 1
+  
+  while left < right:
+      current_sum = array[left] + array[right]
+      if current_sum == target:
+          return [left, right]
+      elif current_sum > target:
+          right -= 1 # Decrease the sum
+      else:
+          left += 1  # Increase the sum
+  ```
+
+To understand the two-pointer approach on a sorted array, imagine you are **adjusting the temperature of a shower with two separate knobs**: one for freezing cold and one for scalding hot. If the water is too hot (sum > target), you turn down the hot knob (decrement right pointer). If the water is too cold (sum < target), you turn up the cold knob (increment left pointer). You keep adjusting from the extremes until you hit the perfect temperature.
+
+### Prefix Sums
+
+- **Prefix Sums Pattern Overview**
+    - **Core Definitions and Concepts**
+        - **Prefix Sums** are a common pattern used with arrays that typically do not require complex data structures or advanced algorithms.
+        - A **prefix** of an array is defined as any contiguous subarray that starts at the very beginning of that array.
+        - Examples of prefixes:
+            - A subarray containing only the first element.
+            - A subarray containing the first two elements.
+            - The entire array itself is technically a prefix.
+        - Non-examples of prefixes:
+            - A subarray that does not start at the beginning of the array.
+            - A block of elements that starts at the beginning but is not contiguous.
+        - A **prefix sum** refers to calculating the sum of every prefix within a given array to improve efficiency.
+    - **Calculating Prefix Sums Step-by-Step**
+        - To calculate prefix sums, you take the sum of a prefix and add the next element to it, avoiding repeated work.
+        - **Example Array Walkthrough**: [2, -1, 3, -3, 4]
+            - The first prefix sum is **2**.
+            - The second prefix sum (first two values) is 2 + (-1) = **1**.
+            - The third prefix sum (first three values) is the previous sum (1) + 3 = **4**.
+            - The fourth prefix sum (first four values) is the previous sum (4) + (-3) = **1**.
+            - The fifth prefix sum (entire array) is the previous sum (1) + 4 = **5**.
+    - **Variations of the Pattern**
+        - **Prefix Products**: This follows the same logic as prefix sums but involves calculating the product of elements instead.
+            - Example for [2, -1, 3]: The first product is 2, the second is 2 * -1 = -2, and the third is -2 * 3 = -6.
+        - **Postfix Sums**: This is the "opposite" of a prefix; it consists of every contiguous subarray starting from the end of the array.
+        - Prefixes and postfixes are considered "two sides of the same coin" because they both eliminate repeated work.
+    - **The Subarray Sum Query Problem**
+        - A classic application of this pattern is designing a data structure that can query the sum of a subarray between two indices: **left** and **right**.
+        - **Naive Implementation**:
+            - This approach does not use prefixes; it simply iterates through every position between the indices, adds them to a total, and returns that total.
+            - In the worst case, this is an **O(n)** time operation every time the function is called.
+        - **Prefix Sum Implementation**:
+            - Precomputing prefix sums eliminates nearly all repeated work.
+            - While prefix sums only represent subarrays starting at the beginning, they can be used to calculate any arbitrary subarray sum.
+            - **Calculation Logic**: To find a specific subarray sum, take the prefix sum up to the `right` index and subtract the prefix sum of the elements to the left of the `left` index.
+            - This allows for **O(1)** constant time queries.
+    - **Numerical Examples of Subarray Queries**
+        - **Example 1**: To find a subarray sum that equals -1, the source takes a prefix sum of 1 and subtracts the previous prefix sum of 2 (1 - 2 = -1).
+        - **Example 2**: To find the sum of a subarray at the end of the array, take the prefix sum of the entire array (5) and subtract the prefix sum of the first three values (4) (5 - 4 = 1).
+        - The source notes that looking at the values individually (-3 and 4), the sum is indeed 1.
+    - **Using Postfix Sums for Queries**
+        - This problem can be solved identically using postfix sums.
+        - A value in a postfix array represents the sum from that index to the end of the array.
+        - To find a subarray sum with postfixes, take the postfix value at the `left` index (representing the sum to the end) and subtract the postfix value starting after the `right` index.
+    - **Code Implementation and Data Structure Design**
+        - **Initialization (Constructor)**:
+            - Given an array `nums`, initialize the data structure by computing the prefix sums once.
+            - Create a member variable array called `prefix` and a `total` variable initialized to zero.
+            - Loop through every number in `nums`, add it to the `total`, and append that `total` to the `prefix` array.
+            - This precomputation takes **O(n)** linear time.
+        - **Range Sum Query Function**:
+            - This function takes `left` and `right` indices and returns the sum in **O(1)** time.
+            - **Right Prefix Sum**: This is retrieved directly from the `prefix` array at the `right` index.
+            - **Left Prefix Sum**: This is the value to be subtracted, found at the `left - 1` index of the `prefix` array.
+            - **Edge Case (Index 0)**: If the `left` index is 0, the `left - 1` index is out of bounds.
+            - If `left` is 0, the default value to subtract should be 0 because the `right` prefix sum already represents the entire sum needed.
+            - **Implementation Logic**:
+                ```python
+                # Logical representation using a ternary operator
+                leftPrefix = prefix[left - 1] if left > 0 else 0
+                return prefix[right] - leftPrefix
+                ```
+        - **Efficiency Analysis**:
+            - While the naive constructor is O(1) and prefix sum constructor is O(n), the prefix sum approach is superior if the range sum function is called frequently.
+    - **Conclusion on the Pattern**
+        - Prefix sums are one of the most common and important patterns in coding interviews and data structure design.
+        - The pattern is versatile and open-ended, applying to sums, products, and various other precomputed range queries.
+
+- **Analogy for Understanding**
+    - Think of prefix sums like the distance markers on a highway. If you want to know the distance between Exit 10 and Exit 50, you don't need to remeasure the road; you simply take the distance at marker 50 and subtract the distance at marker 10.
+
+## Linked Lists
+
+### Fast and Slow Pointers
+
+- **Fast and Slow Pointer Algorithm**
+    - The algorithm is also commonly referred to as **Floyd's Tortoise and Hare algorithm**.
+    - In this analogy, the **tortoise** is the **slow pointer** and the **hair** is the **fast pointer**.
+    - It is a two-pointer technique usually used for **linked lists** and can be applied to many different areas.
+
+- **Example 1: Finding the Middle of a Linked List**
+    - This is a trivial example that can be solved without this specific algorithm.
+    - **Standard Approach**:
+        - Count the length of the linked list (e.g., 1, 2, 3, 4, 5).
+        - Find the midway point based on that length.
+        - For odd-length lists, the midway point is straightforward.
+        - For even-length lists, there are two middle nodes. This specific algorithm assumes the **second node** of the two is the middle.
+        - This standard approach takes **O(N) time** because it requires iterating once to find the length and then iterating halfway again.
+    - **Fast and Slow Pointer Approach**:
+        - This is also a linear time (**O(N)**) algorithm, so it does not improve time complexity, but it is a fundamental application of the technique.
+        - **Initialization**: Initialize both a fast pointer and a slow pointer at the **head** of the linked list.
+        - **Movement**: 
+            - On each iteration, shift the **fast pointer by two spaces**.
+            - Shift the **slow pointer by one space** each time.
+            - The fast pointer is exactly twice as fast as the slow pointer.
+        - **Termination**: Continue until one pointer reaches the end. The fast pointer will reach the end first.
+        - **Definition of "End"**: The fast pointer is at the end when it is at the **last node** or it is **equal to null**.
+        - **Result**: Because the slow pointer travels half as fast, it will have traveled half the length of the list when the fast pointer reaches the end.
+        - **Odd Length Example**: The slow pointer ends up perfectly at the middle node.
+        - **Even Length Example**: 
+            - If we have 4 nodes (1, 2, 3, 4) and 4 points to null.
+            - 1st iteration: Fast moves two spots, slow moves one.
+            - 2nd iteration: Fast moves two spots (reaches null), slow moves one more spot to the second node of the middle pair.
+        - **Variant**: If you want the first node to be the middle in an even-length list, you can augment the algorithm by initializing the slow pointer at the head and the fast pointer at the node after the head.
+    - **Code Implementation**:
+        ```python
+        # Initialize two pointers at the head
+        slow = head
+        fast = head
+
+        # While fast pointer and the next node are not null
+        while fast is not None and fast.next is not None:
+            slow = slow.next          # Increment slow by one
+            fast = fast.next.next     # Increment fast by two
+
+        # When fast reaches the end, slow is at the middle
+        return slow
+        ```
+        - This algorithm handles **edge cases**, such as an **empty (null) linked list**. If the head is null, the loop never executes, and it returns slow (null).
+
+- **Example 2: Cycle Detection**
+    - A cycle occurs if a node (e.g., node 5) points back to a previous node (e.g., node 3).
+    - In a cycle, a standard traversal loop would run forever.
+    - **Goal**: Given an arbitrary linked list, determine if it contains a cycle.
+    - **Hash Set Approach**:
+        - Traverse the list and add the pointer of every node to a **hash set**.
+        - If you visit a node that is already in the hash set, you have found a duplicate, which means there is a cycle.
+        - If you reach null, there is no cycle.
+        - **Complexity**: O(N) time, but also **O(N) memory** because of the hash set.
+    - **Fast and Slow Pointer (Floyd's) Approach**:
+        - This eliminates the extra memory need, resulting in **O(1) space**.
+        - **Algorithm**:
+            - Initialize both pointers at the head.
+            - Move the fast pointer by two spaces and the slow pointer by one space.
+            - If the pointers **intersect (equal each other)**, return true; a cycle exists.
+        - **Why it works**:
+            - In a straight line, the fast pointer will always be twice as far ahead as the slow pointer.
+            - In a loop, the fast pointer will eventually "catch up" and overlap the slow pointer from behind.
+        - **Guarantee of Intersection**:
+            - Once both pointers enter a cycle of length $C$, there is a distance between them.
+            - Every iteration, the slow pointer moves 1 and the fast pointer moves 2. This means the **distance between them shrinks by 1** every iteration.
+            - Eventually, the distance becomes zero, and they intersect.
+        - **Time Complexity**: 
+            - It is guaranteed to happen in **linear time**.
+            - The slow pointer will not have to traverse longer than the entire length of the list before an intersection occurs.
+            - The fast pointer might traverse twice the length, but the overall complexity remains **O(N)**.
+    - **Code Implementation**:
+        ```python
+        slow = head
+        fast = head
+
+        while fast is not None and fast.next is not None:
+            slow = slow.next
+            fast = fast.next.next
+            
+            # If they meet, a cycle is detected
+            if slow == fast:
+                return True
+
+        # If fast reaches out of bounds, no cycle exists
+        return False
+        ```
+
+- **Example 3: Finding the Head of the Cycle**
+    - **Goal**: If a cycle exists, return the specific node that is the **head (start)** of that cycle.
+    - **The Algorithm**:
+        1.  Perform the standard cycle detection: move the fast pointer by two and the slow pointer by one until they intersect.
+        2.  If the fast pointer reaches null, there is no cycle; return null.
+        3.  If they intersect, leave the original slow pointer (**S1**) at the intersection point.
+        4.  Create a **second slow pointer (S2)** and initialize it at the **head** of the linked list.
+        5.  Increment both S1 and S2 by **one space each** simultaneously.
+        6.  The point where S1 and S2 intersect is guaranteed to be the start of the cycle.
+    - **Mathematical Proof**:
+        - Define **P** as the portion of the list before the cycle.
+        - Define **C** as the length of the cycle.
+        - Define the intersection point as **X** distance from the head of the cycle.
+        - The remaining portion of the cycle after the intersection point is **C - X**.
+        - **Slow pointer distance**: Travels $P$ and then some portion of the cycle ($C - X$).
+        - **Fast pointer distance**: Travels $P$, a full cycle $C$, and then the same portion of the cycle ($C - X$).
+        - Because the fast pointer is twice as fast: $2 \times (\text{Slow Distance}) = \text{Fast Distance}$.
+        - $2(P + C - X) = P + C + (C - X)$.
+        - Simplified: $2P + 2C - 2X = P + 2C - X$.
+        - Subtract $P$ from both sides and $2C$ from both sides: $P - 2X = -X$.
+        - Solve for $P$: **$P = X$**.
+        - This proves the distance from the head of the list to the start of the cycle ($P$) is equal to the distance from the intersection point to the start of the cycle ($X$).
+    - **Code Implementation**:
+        ```python
+        slow = head
+        fast = head
+
+        # Phase 1: Detect Intersection
+        while fast is not None and fast.next is not None:
+            slow = slow.next
+            fast = fast.next.next
+            if slow == fast:
+                break
+        else:
+            # If the loop finished without a break, no cycle exists
+            return None
+
+        # Phase 2: Find the head of the cycle
+        slow2 = head
+        while slow != slow2:
+            slow = slow.next
+            slow2 = slow2.next
+
+        # Both pointers now point to the start of the cycle
+        return slow
+        ```
+    - While the proof is mathematically complex, the algorithm itself is simple and worth memorizing for interviews.
+
+***
+
+**Analogy**: Imagine a race on a track that has a straight path leading into a circular loop. If a fast runner (the hair) and a slow runner (the tortoise) start together, the fast runner will enter the loop first and eventually "lap" the slow runner. The moment they are at the exact same spot on the loop is the intersection used to detect the cycle.
+
+## Tries
+
+### Trie
+
+- **Trie (Prefix Tree) Comprehensive Notes**
+
+- **Introduction to the Trie Data Structure**
+    - **Definition and Names**: 
+        - A "trie" is a specific type of tree structure.
+        - A better and more descriptive name for it is a **prefix tree**.
+    - **Primary Goal**: 
+        - The goal is to insert words (strings of characters) in constant time.
+        - It is specifically designed for strings, rather than integers or other value types.
+    - **Performance**:
+        - **Insertion**: Can be considered O(1) or more accurately **O(N)**, where N is the length of the word, because the algorithm must iterate through every character.
+        - **Search**: Allows for checking the existence of a word very efficiently in constant time (O(N) relative to word length).
+
+- **Trie vs. Hash Sets**
+    - **Capabilities of Hash Sets**: A hash set can easily achieve constant time insertion and searching for full words.
+    - **The Limitation of Hash Sets**: Hash sets cannot efficiently **search for a prefix**.
+    - **The Prefix Search Problem**:
+        - In a hash map or hash set, searching for a prefix (e.g., finding if any words start with "app") would require checking every single string in the structure in the worst case.
+        - In a **prefix tree**, searching for a prefix is done in **O(1)** relative to the size of the prefix itself.
+        - Example: If the word "apple" is inserted, a trie can quickly confirm that the prefix "app" exists.
+
+- **Applications and Importance**
+    - **Search Engines**: Prefix trees are used by search engines like Google.
+    - **Autocomplete/Suggestions**: When a user types a few characters, the trie identifies which strings match that prefix to provide suggestions.
+    - **Coding Interviews**: It is a common data structure for interviews and is easier to implement than many expect.
+
+- **Structure of a Trie**
+    - **Character-Based Nodes**: A trie is a tree of characters where each node represents a character.
+    - **Character Sets**: 
+        - Usually, the restriction is lowercase letters from **A through Z** (26 characters).
+        - It can be expanded to include uppercase letters or larger alphabets without changing the fundamental structure.
+    - **The Root Node**: 
+        - The trie has a single **root node** that is essentially empty.
+        - Alternatively, you can think of it as having 26 root nodes, one for each possible starting character.
+    - **Branching Logic**: 
+        - All words starting with 'A' follow the path down the 'A' branch.
+        - Each node can have up to 26 children (A through Z).
+        - A node might have anywhere from 0 to 26 children depending on what has been inserted.
+
+- **Trie Node Implementation Details**
+    - **Child Management**:
+        - Using individual variables or left/right pointers for 26 children is inefficient.
+        - An easier and more flexible method is using a **hashmap** for children.
+    - **Flexible Design**:
+        - While an array of size 26 could be used, a hashmap makes the trie flexible for different alphabets (like uppercase A-Z).
+    - **The TrieNode Class Components**:
+        - **Children**: An empty hashmap initially. The key is the character (e.g., 'a'), and the value is the corresponding TrieNode.
+        - **Word End Indicator**: A boolean value (e.g., `wordEnd`) to determine if a character marks the end of a complete word. This is initially set to **false**.
+    - **Redundancy Note**:
+        - Trie nodes do **not** actually need to store the character itself.
+        - The character is stored as a **key in the parent's children hashmap**. Accessing `children['a']` provides all the necessary information.
+
+- **Core Algorithms**
+    - **1. Insert Operation**
+        - **Step 1**: Start at the root node (the "current pointer").
+        - **Step 2**: Iterate through every character in the input word.
+        - **Step 3**: Check if the character is already a child of the current node.
+        - **Step 4**: If the character does not exist, create a new **TrieNode** and add it to the hashmap using the character as the key.
+        - **Step 5**: Shift the current pointer to the node of the character just checked or created.
+        - **Step 6**: Repeat until the end of the word.
+        - **Step 7**: Mark the `wordEnd` variable of the final node as **true** (often represented visually as a green circle).
+    - **2. Search Operation (Full Word)**
+        - **Step 1**: Start at the root node.
+        - **Step 2**: Iterate through every character of the search word.
+        - **Step 3**: Check if the character exists as a child. If it does not exist at any point, return **false** immediately.
+        - **Step 4**: If the character exists, move the pointer to that child node and continue.
+        - **Step 5**: After iterating through all characters, return the value of the current node's `wordEnd` boolean.
+        - **Example**: If "apple" is in the trie but "a" is searched, it returns **false** because the 'a' node was never marked as the end of a word.
+    - **3. StartsWith Operation (Prefix Search)**
+        - This is the main purpose of the trie.
+        - **Step 1**: Takes a prefix as input.
+        - **Step 2**: Start at the root and iterate through the prefix characters.
+        - **Step 3**: Use the children hashmap to move through nodes efficiently.
+        - **Step 4**: If a character in the prefix is not found, return **false**.
+        - **Step 5**: If the loop completes (meaning all characters in the prefix were found), return **true**.
+        - **Distinction**: Unlike the search function, this returns true even if the last node's `wordEnd` is false, as long as the path exists.
+
+- **Efficiency and Branching Example**
+    - **Avoiding Redundancy**: 
+        - If "apple" is inserted and then "ape" is inserted, the trie uses the existing 'a' and 'p' nodes.
+        - It only creates a new node for the 'e' in "ape" starting from the second position.
+        - This ensures all words starting with the same prefix follow a single branch, making searching efficient.
+    - **Efficiency**: 
+        - Every operation (insert, search, startsWith) involves a single pass through the characters of the input.
+        - Hashmap lookups for children are performed in constant time.
+
+- **Summary of Node Logic**
+```python
+# Conceptual Structure of a Trie Node
+class TrieNode:
+    def __init__(self):
+        # Hashmap to store children: {char: TrieNode}
+        self.children = {} 
+        # Boolean to mark the end of a word
+        self.isWordEnd = False 
+```
+
+***
+
+**Analogy for Understanding**: Think of a Trie like a **structured dictionary** where you don't look up a whole word at once, but follow a **path of breadcrumbs**. Each letter is a signpost pointing to the next. If you are looking for the word "apple," you follow the 'A' path, then 'P', and so on. If you reach the end of your word and find a "Finished" sign (the `wordEnd` boolean), the word exists. If you are just checking for a prefix, you only care that the path exists, not necessarily that there is a "Finished" sign at the end of it.
+
+### Union Find
+
+- **Union Find Data Structure Overview**
+    - Union Find, also known as the **Disjoint Sets** data structure, is an underrated tool.
+    - It is technically a **tree data structure**, though it is most commonly applied to **generic graphs**.
+    - While implementation can seem complicated due to its application to graphs, it is actually easier to implement than expected.
+    - Its primary strength is dealing with **disjoint sets** where a graph may have one or more **connected components**,.
+    - In a typical graph, all nodes might not be connected; Union Find helps identify these separate entities.
+
+- **Key Applications and Comparisons**
+    - **Counting Connected Components**: It is used to determine how many separate groups of connected nodes exist in a graph.
+    - **Cycle Detection**:
+        - It can determine if a graph contains cycles.
+        - If an edge is added between two nodes that are already part of the same connected component, Union Find detects a cycle.
+    - **Comparison to DFS**:
+        - A generic Depth First Search (DFS) algorithm can often satisfy the same operations (cycle detection and counting components).
+        - Because DFS is common, Union Find is seen less frequently.
+        - However, Union Find is sometimes **more efficient** and occasionally required,.
+
+- **Conceptual Implementation**
+    - **Forest of Trees**: Union Find is represented as a "forest of trees," meaning it consists of a collection of multiple trees.
+    - **Initialization**:
+        - Initially, every node is assumed to be a disjoint set (its own tree).
+        - For each node, the structure only stores one piece of information: the **parent** of that node.
+        - In code, it is common to initialize every node as its own parent (`parent[i] = i`),.
+    - **Connecting Nodes (Union)**:
+        - When an edge exists between two nodes (e.g., node 1 and node 2), the two sets are connected.
+        - To connect them, one node is set as the parent of the other node.
+        - For example, if node 1 and 2 are connected, node 2 can become a child of node 1.
+
+- **The Find Operation**
+    - The `find` function is used to determine the **root parent** of a node,.
+    - **Traversing the Tree**: To find the root, you start at a node and follow the parent pointers up the chain until you reach a node that is its own parent.
+    - **Example**: To find the root of node 4, you move to its parent, then that parent’s parent, until you cannot go any higher.
+    - This root represents the "set" that the node belongs to.
+
+- **The Union Operation**
+    - To union two nodes (e.g., n1 and n2), you must first find the **root parent** of both,.
+    - If both nodes have the **same root parent**, they are already in the same set, and a union is not performed (this indicates a cycle),.
+    - If they have different roots, the root of one tree is set as the child of the root of the other tree, merging the two sets.
+    - **Union by Rank (Height)**:
+        - Arbitrarily picking which root becomes the parent can result in imbalanced trees (like a linked list), making the `find` operation inefficient,.
+        - **Rank** refers to the **height** of the tree,.
+        - The more efficient method is to take the root of the tree with the **smaller height** and make it a child of the root of the tree with the **larger height**,.
+        - If the heights are equal, one is chosen arbitrarily to be the parent, and its rank is increased by one,.
+
+- **Path Compression Optimization**
+    - Path compression is a single-line optimization for the `find` function,.
+    - As the algorithm traverses up the tree to find the root, it **shortens the chain** by pointing nodes directly to their "grandparent".
+    - This does not improve the time complexity of the very first `find` operation, but it makes every subsequent `find` on those nodes much faster by creating a direct link toward the root,.
+
+- **Code Structure and Logic**
+    - **Data Structures**:
+        - A **hashmap** or **array** is used to store the `parent` of each node.
+        - A second hashmap or array is used to store the `rank` (height) of each tree.
+    - **Constructor**:
+        - Takes the size `n` (number of nodes).
+        - Initializes `parent[i] = i` and `rank[i] = 0` (or 1, as long as consistent) for all nodes.
+    - **Find Logic**:
+        ```python
+        # Conceptual logic for Find with Path Compression
+        def find(n):
+            p = parent[n]
+            while p != parent[p]:
+                # Path compression: set parent to grandparent
+                parent[p] = parent[parent[p]]
+                p = parent[p]
+            return p
+        ```
+       ,
+    - **Union Logic**:
+        - Find root `p1` of `n1` and root `p2` of `n2`.
+        - If `p1 == p2`, return `false` (cycle detected/already connected).
+        - If `rank[p1] > rank[p2]`, set `parent[p2] = p1`.
+        - If `rank[p2] > rank[p1]`, set `parent[p1] = p2`.
+        - If `rank[p1] == rank[p2]`, set `parent[p1] = p2` and `rank[p2] += 1`,.
+
+- **Time Complexity**
+    - **Naive Case**: Without path compression or union by rank, `find` can take **O(n)** time because the tree can become imbalanced.
+    - **With One Optimization**: Implementing either path compression OR union by rank reduces the time complexity of `find` to **O(log n)**,.
+    - **With Both Optimizations**:
+        - Using both path compression and union by rank results in a time complexity based on the **Inverse Ackermann function**.
+        - This function grows so slowly that it is essentially **constant time O(1)** for all practical values of `n`.
+    - **Total Complexity**: For a graph with `M` edges, the total time complexity is effectively **O(M)** when both optimizations are used.
+    - This efficiency is why Union Find can outperform DFS for specific graph problems.
+
+- **Analogy for Understanding**
+    - Think of Union Find like several different families (sets) merging through marriage. When two people from different families marry, one entire family (the smaller one) joins the other. Path compression is like everyone in the family getting the direct phone number for the family patriarch (the root), rather than having to call their parents, who then call their grandparents, to get information.
+
+### Segment Tree
+
+- **Motivation for Segment Trees**
+    - The segment tree is considered the **most complicated tree structure** discussed so far.
+    - It is designed to solve problems involving an **array of values** where two main operations are required.
+    - The first operation is **updating a value** at a specific index.
+    - In a standard array, an update is very efficient and can be done in **constant time (O(1))** by overwriting the value.
+    - The second operation is **querying a range** between a left and right index inclusive to get a result, such as a **sum**.
+    - This sum query is the textbook problem for segment trees.
+    - In a standard array, a range query takes **linear time (O(n))** in the worst case because you must iterate from left to right.
+    - While **prefix sums** can make queries constant time, this optimization only works if the array values never change.
+    - If updates are allowed, an array cannot achieve constant time queries; it remains **O(n)**.
+    - A **segment tree** allows both **updates and range queries to be performed in logarithmic time (O(log n))**.
+
+- **Trade-offs and General Structure**
+    - The update operation in a segment tree is actually a **downside** compared to an array because it moves from O(1) to **O(log n)**.
+    - This adds overhead to updates, but the trade-off is a much more **efficient query** compared to the linear time required by an array.
+    - Having O(log n) for both is better than having one O(1) and one O(n) operation if you are frequently performing both tasks.
+    - The name "segment tree" comes from the fact that it **breaks an array into segments**.
+    - The **root node represents the entire array range**.
+    - As you move down to the children, the array is broken into **smaller and smaller portions**.
+    - The **left half** of an array segment belongs to the left child, and the **right half** belongs to the right child.
+    - When updating a value, you cannot just update one node; you must update the **entire chain of ancestors** (the leaf, its parent, and so on up to the root) that contains that index.
+    - This chain of updates is why the update operation takes **O(log n)** time.
+
+- **Building a Segment Tree**
+    - To build a tree for an array with indices **0 through 5**, the **root represents the range**.
+    - The construction uses a **divide and conquer** approach similar to **merge sort**.
+    - To find the boundaries for children, you calculate the **midpoint (m)** by adding the left (L) and right (R) indices and dividing by two, rounding down.
+    - For the range, the midpoint is **(0 + 5) / 2 = 2**.
+    - The **left child** boundaries are the current left index to the midpoint: **[L, m]** (e.g.,).
+    - The **right child** boundaries are the midpoint plus one to the current right index: **[m + 1, R]** (e.g.,).
+    - This process repeats **recursively**:
+        - Range splits into and (midpoint is 1).
+        - Range splits into  and (midpoint is 0).
+        - Range splits into and (midpoint is 4).
+        - Range splits into and (midpoint is 3).
+    - A **base case** occurs when a range has a length of one (e.g.,), meaning it cannot be broken up further and has no children.
+    - Each node stores a value representing its range, such as a **sum**.
+    - **Leaf nodes** (base cases) take their sum directly from the array values at that index (e.g., index 0 = 5, index 1 = 3, index 2 = 7, index 3 = 1, index 4 = 4, index 5 = 2).
+    - As recursion "pops back up," the sum for a parent node is calculated by **adding the sums of its two children**.
+    - For example, if children are 5 and 3, the parent sum is **8**; if children are 8 and 7, the parent sum is **15**.
+    - The **root node's sum** will eventually equal the sum of the entire array (e.g., 22).
+
+- **Implementation Details**
+    - A **SegmentTree class** can be used for implementation.
+    - Each node in the class contains:
+        - `total`: The range sum (or other value being tracked).
+        - `L` and `R`: The **boundaries** of the range the node represents.
+        - `left` and `right`: **Pointers** to the child nodes.
+    - A **static build method** can construct the tree in **linear time (O(n))**.
+    - The build process is **bottom-up**:
+        - If `L == R`, create a leaf node with the array value and return it.
+        - Otherwise, calculate the **middle**, create a temporary node with a sum of 0, and recursively build the left and right children.
+        - After children are built, set the node's total to `left.total + right.total`.
+    - While segment trees are similar to **heaps** (full binary trees), they are harder to implement with arrays because they can have **gaps** in the tree structure.
+    - Therefore, using **nodes and pointers** is often preferred.
+
+- **Update Operation**
+    - The update operation takes an **index and a new value** and runs in **O(log n)** time.
+    - You must find the **leaf node** representing the specific index by searching recursively.
+    - If the target index is **greater than the midpoint** of the current node, you move to the **right child**.
+    - If the target index is **less than or equal to the midpoint**, you move to the **left child**.
+    - Once you reach the **base case** (the leaf node where `L == R`), you overwrite its value.
+    - Because the value has changed, you must update the sums of **all ancestors** in the chain back to the root.
+    - As the recursion returns to each parent, you recalculate its sum by **adding the current sums of its two children**.
+    - This is a **constant time operation** at each level of the tree.
+    - For example, if you update index 3 from 1 to 4:
+        - The leaf for index 3 becomes 4.
+        - Its parent updates from 5 to **8** (4 + 4).
+        - Its grandparent updates from 7 to **10** (8 + 2).
+        - The root updates from 22 to **25** (15 + 10).
+    - The tree is always **balanced** because it is split into equal halves, ensuring the height is always **log n**.
+
+- **Range Query Operation**
+    - The goal is to calculate the **range sum** between a left and right index inclusive.
+    - If the query range **exactly matches** the node's range, you simply return the node's sum.
+    - To find the sum for a specific range, you calculate the **midpoint** and determine where the range lies.
+    - There are **three possibilities** for where the queried range lies relative to the current node:
+        1. **Entirely in the right subtree**: This happens if the query's **left index is greater than the midpoint**.
+        2. **Entirely in the left subtree**: This happens if the query's **right index is less than or equal to the midpoint**.
+        3. **Overlaps both subtrees**: This happens if the query range spans across the midpoint.
+    - If the range is only on one side, you only recurse down that side of the tree.
+    - If the range **overlaps both sides**, you call the query function **recursively on both children**.
+        - For the left child, you query the range from the original **left to the midpoint**.
+        - For the right child, you query the range from the **midpoint plus one to the original right**.
+        - You add the results from both sides together and return the total.
+    - **Optimization**: You often find the answer before reaching the leaf nodes because a node might represent the exact sub-range you need.
+    - For example, to find the sum of range:
+        - At root, the range overlaps both sides (midpoint 2).
+        - Left child is queried for index 2; it returns **7**.
+        - Right child is queried for range; it returns **5** (the pre-calculated sum for that segment).
+        - The total returned is 7 + 5 = **12**.
+    - The **time complexity is O(log n)** because at any level of the tree, you look at at most a **constant number of nodes (around 4)**.
+
+- **Analogy**
+    - A segment tree is like a **corporate management structure**. The CEO (root) knows the total productivity of the entire company. Each department head (child node) knows the productivity of their specific branch. If one employee (leaf node) changes their output, the employee's manager must update their total, then the department head must update theirs, and finally the CEO updates the company total. When the CEO needs to know the productivity of a specific group of departments, they don't ask every employee; they just ask the few managers who already have the totals for those specific groups.
+
+### Iterative DFS
+
+- **Iterative DFS on Binary Trees**
+    - **Overview of Iterative DFS**
+        - Binary trees are familiar data structures where Depth-First Search (DFS) is a common algorithm.
+        - While DFS is easy to implement using recursion, it is more complex to implement iteratively without recursion.
+        - Iterative DFS is performed by emulating how the recursive function actually runs using an explicit stack,.
+        - The three common traversals for a tree are:
+            - **In-order traversal**: The easiest to do iteratively.
+            - **Pre-order traversal**: Similar to in-order but with a different processing sequence,.
+            - **Post-order traversal**: The hardest to implement iteratively.
+        - **Traversing** a node means performing an operation on it, such as printing its value.
+
+    - **In-Order Traversal**
+        - **Recursive Concept**
+            - The goal is to traverse the entire left subtree, then the root node, and then the right subtree,.
+            - In recursion, when a null node is reached, the function simply returns.
+            - Returning from a null node pops the execution back to the previous node in the recursive call stack.
+        - **Iterative Implementation via Explicit Stack**
+            - Instead of a call stack, a stack data structure is explicitly declared and used the same way.
+            - **Tree Nodes** (or pointers to them) are added to the stack, not just their literal values.
+        - **Step-by-Step Example (Nodes 1, 2, 3, 4, 5)**
+            - Start at the root node (1). Before printing, the left subtree must be processed.
+            - Push 1 onto the stack, then move to the left child (2).
+            - Push 2 onto the stack, then move to the left child (4),.
+            - Push 4 onto the stack, then move to its left child, which is null.
+            - When null is reached, do not push anything; instead, pop from the stack.
+            - Pop 4 and print it. Since 4’s left subtree was null and 4 is now printed, move the pointer to the right child of 4,.
+            - The right child of 4 is null. Pop from the stack again to get the parent node.
+            - Pop 2 and print it. This indicates the left subtree of 2 is finished and 2 itself is processed.
+            - Move to the right child of 2. It is null, so pop from the stack again.
+            - Pop 1 and print it. The left subtree of 1 is now fully traversed.
+            - Set the pointer to the right child of 1 (node 3) and run DFS on this subtree.
+            - Since 3 is not null, push it to the stack and go to its left child (null).
+            - Since the left child is null, pop 3 and print it.
+            - Shift the pointer to the right child of 3 (node 5). Since 5 is not null, push it to the stack and go to its left child (null).
+            - Pop 5 and print it, then go to the right child (null).
+            - The algorithm stops when the pointer is null and the stack is empty.
+        - **Code and Logic**
+            - Initialize an empty stack and set a `current` pointer to the root.
+            - The loop continues as long as `current` is not null OR the stack is not empty.
+            - If `current` is not null:
+                - Push `current` to the stack and move `current` to the left child.
+            - If `current` is null (else case):
+                - Pop a node from the stack, print its value, and set `current` to the popped node's right child,.
+        - **Complexity**
+            - **Time Complexity**: O(N) because every node is traversed.
+            - **Memory Complexity**: O(H), where H is the height of the tree. In the worst case (an imbalanced tree acting like a chain), this is O(N).
+
+    - **Pre-Order Traversal**
+        - **Iterative Process**
+            - Pre-order means processing the current node before processing its children (Node -> Left Subtree -> Right Subtree).
+            - Print the current node immediately upon visiting it.
+            - To ensure the right subtree can be accessed later, push the right child onto the stack before moving the pointer to the left child.
+        - **Step-by-Step Example**
+            - Start at root (1). Print 1. Push its right child (3) to the stack and move the pointer to the left child (2),.
+            - At node 2, print 2. Its right child is null, so nothing is pushed. Move pointer to left child (4),.
+            - At node 4, print 4. Its right child is null. Move pointer to left child (null).
+            - When the pointer is null, pop from the stack.
+            - Pop 3 and print it. Push its right child (5) to the stack and move pointer to the left child (null).
+            - Pointer is null, so pop 5 and print it.
+        - **Code and Logic**
+            - Similar loop structure: `while (curr != null || !stack.isEmpty())`.
+            - If `current` is not null:
+                - Print the node value.
+                - If the right child exists, push it to the stack.
+                - Move `current` to the left child.
+            - If `current` is null:
+                - Pop from the stack to set the new `current` pointer.
+        - **Complexity**
+            - **Time Complexity**: O(N).
+            - **Space Complexity**: O(H), which can be O(N) in the worst case.
+
+    - **Post-Order Traversal**
+        - **The Difficulty of Post-Order**
+            - Post-order requires traversing the left subtree, then the right subtree, and finally the node (Left -> Right -> Node).
+            - Using a single stack is difficult because you visit the same node multiple times and need a way to know when to process the right child versus the node itself,.
+        - **The Two-Stack / Visit-Stack Solution**
+            - One stack stores the nodes; another stack (the "visit stack") marks whether a node has been visited before using boolean values (True/False).
+            - Alternatively, this can be implemented as a single stack of pairs (node, boolean).
+        - **The Algorithm Logic**
+            - Initialize the stack with the root node and mark it as `False` (not visited),.
+            - While the stack is not empty:
+                - Pop the node and its visited status.
+                - If the node is null, do nothing.
+                - If `visited` is `True`:
+                    - Print the node value.
+                - If `visited` is `False`:
+                    - Push the node back onto the stack but mark it as `True`,.
+                    - Push the right child onto the stack marked as `False`,.
+                    - Push the left child onto the stack marked as `False`,.
+            - Pushing the right child before the left child ensures the left child is popped and processed first.
+        - **Step-by-Step Example**
+            - Start with root (1) as `False`. Pop 1. Since it's `False`, push 1 as `True`, then push 3 as `False`, then 2 as `False`,.
+            - Pop 2 (`False`). Push 2 as `True`, push its right child (null) as `False`, push its left child (4) as `False`.
+            - Pop 4 (`False`). Push 4 as `True`, push its children (null, null) as `False`.
+            - Pop null nodes and do nothing. Pop 4 (`True`) and print it.
+            - Pop null (right child of 2). Pop 2 (`True`) and print it.
+            - Pop 3 (`False`). Push 3 as `True`, push 5 as `False`, push left child (null) as `False`.
+            - Pop null. Pop 5 (`False`). Push 5 as `True`, push its children (null, null) as `False`.
+            - Pop nulls. Pop 5 (`True`) and print it.
+            - Pop 3 (`True`) and print it.
+            - Pop 1 (`True`) and print it.
+        - **Complexity**
+            - **Time Complexity**: O(N). Each node is pushed and popped twice, resulting in O(2*N), which reduces to linear time.
+            - **Space Complexity**: O(H), worst case O(N).
+
+    - **General Applications and Recommendations**
+        - A common application of iterative DFS is implementing a **Binary Search Tree (BST) iterator**.
+        - A BST iterator allows fetching values in order one by one (e.g., getting the first two values and pausing) without traversing the entire tree at once.
+        - If recursion is allowed, it is generally recommended over iterative methods because recursive DFS is easier to implement.
+
+## Heaps
+
+### Heaps
 
 # Others
 
