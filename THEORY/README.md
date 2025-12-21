@@ -4433,6 +4433,92 @@ class TrieNode:
 
 ### Heaps
 
+- **HEAPS: THE TWO HEAPS PATTERN FOR MEDIAN PROBLEMS**
+
+    - **Introduction to the Two Heaps Pattern**
+        - Solving complex heap problems sometimes requires using two heaps to find the optimal solution.
+        - This pattern is most commonly applied when dealing with **medians**.
+
+    - **Definition of a Median**
+        - A median is the middle value of a set of numbers when those numbers are sorted.
+        - **Odd Number of Values**: If the set has an odd length, the median is the value at the middle index.
+            - *Example*: In a sorted array, calculate the middle index and go to it. If the array contains five elements and the middle is 4, then 4 is the median.
+        - **Even Number of Values**: If the set has an even length, there is no single middle value. There are two middle indices.
+            - *Calculation*: Take the two middle values, add them together, and divide by two.
+            - *Example*: If the middle values are 3 and 4, the median is (3 + 4) / 2 = 3.5.
+
+    - **Complexity Analysis of Finding Medians**
+        - **Unsorted Input Array**:
+            - You cannot do much better than sorting the array first.
+            - **Time Complexity**: Big O of N log N ($O(N \log N)$).
+        - **Sorted Input Array**:
+            - You can solve the problem in **constant time** ($O(1)$) by simply accessing the middle indices and returning the result.
+        - **Stream of Values (The Challenge)**:
+            - In a streaming scenario, values are not given all at once but are received continuously over time.
+            - *The Problem with Naive Sorting*: If you re-sort the set every time a new value is inserted, it becomes inefficient as the set grows.
+            - *Inserting into a Sorted Array*:
+                - To maintain sorted order while adding a new value, the insertion takes **Big O of N** ($O(N)$) time.
+                - While getting the median remains $O(1)$, the continuous insertion becomes expensive.
+                - If the set grows to size N, the total time complexity for inserting all values would be **N squared** ($O(N^2)$).
+
+    - **The Two Heaps Solution**
+        - This approach allows for **insertion in Log N** ($O(\log N)$) time while keeping **getting the median at constant time** ($O(1)$).
+        - **Structure**:
+            - **Small Heap**: A **Max Heap** that contains the smaller half of the values seen so far.
+            - **Large Heap**: A **Min Heap** that contains the larger half of the values seen so far.
+        - **Class Design (`MedianFinder`)**:
+            - The class supports arbitrary insertion and retrieval of the median in any order.
+            - *Assumption*: We do not call `get_median` when no values are inserted.
+
+    - **Step-by-Step Execution Example**
+        - **1. Insert first value (e.g., 4)**:
+            - Arbitrarily insert it into the small heap.
+            - Median = 4.
+        - **2. Insert second value (e.g., 7)**:
+            - Criteria: We want half of the values in the small heap and half in the large heap. Every value in the small heap must be $\le$ every value in the large heap.
+            - 7 is greater than 4, so it is placed in the large heap.
+            - Now both heaps have equal length (1), meaning the total number of values is even.
+            - Median = (Root of Small Heap + Root of Large Heap) / 2 = (4 + 7) / 2 = 5.5.
+        - **3. Insert third value (e.g., 3)**:
+            - Since 3 is smaller than the minimum value in the large heap, it is placed in the small heap.
+            - Small heap size = 2; Large heap size = 1.
+            - **Constraint**: The difference between the lengths of the heaps must be at most **1**.
+            - Median = Max value of the larger heap (Small heap root) = 4.
+
+    - **Maintaining Heap Properties During Insertion**
+        - **Simplified Insertion Logic**:
+            1. Every time a new value arrives, arbitrarily push it into the **Small Heap** (Max Heap) first.
+            2. **Verify Sorted Property**: Ensure the maximum value of the small heap is $\le$ the minimum value of the large heap.
+                - If both heaps are non-empty and the Small Heap root > Large Heap root, pop from the Small Heap and push to the Large Heap.
+            3. **Verify Size Property**: Ensure heap lengths do not differ by more than 1.
+                - If `len(Small Heap) > len(Large Heap) + 1`, pop the maximum from the small heap and push it to the large heap.
+                - If `len(Large Heap) > len(Small Heap) + 1`, pop the minimum from the large heap and push it to the small heap.
+
+    - **Python Implementation Details**
+        - Heaps are initialized as arrays, and operations are run using a heap class.
+        - **Handling Max Heaps**:
+            - Python does not have a built-in Max Heap; it only has Min Heaps.
+            - **Workaround**: Multiply values by **-1** when inserting into the small heap to simulate a max heap.
+            - When popping or reading the value, multiply it by **-1** again to restore the original number.
+
+    - **Calculating the Median (Code Logic)**
+        - **Odd number of elements**:
+            - Check if one heap is larger than the other.
+            - If Small Heap is larger: Return the Max value from the Small Heap.
+            - If Large Heap is larger: Return the Min value from the Large Heap.
+        - **Even number of elements**:
+            - If heaps are equal in size: Take the root value of both heaps, add them, and divide by 2.
+
+    - **Conclusion and Best Practices**
+        - This pattern is elegant because it avoids messy conditionals by performing arbitrary pushes followed by balancing steps.
+        - Even if a solution uses more conditionals, the core concepts are:
+            1. Heaps must be roughly even in size.
+            2. Values in the small heap must be $\le$ values in the large heap.
+        - This pattern is common in interviews and is essential for solving streaming median problems optimally.
+
+    - **Analogy for Understanding**
+        - Think of the two heaps like a **butterfly's wings**. The small values are on the left wing (max heap) and the large values are on the right wing (min heap). The median is essentially the "body" of the butterfly where the two wings meet. By keeping the wings balanced in size and ensuring the left wing values stay smaller than the right, you can always find the center instantly.
+
 # Others
 
 ## Prompts
