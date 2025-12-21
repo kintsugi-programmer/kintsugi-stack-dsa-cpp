@@ -58,9 +58,10 @@
     - [2-Dimension DP](#2-dimension-dp)
   - [Bit Operator](#bit-operator)
     - [Bit Operator](#bit-operator-1)
+- [Others](#others)
   - [Prompts](#prompts)
     - [Notes Formatting](#notes-formatting)
-    - [LaTeX math symbols/commands -\> Markdown-friendly alternatives](#latex-math-symbolscommands---markdown-friendly-alternatives)
+  - [LaTeX math symbols/commands -\> Markdown-friendly alternatives](#latex-math-symbolscommands---markdown-friendly-alternatives)
 
 ## About
 
@@ -3457,6 +3458,8 @@ To understand this, imagine building a brick wall from the bottom up; you only n
 **Analogy for Understanding Bit Shifting:**
 Think of bit shifting like a queue of people sitting in a row of chairs. **Left shifting** is like everyone moving one chair to the left; the person at the far left falls off the end and disappears, while a new person (a zero) sits in the empty chair on the right. **Right shifting** is the same process in reverse: everyone moves right, the person on the far right disappears, and a new zero sits in the chair on the far left. Just as adding a zero to the end of a decimal number (`15 -> 150`) multiplies it by 10, adding a zero to the end of a binary number multiplies it by 2.
 
+# Others
+
 ## Prompts
 
 ### Notes Formatting
@@ -3465,7 +3468,7 @@ Create super depth notes in Markdown (.md) format with 100% information preserve
 and no #, just nested - lines plaintext
 ```
 
-### LaTeX math symbols/commands -> Markdown-friendly alternatives
+## LaTeX math symbols/commands -> Markdown-friendly alternatives
 ```
 \to => ->
 \times => *
@@ -3473,6 +3476,7 @@ $ => ** or `
 \log => LOG
 \rightarrow => -> 
 \cdot => *
+\frac => \
 ```
 
 ---
