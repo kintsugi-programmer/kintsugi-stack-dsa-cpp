@@ -55,7 +55,8 @@
   - [Dynamic Programming](#dynamic-programming)
     - [1-Dimension DP](#1-dimension-dp)
     - [2-Dimension DP](#2-dimension-dp)
-  - [](#)
+  - [Bit Operator](#bit-operator)
+    - [Bit Operator](#bit-operator-1)
   - [Prompt for Notes Formatting](#prompt-for-notes-formatting)
 
 
@@ -3340,7 +3341,118 @@ An analogy for Dynamic Programming is building a staircase where you can only re
 
 To understand this, imagine building a brick wall from the bottom up; you only need the layer of bricks directly beneath the one you are currently laying to provide support, so you don't need to keep the blueprints for the entire foundation in your hands once that specific layer is finished.
 
-## 
+## Bit Operator 
+
+### Bit Operator 
+
+- **OVERVIEW OF BIT MANIPULATION**
+    - Bit manipulation is the final topic covered in the course.
+    - It is not considered a super important topic for coding interviews, but it does come up occasionally.
+    - It is important to understand the basics and have a fundamental understanding of how bits work, even beyond interview contexts.
+    - Computers use zeros and ones (bits) exclusively under the hood, though this is usually abstracted away for the user.
+
+- **BASIC LOGICAL OPERATIONS**
+    - **Bitwise AND (&)**
+        - Most languages, including Python, use the ampersand character `&` for this operation.
+        - Logic: Both bits must be 1 for the result to be 1.
+        - If either bit is 0, the result is 0.
+        - Truth Table:
+            ```
+            0 & 0 = 0
+            0 & 1 = 0
+            1 & 0 = 0
+            1 & 1 = 1
+            ```
+    - **Logic OR (|)**
+        - The character for logic OR is the pipe `|`.
+        - Logic: Only a single bit has to be 1 for the result to be 1.
+        - If neither bit is 1, the result is 0.
+        - Truth Table:
+            ```
+            0 | 0 = 0
+            0 | 1 = 1
+            1 | 0 = 1
+            1 | 1 = 1
+            ```
+    - **Exclusive OR (XOR / ^)**
+        - This operation comes up occasionally in coding interviews.
+        - The character for XOR is the up-caret `^`.
+        - Logic: The result is 1 **only** if exclusively one of the bits is 1.
+        - If both bits are 1, or both bits are 0, the result is 0.
+        - Truth Table:
+            ```
+            0 ^ 0 = 0
+            0 ^ 1 = 1
+            1 ^ 0 = 1
+            1 ^ 1 = 0
+            ```
+    - **Negation (NOT / ~)**
+        - The negation operator is typically the tilde `~`.
+        - It takes any bit and flips it to its opposite value.
+        - Logic:
+            - Negation of 1 is 0.
+            - Negation of 0 is 1.
+
+- **BINARY REPRESENTATION AND BASES**
+    - **Base 10 (Decimal)**
+        - This is the standard system where the maximum value of a digit is nine.
+        - When you reach ten, you add a new digit.
+        - Places are powers of 10:
+            - Ones place ($10^0$).
+            - Tens place ($10^1$).
+            - Hundreds place ($10^2$).
+    - **Base 2 (Binary)**
+        - When you reach the value of two, you add a new digit.
+        - For example, the number 2 is represented as `10` in binary.
+        - Places are powers of 2:
+            - Ones place ($2^0$).
+            - Twos place ($2^1$).
+            - Fours place ($2^2$).
+            - Eights place ($2^3$).
+    - **Integer Storage**
+        - Programming languages usually use 32-bit integers.
+        - A small number like 23 would be represented with its binary bits preceded by many leading zeros to fill the 32-bit requirement.
+
+- **BIT SHIFTING**
+    - **Left Shift (<<)**
+        - Shifting to the left moves every bit one position to the left.
+        - The vacated spot on the right is replaced with a 0.
+        - If a bit is shifted off the left end, it is dropped or deleted; it does not circle back.
+        - **Mathematical Rule:** Shifting an integer to the left by one is the same as multiplying it by two.
+    - **Right Shift (>>)**
+        - Shifting to the right moves every bit one position to the right.
+        - The vacated spot on the left is replaced with a 0.
+        - **Mathematical Rule:** Shifting an integer to the right by one is the same as dividing it by two.
+        - If the number is odd, the result is rounded down.
+
+- **ALGORITHM: COUNTING ONE BITS**
+    - **Goal:** Given an integer, count the number of 1s in its binary representation.
+    - **Example:** The integer 23 (base 10) is `10111` in binary.
+    - **Steps:**
+        1. Declare a `count` variable starting at zero.
+        2. Run a loop while the integer $n$ is greater than zero.
+        3. Check the "ones place" of the current number by using bitwise AND with 1 (`n & 1`).
+            - The value 1 is used because it has all zeros except for the last bit.
+            - If the result of `n & 1` is 1, it means there is a 1 in the ones place.
+        4. If `n & 1` is true, increment the `count`.
+        5. Shift the integer $n$ to the right by one (`n >> 1`) to discard the bit that was just checked.
+        6. Repeat until $n$ becomes zero.
+    - **Tracing the example (Integer 23 / `10111`):**
+        - `10111 & 1` is 1 $\rightarrow$ Count becomes 1. Shift right to get `1011`.
+        - `1011 & 1` is 1 $\rightarrow$ Count becomes 2. Shift right to get `101`.
+        - `101 & 1` is 1 $\rightarrow$ Count becomes 3. Shift right to get `10`.
+        - `10 & 1` is 0 $\rightarrow$ Count stays 3. Shift right to get `1`.
+        - `1 & 1` is 1 $\rightarrow$ Count becomes 4. Shift right to get `0`.
+        - Loop ends; result is 4.
+
+- **FINAL NOTES ON BIT MANIPULATION**
+    - These problems often rely on specific "tricks," which is why some people feel they are not the best coding interview questions.
+    - You either know the trick or you don't, which can limit the effectiveness of the question for evaluating general coding ability.
+    - However, mastering these basics is useful for general programming tasks outside of interviews.
+
+**Analogy for Understanding Bit Shifting:**
+Think of bit shifting like a queue of people sitting in a row of chairs. **Left shifting** is like everyone moving one chair to the left; the person at the far left falls off the end and disappears, while a new person (a zero) sits in the empty chair on the right. **Right shifting** is the same process in reverse: everyone moves right, the person on the far right disappears, and a new zero sits in the chair on the far left. Just as adding a zero to the end of a decimal number ($15 \rightarrow 150$) multiplies it by 10, adding a zero to the end of a binary number multiplies it by 2.
+
 ## Prompt for Notes Formatting
 
 ```
