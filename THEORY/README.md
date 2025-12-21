@@ -28,6 +28,9 @@
     - [Merge Sort](#merge-sort)
     - [Quick Sort](#quick-sort)
     - [Bucket Sort](#bucket-sort)
+  - [Binary Search](#binary-search)
+    - [Search Array](#search-array)
+    - [Search Range](#search-range)
   - [Prompt for Notes Formatting](#prompt-for-notes-formatting)
 
 
@@ -1119,6 +1122,181 @@ Think of a **Singly Linked List** like a **one-way train** where each car only k
    
 - **ANALOGY**
     - Bucket sort is like sorting a collection of colored tokens (red, blue, yellow) by simply counting how many of each you have. Instead of rearranging the actual tokens, you throw them away and lay out new ones in the right order based on your count: all red first, then all blue, then all yellow. You end up with a sorted line, but you don't care which specific red token was which.
+
+## Binary Search
+
+### Search Array
+
+- Binary Search Overview
+  - Binary search is an algorithm that is very closely related to sorting.
+  - This algorithm can only run on an input that is already in some type of sorted order.
+  - It is much more efficient than looking through every single value in an input.
+
+- Intuition and Concept
+  - Linear Search Comparison:
+    - In a standard search, you might have to look at every single value to find what you are looking for in the worst case.
+    - For example, if you were looking for the number 8 and it was at the very end of the array, you would have to look through all positions before finding it.
+  - The Dictionary Example:
+    - Massive lists of words are placed in alphabetical order in dictionaries.
+    - If you are looking for the word "banana," you might start at the halfway point.
+    - If you find words starting with "J" at the halfway point, you know "B" comes before "J".
+    - Therefore, you eliminate the second half of the dictionary and only search the first half.
+  - The Number Guessing Game:
+    - If you need to guess a number between 1 and 100, and you are told if your guess is "too big" or "too small," the best strategy is to guess 50.
+    - If 50 is "too small," the answer is between 51 and 100.
+    - If 50 is "too big," the answer is between 1 and 49.
+    - This approach eliminates half of the possibilities every single time, reducing the search space.
+    - Guessing the halfway point is less risky because it guarantees at least half the possibilities are eliminated regardless of the feedback.
+
+- Algorithm Requirements and Goals
+  - Input Type: Binary search is most commonly run on an array.
+  - Sorted Order: It is very important for the input to be in sorted order.
+  - If the input is not sorted, the best possible search time is Big O of N (O(n)), where you look at every element individually.
+  - Target: The value you are searching for.
+  - Goal: To return the index where the target value appears.
+  - Solution Not Found: If the target does not exist in the input, the algorithm usually returns -1 to indicate an invalid index.
+
+- Algorithm Mechanics and Pointers
+  - Search Space: The portion of the array currently being considered. At the start, the search space is the entire array.
+  - Boundaries (Pointers):
+    - Left Pointer (or Low Pointer): Initialized to index 0.
+    - Right Pointer (or High Pointer): Initialized to the length of the array minus one.
+  - Midpoint Calculation:
+    - The middle index (m) is found by adding the two boundaries together and dividing by two.
+    - Usually, this result is rounded down.
+    - Example: index 0 + index 7 divided by 2 equals 3.5, which rounds down to index 3.
+
+- The Binary Search Logic (Pseudo-code Steps)
+  - 1. Initialize the Left pointer to 0 and Right pointer to length - 1.
+  - 2. Start a loop that continues as long as the Left pointer is less than or equal to the Right pointer.
+  - 3. Calculate the midpointer.
+  - 4. Check the value at the midpointer against the target:
+    - Case A: Target is greater than the value at mid.
+      - The target must be to the right.
+      - Set the Left pointer to mid + 1.
+      - This eliminates the mid index and everything to its left.
+    - Case B: Target is less than the value at mid.
+      - The target must be to the left.
+      - Set the Right pointer to mid - 1.
+      - This eliminates the mid index and everything to its right.
+    - Case C (Else): The target is equal to the value at mid.
+      - The target is found.
+      - Return the mid index.
+  - 5. If the loop finished and the target was not found, return -1.
+
+- Detailed Example Walkthrough: Target 5
+  - Setup: A sorted array with indices 0 through 7. Target is 5.
+  - Iteration 1:
+    - Left is 0, Right is 7. Mid is 3 (Value at index 3 is 4).
+    - 5 is greater than 4.
+    - Update Left to mid + 1 (Left = 4).
+  - Iteration 2:
+    - Left is 4, Right is 7.
+    - Mid calculation: (4 + 7) / 2 = 5.5, rounded down is 5 (Value at index 5 is 6).
+    - 5 is less than 6.
+    - Update Right to mid - 1 (Right = 4).
+  - Iteration 3:
+    - Left is 4, Right is 4. The search space is now a single value.
+    - Mid calculation: (4 + 4) / 2 = 4 (Value at index 4 is 5).
+    - 5 is equal to 5.
+    - Return index 4.
+
+- Example of a Failed Search: Target 9
+  - If the search space reaches a single element (e.g., index 7 with value 8) and the target is 9:
+    - 9 is greater than 8.
+    - Left pointer is updated to mid + 1 (Left = 8).
+    - Now Left (8) is greater than Right (7).
+    - The search space is empty, and the loop terminates.
+    - Return -1.
+
+- Complexity Analysis
+  - Time Complexity:
+    - With every iteration of the loop, at least half of the search space is eliminated.
+    - This continues (n -> n/2 -> n/4...) until the search space is size 1.
+    - The number of times a value (n) can be divided by 2 until it equals 1 is represented by the formula: log base 2 of n.
+    - Worst-case runtime: O(log n).
+    - Log N is much more efficient than the O(N) required for a linear scan.
+  - Memory Complexity:
+    - Only a few pointers (Left, Right, Mid) are allocated.
+    - No additional data structures or variable-length arrays are created.
+    - Memory complexity: Big O of 1 (constant space).
+
+***
+
+To think of binary search simply, imagine you are looking for a specific page in a thick textbook; instead of flipping every single page from the front (Linear Search), you open it exactly to the middle. If the page you need is higher, you ignore the entire first half of the book and repeat the process with the remaining half until you land on the correct page.
+
+### Search Range
+
+- **Binary Search Variation: Search Range**
+    - This is a variation of the standard binary search algorithm that often appears in interview problems.
+    - It is based on the concept of guessing a number within a specific range, such as a range between 1 and 100.
+    - **Key Differences from Original Binary Search**
+        - You are not necessarily given an array of numbers in sorted order.
+        - You are not searching for the index of a specific target value.
+        - Instead, you are given a range of values and must find a correct value $n$ that satisfies specific conditions.
+        - This is a more general case of binary search.
+        - While the original case checked if $n$ was equal to a target, this version can involve much more complex requirements or computations.
+
+- **The General Template**
+    - This range-style binary search is very similar to the original algorithm template.
+    - **Inputs**
+        - A range of values defined by a lower bound and an upper bound.
+        - Important: No array is provided for this search.
+    - **Process**
+        - Perform the search while the `low` value is less than or equal to the `high` value.
+        - Calculate the midway point (`mid`) to eliminate half of the remaining possibilities in each step.
+    - **The Helper Function: `isCorrect(n)`**
+        - Because there is no explicit target, a helper function (often called a dummy function) decides if the guess is correct.
+        - This function takes a single number as an input and computes whether the guess satisfies the requirements.
+        - The function must determine not only if a guess is wrong but also if it was "too big" or "too small".
+        - **Logic of the Helper Function (Example)**
+            - If $n$ is greater than the desired value, return `1` (indicates the guess is too big).
+            - If $n$ is less than the desired value, return `-1` (indicates the guess is too small).
+            - If $n$ is exactly the desired value, return `0` (indicates the guess is correct).
+            - This function can contain any algorithm or computation required by the specific problem.
+
+- **Step-by-Step Example: Finding the Number 10 in a Range of 1 to 100**
+    - **Initial State**
+        - Range: 1 to 100.
+        - Target value (hardcoded in this example): 10.
+    - **Iteration 1**
+        - Calculate mid: $(1 + 100) / 2 = 50$.
+        - Call `isCorrect(50)`. Since 50 is greater than 10, it returns `1` (too big).
+        - Update range: Set `high` to `mid - 1` ($50 - 1 = 49$).
+        - Half of the possibilities are now eliminated.
+    - **Iteration 2**
+        - Calculate mid: $(1 + 49) / 2 = 25$.
+        - Call `isCorrect(25)`. Since 25 is greater than 10, it returns `1` (too big).
+        - Update range: Set `high` to `mid - 1` ($25 - 1 = 24$).
+    - **Iteration 3**
+        - Calculate mid: $(1 + 24) / 2 = 12$.
+        - Call `isCorrect(12)`. Since 12 is greater than 10, it returns `1` (too big).
+        - Update range: Set `high` to `mid - 1` ($12 - 1 = 11$).
+    - **Iteration 4**
+        - Calculate mid: $(1 + 11) / 2 = 6$.
+        - Call `isCorrect(6)`. Since 6 is less than 10, it returns `-1` (too small).
+        - Update range: Set `low` to `mid + 1` ($6 + 1 = 7$).
+    - **Iteration 5**
+        - Calculate mid: $(7 + 11) / 2 = 9$.
+        - Call `isCorrect(9)`. Since 9 is less than 10, it returns `-1` (too small).
+        - Update range: Set `low` to `mid + 1` ($9 + 1 = 10$).
+    - **Iteration 6**
+        - Calculate mid: $(10 + 11) / 2 = 10.5$, which rounds down to 10.
+        - Call `isCorrect(10)`. Since 10 is the target, it returns `0` (correct).
+    - **Final Result**
+        - The algorithm returns the value 10.
+        - The goal was to find the correct value, not an index.
+
+- **Algorithm Complexity**
+    - **Time Complexity**
+        - The Big O time complexity remains **$O(\log n)$**.
+    - **Definition of $n$**
+        - In original binary search, $n$ represented the size of the array.
+        - In range-style binary search, $n$ represents the size of the range of values (e.g., if the range is 1 to 100, $n$ is 100).
+
+- **Conclusion**
+    - This method allows the core binary search template to be extended to various types of problems by searching a space of values rather than a physical data structure.
+
 
 ## Prompt for Notes Formatting
 
