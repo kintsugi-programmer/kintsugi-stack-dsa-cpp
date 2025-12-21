@@ -47,6 +47,15 @@
   - [Hashing](#hashing)
     - [Hash Usage](#hash-usage)
     - [Hash Implementation](#hash-implementation)
+  - [Graphs](#graphs)
+    - [Introduction to Graphs](#introduction-to-graphs)
+    - [Matrix DFS](#matrix-dfs)
+    - [Matrix BFS](#matrix-bfs)
+    - [Adjacency List](#adjacency-list)
+  - [Dynamic Programming](#dynamic-programming)
+    - [1-Dimension DP](#1-dimension-dp)
+    - [2-Dimension DP](#2-dimension-dp)
+  - [](#)
   - [Prompt for Notes Formatting](#prompt-for-notes-formatting)
 
 
@@ -2667,6 +2676,671 @@ Think of inserting a new book into a library organized by a specific system. You
     - While the analysis is complex, assuming O(1) is standard for interviews.
     - Understanding the concepts (collisions, rehashing, open addressing) places you ahead of most candidates.
 
+## Graphs
+
+### Introduction to Graphs
+
+- Introduction to Graphs
+    - General Overview
+        - Graphs are a really common topic in real coding interviews and are considered pretty challenging.
+        - A lot of material needs to be covered regarding graphs.
+        - Linked Lists are actually a form of graphs; they are a subset of graphs.
+        - Trees (binary trees or other kinds) are also a subset of graphs.
+    - Definition and Components
+        - A graph is essentially made up of nodes and possibly some pointers connecting them together.
+        - Nodes: These can also be referred to as "vertices".
+        - Vertices: This is a synonym for nodes; a vertex is essentially the same thing as a node typically.
+        - Edges: These are the pointers connecting the nodes together.
+
+- Graph Shapes and Constraints
+    - Connectivity and Cycles
+        - Graphs can have all kinds of shapes.
+        - Unlike binary trees or binary search trees, generic graphs have no restrictions regarding cycles.
+        - A cycle occurs when you can follow edges from a node and eventually return to that same node (e.g., A to B to C and back to A).
+        - In a generic graph, there are no restrictions on the number of nodes or the edges connecting them.
+    - Mathematical Constraints on Edges
+        - Technically, the number of edges (E) is less than or equal to the number of vertices (V) squared ($E \le V^2$).
+        - V refers to the number of vertices (nodes).
+        - Example: If there are 3 nodes, $3^2 = 9$, so the number of edges is less than or equal to 9.
+    - Logic Behind the Formula
+        - From every single vertex (singular of vertices), there can be a pointer going to every other vertex.
+        - A node can also have a pointer going into itself (a self-loop).
+        - Since every node can have V edges (where V is the total number of nodes), the maximum is $V \times V$ or $V^2$.
+        - Duplicate edges are typically not considered in graphs.
+
+- Directed vs. Undirected Graphs
+    - Directed Graphs
+        - A directed graph means that the pointers (edges) have a specific direction.
+        - You might be able to go from B to C, but not necessarily from C to A.
+        - Trees and Linked Lists are examples of directed graphs.
+        - Cycles can form in directed graphs if pointers allow going back and forth between nodes (e.g., A to B and B to A).
+    - Undirected Graphs
+        - Undirected edges mean you can go in either direction between connected nodes.
+        - Drawing style 1: A line with arrows on both ends.
+        - Drawing style 2 (More common): A line without any direction indicators.
+        - If an undirected graph is drawn with plain lines, it implies movement is possible both ways for every edge.
+
+- Graph Representations
+    - Overview
+        - There are three common ways to represent graphs.
+        - The most common ways for coding interviews are the Matrix and the Adjacency List.
+        - The Adjacency Matrix is much less common.
+
+    - Representation 1: Matrix (2D Grid)
+        - Basic Structure
+            - This is essentially a two-dimensional array used to represent a graph.
+            - In languages like Python, it appears as an array of arrays (rows).
+            - Example structure:
+                ```text
+                [
+                  ,
+                 
+                ]
+                ```
+        - Coordinate Systems
+            - Using X and Y for coordinates can get confusing because in math, X usually refers to a row (horizontal) and Y to a column (vertical), which might conflict with array indexing.
+            - It is recommended to use R (Row) and C (Column) to avoid confusion during interviews.
+        - Accessing Values
+            - Everything is indexed by zero.
+            - To access a coordinate: `grid[row][column]`.
+            - Accessing `grid` returns the entire one-dimensional array at index 1 (the second row).
+            - Accessing `grid` accesses the value at column 2 within row 1.
+        - Logic as a Graph
+            - Values in the matrix (e.g., 0 and 1) can define rules.
+            - Example: 0 represents a free space (a node you can move to), and 1 represents a blocked space.
+            - Nodes: The free spaces (zeros) act as the nodes.
+            - Edges: Movement rules define the edges (e.g., allowed to move Left, Right, Up, Down).
+            - Edge Direction: Typically, these edges are undirected (you can move left and then move back right).
+            - Null Pointers: If a movement leads out of bounds or to a blocked space, it is essentially a null pointer.
+            - Implicit Nature: The matrix does not store explicit pointers; edges exist because of the defined movement rules.
+
+    - Representation 2: Adjacency Matrix
+        - Basic Structure
+            - This is typically a square matrix with dimensions $V \times V$ (where V is the number of vertices).
+            - The dimensions represent the nodes themselves (e.g., Row 0 represents Vertex 0, Column 0 represents Vertex 0).
+        - Storing Edges
+            - The values inside the matrix represent the existence of edges.
+            - 0: There is no edge going from the source vertex to the destination vertex.
+            - 1: There is an edge going from the source vertex to the destination vertex.
+        - Indexing and Direction
+            - If accessing `matrix[i][j]`, `i` represents the starting vertex and `j` represents the ending vertex.
+            - Example: `matrix = 1` means there is an edge from Vertex 1 to Vertex 0.
+            - This represents a directed edge.
+            - To check the reverse direction (0 to 1), you must check `matrix`.
+            - Self Loops: An edge from a node to itself is represented by a 1 at the index `[i][i]` (e.g., `matrix`).
+        - Space Complexity
+            - Space complexity is $O(V^2)$ because it requires an entire matrix regardless of the number of actual edges.
+            - Even if a graph has very few edges (e.g., 4 edges for 4 nodes), the matrix still takes up $V \times V$ space.
+            - This inefficiency makes it rare to use adjacency matrices compared to other methods.
+
+    - Representation 3: Adjacency List
+        - Overview
+            - This is typically the most common way of representing graphs in coding interviews.
+            - It works similarly to Linked Lists and Trees.
+        - Node Structure
+            - A graph node (vertex) usually contains two things:
+                - A value: Can be an integer, character, string, or an object (like a "Person" or "City").
+                - Pointers: A way to connect to other nodes.
+        - Handling Pointers
+            - Unlike Binary Trees (left/right) or Linked Lists (next/prev), generic graphs can have any number of pointers.
+            - Implementation: Use a list (array) to store pointers.
+            - In Python, this list is often called `neighbors`.
+        - Logic
+            - The `neighbors` list represents outgoing edges (which nodes this specific node is pointing to).
+            - Example 1: If Node 0 has no outgoing edges, its `neighbors` list is empty.
+            - Example 2: If Node 1 points to itself and Node 0, its `neighbors` list contains pointers to Node 1 and Node 0.
+            - Example 3: If Node 3 points to Node 1, Node 1 is in Node 3's neighbor list (but Node 3 is not necessarily in Node 1's list unless the edge goes back).
+        - Space Efficiency
+            - This method is more space-efficient than an adjacency matrix.
+            - It only contains pointers for nodes that actually exist and are connected.
+            - Space corresponds to nodes plus edges, rather than nodes squared.
+        - Undirected Graphs in Adjacency Lists
+            - If edges are undirected, the connection is stored in both nodes' neighbor lists.
+            - Example: If there is a connection between Node 0 and Node 1:
+                - Node 1 is in Node 0's `neighbors`.
+                - Node 0 is in Node 1's `neighbors`.
+
+### Matrix DFS
+
+- **Problem Definition and Goals**
+    - The objective is to count the number of unique paths from the top-left of a matrix to the bottom-right.
+    - The algorithm used is Depth First Search (DFS), which is very commonly applied to graphs.
+    - **Movement Rules**
+        - The path can only move along zeros (0).
+        - The path cannot move on ones (1) because they are blocked.
+        - A single path cannot visit the same cell more than once.
+    - **Why avoid revisiting cells?**
+        - If we revisit a cell (e.g., going down, left, and back up), we could enter an infinite loop.
+        - Without this rule, the answer would basically be infinity, which is not useful.
+        - If a cell is already visited on the current path, it is treated as "blocked" for that specific path.
+
+- **Algorithm Strategy: DFS and Backtracking**
+    - To count the paths, the algorithm must go through every single possibility.
+    - This approach is an example of backtracking, which has a big overlap with DFS.
+    - Both DFS and backtracking are recursive algorithms.
+    - **Visualizing the Approach**
+        - It is best to think about the problem visually as a matter of choices.
+        - We start at the top-left position (0, 0).
+        - From any position, there are four possible choices: Move Up, Move Left, Move Down, or Move Right.
+        - The algorithm explores one path as deep as possible, backtracks, and then explores other paths.
+
+- **Function Parameters and Inputs**
+    - The function receives the `grid` (the two-dimensional matrix).
+    - The function receives the starting position coordinates (row, column), initially `0, 0`.
+    - **Matrix Dimensions**
+        - `ROWS` is the length of the grid.
+        - `COLS` is the length of the first row (assuming a rectangular grid).
+        - These dimensions can be calculated inside the function or passed as parameters; calculating them inside does not change time complexity.
+    - **The Visit Hash Set**
+        - A `visit` hash set is passed to the recursive function to track cells visited on the current path.
+        - This object is reused across recursive calls; a new one is not created every time.
+        - Adding and removing from a hash set is a constant time operation.
+        - Alternatively, a 2D grid of the same size could be used to mark visited positions.
+        - Modifying the input grid (e.g., changing visited cells to 1) is possible but not always safe to assume allowed.
+
+- **Base Cases (Stopping Conditions)**
+    - The algorithm has multiple base cases where it must stop and return a value.
+    - **1. Out of Bounds**
+        - If the row is less than 0 or the column is less than 0, the path is invalid.
+        - This can be checked by seeing if the minimum of row and column is less than 0.
+        - If the row equals the number of rows (too big), it is out of bounds.
+        - If the column equals the number of columns (too big), it is out of bounds.
+        - In these cases, return `0` because no path was found.
+    - **2. Blocked Position**
+        - If the current position is blocked (contains a 1), we are not supposed to be there.
+        - We stop searching immediately and return `0`.
+    - **3. Already Visited**
+        - If the current position is in the `visit` hash set, it means we visited it before on this path.
+        - Visiting twice is not allowed, so return `0`.
+    - **4. Destination Reached**
+        - The destination is defined as the last row (`rows - 1`) and the last column (`cols - 1`).
+        - If `r == rows - 1` and `c == cols - 1`, we have found a single valid path.
+        - Return `1` to count this path.
+
+- **The Recursive Step (The "Count" Logic)**
+    - If no base cases are met, we proceed with the recursive exploration.
+    - **Mark as Visited**
+        - Add the current coordinate pair to the `visit` hash set.
+    - **Explore Directions**
+        - Initialize a `count` variable to 0.
+        - Call DFS recursively in all four directions:
+            - Down: `row + 1`.
+            - Up: `row - 1`.
+            - Right: `column + 1`.
+            - Left: `column - 1`.
+        - The `count` variable accumulates the results returned from these four directions.
+    - **Backtracking (Unmark Visited)**
+        - After exploring all directions from the current cell, we must backtrack.
+        - Remove the current position from the `visit` hash set (mark as unvisited).
+        - **Why Unmark?**
+            - While a single path cannot visit a node twice, different unique paths can share the same nodes.
+            - Example: One path might go down-right, and another might go right-down; they are distinct paths even if they cross the same cells.
+            - By unmarking, we allow other paths to use this cell later.
+    - **Return Result**
+        - Return the total `count` to the previous node (the caller).
+        - The final result returned to the original caller will be the total number of unique paths.
+
+- **Code Flow Example**
+    - Start at (0,0) with an empty visit set.
+    - Check base cases (bounds, visited, blocked, destination); if valid, add (0,0) to visit set.
+    - Recursively try directions (e.g., Down, Up, Right, Left) one by one.
+    - If "Up" is out of bounds, it returns 0.
+    - If "Down" is blocked, it returns 0.
+    - If "Right" is valid, proceed recursively from the new cell.
+    - This process continues deeper until a base case returns 0 or 1.
+    - Values (0 or 1) bubble up the recursion tree, summing up at each node.
+
+- **Complexity Analysis**
+    - **Time Complexity: O(4^(N * M))**
+        - This is an imprecise upper bound based on the decision tree.
+        - At every node, there are 4 choices (branches).
+        - The maximum height of the decision tree corresponds to the longest possible path, which is the size of the matrix (Rows * Cols, or N * M).
+        - Therefore, the complexity is roughly `branches ^ height`, or `4^(N * M)`.
+        - This is not efficient, but expected for brute force DFS backtracking.
+    - **Space Complexity: O(N * M)**
+        - The memory complexity is determined by the recursive call stack.
+        - In the worst case, the recursion depth can equal the size of the matrix ($N \times M$).
+        - Additionally, the `visit` hash set (or grid) stores up to $N \times M$ elements.
+
+### Matrix BFS
+
+- **Matrix BFS (Breadth-First Search) Algorithm Overview**
+    - **Introduction**
+        - The BFS algorithm on a matrix involves more code than Depth-First Search (DFS).
+        - However, it is visually simpler to understand than DFS.
+        - Similar to BFS on a tree, the algorithm processes nodes layer by layer.
+        - It goes through the first layer, then the second layer, then the third layer, and so on.
+
+    - **Common Use Cases**
+        - The most common application is the **shortest path algorithm**.
+        - Example: Finding the length of the shortest path from the top-left to the bottom-right of a grid.
+        - BFS is the most efficient way to solve this.
+        - DFS could be used as a brute force approach to check every possible path and find the shortest one, but it is much less efficient.
+
+    - **Time and Space Complexity**
+        - **BFS Time Complexity**: $O(N \times M)$.
+            - This represents the size of the grid (Rows $\times$ Columns).
+            - In the worst case, the algorithm visits the entire grid.
+        - **DFS Time Complexity**: $4^{(N \times M)}$.
+            - This is significantly less efficient.
+        - **Space Complexity**: $O(N \times M)$.
+            - This is the maximum size that the visit hash set or the queue could reach.
+
+- **Algorithm Setup and Data Structures**
+    - **Initial Inputs**
+        - Dimensions of the grid.
+        - Starting point (e.g., top-left).
+        - Destination (e.g., bottom-right).
+
+    - **Required Data Structures**
+        - **Visit Hash Set**: Used to track visited nodes, similar to DFS.
+        - **Queue**: Used to track the current level/layer of nodes, similar to tree BFS.
+
+    - **Initialization Steps**
+        - Initialize the queue with the first node (the starting point).
+        - Add the starting point to the visit hash set immediately.
+        - This starting point represents all nodes reachable with a path length of zero.
+
+- **Implementation Details**
+    - **The Main Loop**
+        - Loop runs while the queue is non-empty.
+        - Take a snapshot of the length of the queue at the start of the loop.
+        - This allows processing all elements belonging to the current layer.
+    - **Processing Nodes**
+        - Pop elements from the queue.
+        - When popping, you retrieve the coordinates of the position.
+        - Check if the current position is the destination.
+        - If it is the destination, return the length of the path.
+
+    - **Managing Variables**
+        - **Length**: Initially set to zero,.
+        - The length is incremented by one after processing an entire layer (after the inner loop finishes).
+
+- **Handling Movement and Edge Cases**
+    - **Directions**
+        - We can move in four directions (neighbors): Left, Right, Up, and Down,.
+    
+    - **Edge Cases (Conditionals)**
+        - We must check for specific conditions to see if a move is valid. If invalid, we `continue` (skip).
+        - **Out of Bounds**:
+            - If `min(row, col) < 0`.
+            - If `row == number of rows`.
+            - If `column == number of columns`.
+        - **Blocked**: If the grid value is 1 (or indicates a blockage).
+        - **Visited**: If the position is already in the visit hash set.
+
+    - **Coding Strategy for Directions**
+        - Writing conditionals four times is repetitive and a "pain to type",.
+        - A common strategy is using direction arrays to minimize code.
+        - Define change in row (`dr`) and change in column (`dc`) for all four directions (Right, Left, Below, Above).
+        - Loop through these directions and add them to the current row and column to get neighbor coordinates.
+        - This boilerplate code can also be placed in a helper function,.
+
+- **Step-by-Step Execution Walkthrough**
+    - **Layer 1**
+        - Start at the top-left (Length 0),.
+        - Check neighbors. Only the Right neighbor is valid.
+        - Add the valid neighbor to the Queue and the Visit Hash Set.
+        - Increment path length to 1.
+
+    - **Layer 2**
+        - Pop the node from the Queue.
+        - Check neighbors. Valid moves might be Right and Below.
+        - Add both to the Queue and Visit Hash Set.
+        - Increment path length to 2.
+        - *Note*: If the destination check was performed here and failed, do not return the length yet.
+
+    - **Layer 3 and Beyond**
+        - If the Queue has multiple items (e.g., 2 items), pop them one by one.
+        - **Crucial Logic**:
+            - When adding a neighbor to the queue, immediately add it to the visit hash set.
+            - This prevents adding the same position to the queue twice if it is reached from two different parent nodes.
+            - This ensures the algorithm runs in $N \times M$ complexity.
+        - Continue expanding layer by layer (Length 3, 4, 5, etc.),.
+
+    - **Reaching the Destination**
+        - The destination check usually occurs *after* popping from the queue.
+        - Example: If the popped node is the destination, return the current `length`.
+        - If the destination was reached at the end of the layer, the result (e.g., 6) is returned.
+
+- **Code Logic Summary**
+    - **Pseudocode Logic**
+        ```text
+        Initialize length = 0
+        Add start to Queue and Visit Set
+        While Queue is not empty:
+            For i in range(len(Queue)):
+                Pop (r, c)
+                If (r, c) is destination:
+                    Return length
+                For (dr, dc) in directions:
+                    new_r = r + dr
+                    new_c = c + dc
+                    If (new_r, new_c) is invalid or visited:
+                        Continue
+                    Add (new_r, new_c) to Queue
+                    Add (new_r, new_c) to Visit Set
+            Increment length
+        ```
+    - *Note*: The example in the source performs the destination check after popping.
+    - It is possible to check for the destination when adding to the queue, but the code would need adjustment regarding when the length is incremented.
+
+- **Conclusion**
+    - **Pros**:
+        - Guarantees finding the shortest path.
+        - Never visits the same position twice.
+        - Visually easy to follow (layer by layer expansion),.
+    - **Cons**:
+        - Contains a lot of boilerplate code,.
+        - Handling all edge cases and conditionals correctly takes time and practice.
+    - **Recommendation**:
+        - Practice graph problems to get used to writing the boilerplate efficiently.
+
+### Adjacency List
+
+- Adjacency Lists: Introduction and Representation
+    - Overview
+        - Adjacency lists are generally simpler to run algorithms on compared to matrices.
+        - Originally, adjacency lists were discussed as a **Graph Node Class** or object containing:
+            - A value (stored as a string, character, or integer).
+            - A list of neighbors (pointers pointing to other nodes).
+        - These pointers can represent directed or undirected edges.
+    - Coding Interview Representation
+        - In coding interviews, it is much more common to use a **Hashmap** to represent an adjacency list.
+        - This is effective as long as the value or ID of each node is unique (almost always true in interviews).
+        - Key-Value Structure:
+            - **Key**: The unique identifier of the node (e.g., an integer, character, or string like 'A').
+            - **Value**: A list representing the neighbors.
+        - Example:
+            - If we have nodes 'A' and 'B', the hashmap keys are 'A' and 'B'.
+            - If the lists are empty, it means there are no pointers (edges) originating from those nodes.
+
+- Building an Adjacency List
+    - Common Interview Scenario
+        - Typically, you are not given the adjacency list directly; you must build it from a list of edges.
+    - Input Data
+        - You are given a list of edges, which are pairs of nodes (Source, Destination).
+        - Example: A directed edge from A to B means A points to B.
+    - Step-by-Step Construction Algorithm
+        - 1. **Initialize Variable**: Create an empty hashmap.
+        - 2. **Iterate Through Edges**: Loop through every pair in the edge list.
+            - Identify `source` (first in pair) and `destination` (second in pair).
+        - 3. **Handle New Keys**:
+            - Check if the `source` is in the hashmap. If not, add it with an empty array as its value.
+            - Check if the `destination` is in the hashmap. If not, add it with an empty array as well.
+            - *Note*: We add the destination even if it has no outgoing neighbors to ensure every node seen in the edge list exists in the adjacency list.
+        - 4. **Add Relationship**:
+            - Append the `destination` to the `source`'s list of neighbors.
+            - Visually, this creates a pointer from Source to Destination.
+    - Detailed Example Construction
+        - Given Edges: (A, B), (B, C), (B, E), (C, E), (E, D).
+        - Step 1: Process (A, B). Add A and B to map. Append B to A's list. (A -> B).
+        - Step 2: Process (B, C). B is in map. Add C to map. Append C to B's list. (B -> C).
+        - Step 3: Process (B, E). Add E to map. Append E to B's list. (B -> E).
+        - Step 4: Process (C, E). Append E to C's list. (C -> E).
+        - Step 5: Process (E, D). Add D to map. Append D to E's list. (E -> D).
+        - Result: A map containing all nodes and their relationships, equivalent to the visual graph structure.
+
+- Depth First Search (DFS) on Adjacency Lists
+    - Overview
+        - Running DFS on an adjacency list is easier than on a matrix because there is no need to worry about edge cases like going out of bounds.
+        - It is a backtracking algorithm.
+    - Problem Statement
+        - Count all paths from a **Start Node** (e.g., A) to a **Target Node** (e.g., E).
+    - Parameters
+        - Adjacency List (Hashmap).
+        - Start Node.
+        - Target Node.
+        - `visit` Hash Set (keeps track of visited nodes along the current path).
+    - Algorithm Logic
+        - 1. **Base Case - Visited**: Check if the current node is already in the `visit` set. If yes, return 0 (invalid path).
+        - 2. **Base Case - Target Found**: Check if the current node is the target. If yes, return 1 (found a path).
+        - 3. **Recursive Step**:
+            - Initialize a `count` variable to 0.
+            - Add the current node to the `visit` set.
+            - Iterate through the current node's list of neighbors from the adjacency list.
+            - Call DFS recursively on each neighbor.
+            - Add the result of the recursive call to `count`.
+        - 4. **Backtracking**:
+            - After the loop finishes, remove the current node from the `visit` set.
+            - Return the total `count`.
+    - Execution Trace (A to E)
+        - Start at A. Not visited, not target. Add A to visit. Neighbor: B.
+        - Move to B. Not visited, not target. Add B to visit. Neighbors: C, E.
+        - **Branch 1**: Call DFS on C (DFS goes deep first).
+            - C not visited, not target. Add C to visit. Neighbor: E.
+            - Call DFS on E. E is target. **Return 1**.
+            - Back at C: Add 1 to count. Loop ends. Remove C from visit. **Return 1** to B.
+        - Back at B: Count is 1. Next neighbor: E.
+        - **Branch 2**: Call DFS on E.
+            - E is target. **Return 1**.
+        - Back at B: Add 1 to count. Total count is 2. Loop ends. Remove B from visit. **Return 2** to A.
+        - Back at A: Loop ends. **Return 2**.
+        - *Observation*: Node D was never visited because the path stopped immediately upon reaching target E.
+    - Cycle Detection
+        - If the graph had a back-edge (e.g., C points back to B).
+        - DFS would go A -> B -> C -> B.
+        - At the second B, the algorithm detects B is already in `visit`. Returns 0 immediately to prevent infinite loops.
+    - Time Complexity Analysis (DFS)
+        - This is a brute force backtracking approach.
+        - **Path Length**: In the worst case, the path length is equal to the number of vertices ($V$), acting as the height of the decision tree.
+        - **Choices**: Let $N$ be the average number of edges per node.
+        - **Complexity**: $O(N^V)$ (Exponential).
+        - As the size of the graph ($V$) grows, the time grows extremely quickly, making this inefficient.
+
+- Breadth First Search (BFS) on Adjacency Lists
+    - Overview
+        - BFS is much more efficient than exponential DFS.
+        - It is used to find the **Shortest Path** from a start node to a target node.
+    - Algorithm Setup
+        - **Variables**:
+            - `length`: Initially 0.
+            - `visit`: Hash Set. Add start node immediately.
+            - `queue`: Queue data structure. Add start node immediately.
+    - Algorithm Logic
+        - Loop while the `queue` is not empty.
+        - **Snapshot Length**: Get the length of the queue to process the current level/layer entirely.
+        - Iterate through the current level:
+            - **Pop**: Remove node from queue.
+            - **Check Target**: If node equals target, return `length`.
+            - **Process Neighbors**:
+                - Iterate through neighbors in adjacency list.
+                - If neighbor is **not** in `visit`:
+                    - Add to `visit` set.
+                    - Add to `queue`.
+        - **Increment Layer**: After the inner loop (processing one level) finishes, increment `length` by 1.
+    - Execution Trace (A to E)
+        - **Level 0 (Length 0)**:
+            - Queue: [A]. Pop A. Not target.
+            - Neighbor B: Not visited. Add to visit, Add to Queue.
+            - Level done. Increment Length to 1.
+        - **Level 1 (Length 1)**:
+            - Queue: [B]. Pop B. Not target.
+            - Neighbors C, E: Both unvisited. Add both to visit, Add both to Queue.
+            - Level done. Increment Length to 2.
+        - **Level 2 (Length 2)**:
+            - Queue: [C, E]. Length is 2.
+            - Pop C. Not target. Neighbor E is already visited (skipped).
+            - Pop E. **Is Target**. Return `length` (which is 2).
+        - Result: Shortest path is length 2.
+    - Time Complexity Analysis (BFS)
+        - Unlike the matrix complexity ($4 \cdot N \cdot M$), we analyze based on Vertices ($V$) and Edges ($E$).
+        - **Graph Size**: $V$ (number of vertices).
+        - **Edges**: While edges could theoretically be $V^2$, we use $E$ to represent actual edges.
+        - **Worst Case**: We visit every vertex (add to set/queue) and travel along every edge.
+        - **Formula**: $O(V + E)$.
+    - Space Complexity Analysis (BFS)
+        - In the worst case, we add every node to the `visit` hash set and the `queue`.
+        - **Formula**: $O(V)$.
+
+- Limitations and Advanced Topics
+    - Weighted Graphs
+        - The standard BFS assumes all edges have the same "length" or weight (e.g., 1).
+        - If edges have different weights (e.g., one path is length 10, another is length 2+3=5), standard BFS might find the fewer-steps path (length 10) rather than the actual shortest weighted path (length 5).
+        - To handle weights, more complicated algorithms like **Dijkstra's Algorithm** are required.
+    - Conclusion
+        - Graphs are complex structures with significant academic research behind them.
+        - Understanding DFS and BFS provides a strong foundation.
+        - The shortest path algorithm is essentially a modified BFS.
+
+## Dynamic Programming
+
+### 1-Dimension DP
+
+- **Introduction to 1-Dimension Dynamic Programming (DP)**
+    - **The Fibonacci Sequence: A Core Example**
+        - The Fibonacci sequence is a classic instance of a one-dimensional dynamic programming problem.
+        - **Mathematical Definition**
+            - The zeroth Fibonacci number is defined as 0.
+            - The first Fibonacci number is defined as 1.
+            - An arbitrary nth Fibonacci number is defined as the sum of the (n-1) and (n-2) Fibonacci numbers.
+            - **Example**: The second Fibonacci number is the sum of the first and zeroth Fibonacci numbers (1 + 0 = 1),.
+        - **Iterative Calculation**
+            - Calculating an arbitrary number like the fifth Fibonacci number can be done using a loop.
+            - One would calculate the second, then the third, then the fourth, until reaching the fifth.
+            - This iterative loop approach runs in **O(n) time**.
+
+    - **The Brute Force Recursive Approach**
+        - **Recursive Decision Tree**
+            - To calculate the fifth Fibonacci number (F(5)), the algorithm must find the fourth (F(4)) and third (F(3)) numbers.
+            - This process continues, drawing out a decision tree until the base cases are reached.
+            - **Base Cases**: The recursion stops at F(1) and F(0).
+            - For F(4), the algorithm must find F(3) and F(2); for F(3), it needs F(2) and F(1).
+        - **Recursive Code Logic**,
+            ```python
+            def fibonacci(n):
+                if n <= 1:
+                    return n
+                return fibonacci(n - 1) + fibonacci(n - 2)
+            ```
+            - If the input n is 0 or 1, the function returns n itself.
+            - Otherwise, it makes two recursive calls: one for the left branch (n-1) and one for the right branch (n-2).
+        - **Efficiency Issues and Repeated Work**,
+            - The height of this decision tree is approximately equal to n.
+            - The number of branches at each level is two.
+            - A rough upper bound for the size of the tree is roughly equal to n, though the tree is not completely filled.
+            - This approach involves significant **repeated work**.
+            - For example, while calculating F(5), the subtree for F(2) is drawn and calculated three separate times.
+            - Similarly, the larger subtree for F(3) is calculated twice.
+
+    - **Top-Down Dynamic Programming (Memoization)**,
+        - **Concept of Memoization**
+            - Memoization is an optimisation technique used to eliminate repeated work by caching results.
+            - When a sub-problem is solved for the first time, its result is stored.
+            - If the same sub-problem is encountered again, the stored value is returned immediately instead of recreating the recursive subtree.
+        - **Implementation with Caching**
+            - Most commonly, a **hashmap** is used to represent the cache, though an array can also be used.
+            - The hashmap maps an integer (the Fibonacci index) to its calculated Fibonacci value,.
+            - Checking if a value exists in the hashmap is an **O(1) operation**.
+        - **Step-by-Step Execution for F(5)**,,,
+            - Start with an empty cache and call the function for F(5).
+            - The algorithm traverses down: F(5) -> F(4) -> F(3) -> F(2).
+            - At F(2), it calls base cases F(1) (returns 1) and F(0) (returns 0).
+            - F(2) is calculated as 1 + 0 = 1, and this result is **stored in the cache** (key: 2, value: 1),.
+            - Returning to F(3), the algorithm calculates F(1) (base case returns 1). F(3) = 1 (from F(2)) + 1 = 2. This is cached (key: 3, value: 2).
+            - Returning to F(4), the algorithm needs F(3) (already calculated) and F(2). It checks the cache for F(2), finds the value 1, and returns it immediately without recursive calls.
+            - F(4) = 2 + 1 = 3, which is then cached,.
+            - Finally, for F(5), the algorithm uses F(4) and checks the cache for F(3) (finding value 2). F(5) = 3 + 2 = 5.
+        - **Complexity and Classification**
+            - This approach reduces the decision tree to a linear size.
+            - The time complexity is **O(n)**.
+            - It is called **Top-Down DP** because it starts at the top of the decision tree and works downwards.
+
+    - **Bottom-Up Dynamic Programming**
+        - **The "True" Dynamic Programming Approach**
+            - This approach does not use recursion.
+            - Instead of starting at the top (F(n)) and going down, it starts at the base cases (bottom) and works upwards,.
+            - It is often considered the "true" dynamic programming method by some practitioners.
+        - **Iterative Logic and Array Implementation**,
+            - For n=5, the process starts at the base cases: F(0)=0 and F(1)=1,.
+            - **F(2)**: 0 + 1 = 1.
+            - **F(3)**: 1 + 1 = 2.
+            - **F(4)**: 1 + 2 = 3.
+            - **F(5)**: 2 + 3 = 5.
+            - **Time Complexity**: Big O of N (O(n)) because it iterates n times.
+            - **Memory Complexity**: Big O of N (O(n)) if maintaining a full array.
+        - **Memory Optimisation (Constant Space)**,,
+            - It is not necessary to maintain the entire array; only the two previous values are needed at any time to calculate the next value.
+            - By using a small array of size two or temporary variables, the memory complexity becomes **constant (O(1))**,.
+            - **The process**:
+                - Initially, store 0 and 1.
+                - Calculate the new value and overwrite the old one in a specific position, while saving the necessary previous value in a temporary variable.
+                - This continues until the loop finishes at n, returning the final calculated value.
+            - This is the most efficient way to solve the problem.
+
+    - **Key Concepts of Dynamic Programming**,
+        - **Problem Breakdown**
+            - DP is a technique that takes a large, complex problem and simplifies it.
+            - It involves breaking a problem down into smaller **sub-problems** (e.g., finding F(4) to find F(5)).
+            - Most DP problems can be represented by mathematical equations defining these sub-problems.
+        - **Dimensionality**
+            - This is a **one-dimensional** case because the solution space is a one-dimensional array (indices 0 to n).
+            - This implies the existence of two-dimensional dynamic programming problems where the solution space is more complex.
+
+An analogy for Dynamic Programming is building a staircase where you can only reach a higher step by standing on the ones directly below it; rather than jumping from the top and trying to figure out where the ground is (recursion), you start firmly on the ground floor and lay each brick one by one until you reach the desired height.
+
+### 2-Dimension DP
+
+- **2-Dimension Dynamic Programming**
+  - **The Counting Paths Problem**
+    - The task is to count the number of paths from the top-left of a two-dimensional grid to the bottom-right.
+    - In this specific version, there are no blockers (no zeros or ones acting as obstacles).
+    - A simplifying constraint is that movement is only allowed **down or to the right**.
+    - Because every move (down or right) brings you closer to the goal, every single path to the result will be the **exact same length**.
+  - **Recursive Brute Force Approach**
+    - The problem can be solved recursively using **depth-first search (DFS)**, though this is inefficient.
+    - The grid itself is not a parameter for the function; instead, the dimensions of the grid are what matter.
+    - For a square grid of 4x4, the function is called with the starting coordinates of (0, 0) and dimensions 4x4.
+    - **Base Cases for Recursion:**
+      - **Out of Bounds:** If the row ($r$) equals the total number of rows (e.g., 4) or the column ($c$) equals the total number of columns, the path is invalid. This returns a value of **0**.
+      - **Goal Reached:** If the current row ($R$) is equal to `rows - 1` and the current column is equal to `columns - 1`, the path is valid. This returns a value of **1**.
+    - **Decision Tree and Complexity:**
+      - At every position, there are two choices: move down ($row + 1$) or move right ($column + 1$).
+      - This creates a decision tree with **two branches** at every node.
+      - The height of the decision tree is approximately the number of rows plus the number of columns ($n + m$).
+      - The time complexity for this brute force method is **$2^{(n + m)}$**.
+  - **Top-Down Dynamic Programming (Memoization)**
+    - Efficiency can be improved by noticing **repeated work**; many sub-problems are solved multiple times.
+    - For example, to solve the problem for one cell, you must solve the two cells below and to the right of it. Those cells in turn solve their neighbours, leading to exponential repetition.
+    - **Caching** (memoization) reduces the time complexity to the **size of the grid** ($n \times m$).
+    - **Cache Implementation:**
+      - The cache is a two-dimensional array of the same dimensions as the grid, or a hashmap.
+      - In Python, a 4x4 grid of zeros can be created by taking an array with one zero ``, multiplying it by four to get ``, and then creating an outer array with four copies of that inner array.
+    - **Execution Logic:**
+      - **Crucial Step:** You must check if a move is **out of bounds** before checking if it is in the cache to avoid indexing errors or exceptions.
+      - If the position is not in the cache and not a base case, the function recursively calls itself for $r + 1$ and $c + 1$.
+      - It uses a single cache object passed by reference throughout all recursive calls.
+      - The result for a cell is the sum of the results from the move down and the move to the right.
+      - In a 4x4 grid, the final result calculated at the starting point (0, 0) is **20 unique paths**.
+  - **Bottom-Up Dynamic Programming (True DP)**
+    - This approach starts at the **base case** (the bottom-right goal) and works backwards to the starting point.
+    - It typically requires less code than the recursive approach but can be harder to conceptualise.
+    - **Filling the Grid Logic:**
+      - The order of solving sub-problems is intentional: start at the last row and move left, then move to the next row up and move left.
+      - We place a **1** at the goal position as a base case to allow the maths to work correctly; otherwise, all values would remain zero.
+      - To calculate a value at a position, you add the value from the cell **below** it and the cell to its **right**.
+      - Every cell in the bottom row and the right-most column will have a value of **1** because there is only one way to reach the goal from those straight-line paths.
+  - **Space-Optimised Bottom-Up DP**
+    - It is not necessary to store the entire 2D grid in memory.
+    - To calculate values for a current row, you only need the values from the **row immediately below it** (the previous row).
+    - At any point, only **two rows** are needed in memory: the `current_row` and the `previous_row`.
+    - **Complexity:**
+      - **Time Complexity:** $O(n \times m)$ because you still iterate through the entire grid.
+      - **Space Complexity:** $O(m)$, where $m$ is the number of columns, because you only store two rows (constants are ignored in Big O).
+    - **Step-by-Step Calculation (4x4 Grid Example):**
+      - 1. Initialize a `previous_row` of all zeros.
+      - 2. Create a `current_row` where the last position is set to **1**.
+      - 3. Iterate through the grid from the last row upwards and from the second-to-last column to the left.
+      - 4. In the bottom row, calculations result in all **1s**.
+      - 5. For the next row up: the last cell is 1; the next is $1 (below) + 1 (right) = 2$; then $1+2=3$; then $1+3=4$.
+      - 6. For the row above that: values become **1, 3, 6, 10**.
+      - 7. For the top row: values become **1, 4, 10, 20**.
+      - 8. The `current_row` is assigned to `previous_row` after each row is completed.
+      - 9. The final answer is the zeroth value in the final `previous_row`, which is **20**.
+
+To understand this, imagine building a brick wall from the bottom up; you only need the layer of bricks directly beneath the one you are currently laying to provide support, so you don't need to keep the blueprints for the entire foundation in your hands once that specific layer is finished.
+
+## 
 ## Prompt for Notes Formatting
 
 ```
