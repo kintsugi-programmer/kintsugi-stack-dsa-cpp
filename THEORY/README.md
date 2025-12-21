@@ -44,6 +44,9 @@
     - [Heap Properties](#heap-properties)
     - [Push and Pop](#push-and-pop)
     - [Heapify](#heapify)
+  - [Hashing](#hashing)
+    - [Hash Usage](#hash-usage)
+    - [Hash Implementation](#hash-implementation)
   - [Prompt for Notes Formatting](#prompt-for-notes-formatting)
 
 
@@ -2413,6 +2416,257 @@ Think of inserting a new book into a library organized by a specific system. You
     - **Push/Pop:** Runs in log time ($O(\log N)$).
     - **Get Min/Max:** Runs in constant time ($O(1)$).
 
+## Hashing
+
+### Hash Usage
+
+- **Introduction to Hash Data Structures**
+    - Hashmaps and hash sets are likely the most common data structures you will ever use.
+    - They are extremely useful for coding interviews, real jobs, and projects.
+    - It is more important to understand the application (how to use them) than the specific implementation details.
+
+- **Concept: Sets vs. Maps**
+    - **Sets**
+        - Sets are essentially a collection of values, such as 1, 2, 3.
+    - **Maps**
+        - Maps are slightly more complicated than sets.
+        - A map consists of a set of keys which are mapped to separate values.
+        - **Example:** A phone book is a map where a name (key) is mapped to a phone number (value).
+    - **Key Characteristics**
+        - The main ideas behind maps are nearly identical to sets.
+        - The "key" is used to access values in a hashmap or hash set.
+        - In binary search trees, the key is what is used to sort the tree.
+        - Maps are generally more common and complex than sets.
+
+- **Comparison: Tree Maps vs. Hashmaps**
+    - **Tree Maps**
+        - **Insertion:** Runs in $O(\log n)$ time.
+            - This is better than maintaining a sorted array, which has a worst-case insertion of $O(n)$.
+        - **Removal:** Runs in $O(\log n)$ time.
+        - **Searching:** Runs in $O(\log n)$ time using binary search.
+        - **Ordering:** Tree maps are ordered, allowing iteration in sorted order.
+            - This in-order traversal takes $O(n)$ time.
+    - **Hashmaps**
+        - **Insertion:** Runs in $O(1)$ constant time.
+        - **Removal:** Runs in $O(1)$ constant time.
+        - **Searching:** Runs in $O(1)$ constant time.
+        - **Performance:** Hashmaps generally outperform tree maps significantly regarding these operations.
+
+- **Time Complexity Details for Hashmaps**
+    - **Average vs. Worst Case**
+        - The $O(1)$ complexity is actually the **average-case** time complexity.
+        - In the worst case, inserting, removing, and searching can be $O(n)$ depending on the implementation.
+        - However, in coding interviews and jobs, people assume these operations are constant time $O(1)$.
+    - **Trade-offs and Downsides**
+        - Hashmaps do not maintain any ordering.
+        - You cannot iterate through keys in sorted order in $O(n)$ time.
+        - To iterate in order, you must take all keys and sort them (e.g., merge sort), which typically takes $N \log N$ time.
+        - Despite this downside, the positive aspects (fast insert/search) usually outweigh the negatives, especially when order is not required (like a phone book).
+
+- **Use Case Example: Counting Name Frequencies**
+    - **Problem Statement**
+        - Given a list (array) of names, count how many times each name appears.
+    - **Strategy**
+        - Use a hashmap to map every name (Key) to an integer count (Value).
+    - **Step-by-Step Execution**
+        - **Initialization:** Start with an empty hashmap.
+        - **1. Processing "Alice"**
+            - Search checks if "Alice" exists (not found).
+            - Insert "Alice" into the map with a value of 1.
+            - This operation is $O(1)$, whereas a tree map would be $O(\log n)$.
+        - **2. Processing "Brad"**
+            - Search checks for "Brad" (not found).
+            - Add "Brad" as a key with a value of 1.
+        - **3. Processing "Colin"**
+            - Search checks for "Colin" (not found).
+            - Add "Colin" with a value of 1.
+        - **4. Processing "Brad" (Duplicate)**
+            - Search finds that "Brad" already exists in the map.
+            - Instead of assigning 1, retrieve the current count (1) and increment it by 1.
+            - Overwrite the value to become 2.
+            - **Note:** Hashmaps cannot contain duplicates; it does not make sense to have multiple copies of the same key.
+        - **5. Processing "Dylan"**
+            - Search checks for "Dylan" (not found).
+            - Add "Dylan" with an initial count of 1.
+        - **6. Processing "Kim"**
+            - Search checks for "Kim" (not found).
+            - Add "Kim" with a count of 1.
+
+- **Algorithm Efficiency Analysis**
+    - **Time Complexity**
+        - The algorithm runs in **$O(n)$** linear time.
+        - For each position in the input array, we performed a few $O(1)$ operations.
+        - Comparison: A tree map would take $\log n$ for each insertion, resulting in a total time of $N \log N$.
+    - **Space Complexity**
+        - The space complexity is **$O(n)$**.
+        - In the worst case, every single name is unique, making the map size proportional to $n$.
+        - This space usage is roughly the same as a tree map.
+
+- **Implementation Code Logic**
+    - **Python Example**
+        - Create the map using the syntax `countMap = {}`.
+        - In other languages, you usually use a constructor.
+        - Iterate through every name in the list of names.
+    - **Logic Flow**
+        - **Condition:** Check if the name is **not** in the map.
+            - Python Syntax: `if name not in countMap`.
+            - Other Languages: Use a method like `contains(key)`.
+        - **Action (If New):** Assign the name an initial value of 1.
+        - **Action (If Exists):** Increment the existing count by 1.
+    - This results in a straightforward algorithm running in linear time.
+
+### Hash Implementation
+
+- **Introduction to Hashmap Implementation**
+    - **General Concept**
+        - Implementing a hashmap from scratch is rare in interviews and can become very complicated.
+        - It is better to focus on the general concepts (hashing, key-value pairs) as they appear frequently in software engineering.
+        - Under the hood, a hashmap is implemented using an **array**.
+        - An index in the array maps to a specific key-value pair.
+        - Even an empty hashmap has a non-zero size array.
+    - **Initialization Example**
+        - An empty hashmap might start with an array of size two (indices 0 and 1).
+        - The default value in these slots is `null` (or empty), indicating nothing is stored there yet.
+    - **Insertion Basics**
+        - The operation is often called `put` or `insert`.
+        - It typically involves a key (e.g., a string, integer, or object) and a value.
+        - The critical requirement is having a way to convert the **key** into an integer.
+
+- **The Hashing Process**
+    - **Hashing Function**
+        - A hashing function takes a key and converts it into an integer.
+        - This integer is used as the index to determine where to store the key-value pair in the array.
+        - The array actually stores objects, where each object is a key-value pair.
+    - **Converting Characters to Integers**
+        - A simple method maps each character to an integer (e.g., A=0, L=11).
+        - You sum these integers to get a large result (e.g., resulting in the integer 25).
+        - In implementation, ASCII values are often used (e.g., 'B' might be 70, 'b' might be 44).
+        - This works well for small alphabet sizes (like 128 characters).
+    - **The Modulo Operator (Handling Array Bounds)**
+        - The integer resulting from the sum (e.g., 25) is often too large for the specific array size (e.g., size 2).
+        - To fix this, use math: take the integer and **mod** it by the size of the array.
+        - Modding means dividing and taking the remainder (e.g., 25 / 2 = 12 with a remainder of 1).
+        - **Rule:** Modding by the length of the array always results in a valid index.
+        - The remainder is always less than the number you are modding by (e.g., mod 5 results in 0–4).
+    - **Example**
+        - Key: "Alice". Hashed Integer: 25. Array Size: 2.
+        - Calculation: 25 mod 2 = 1.
+        - "Alice" (key) and "New York City" (value) are inserted at index 1.
+    - **Retrieval Efficiency**
+        - To `get` "Alice", the same process occurs: Hash "Alice" to 25, mod by 2, get index 1.
+        - This allows jumping directly to the index in constant time, **O(1)**.
+
+- **Collisions**
+    - **Definition**
+        - A collision occurs when two different keys result in the same index after hashing and modding.
+        - Example: Inserting "Brad". Hashed integer = 27.
+        - Calculation: 27 mod 2 = 1.
+        - Problem: Index 1 is already occupied by "Alice".
+    - **Inevitability**
+        - You cannot entirely avoid collisions; you can only minimize them and work around them.
+    - **Minimizing Collisions (Resizing)**
+        - If a hashmap is half full (e.g., 1 key in an array of size 2), there is a 50/50 chance of a collision.
+        - To improve odds, the array is resized when it becomes half full.
+        - Resizing works like dynamic arrays: roughly double the size.
+        - Example: After inserting "Alice", the map is half full, so the array is resized to size 4 (indices 0, 1, 2, 3).
+
+- **Rehashing**
+    - **The Problem with Resizing**
+        - When array size changes, the modulo divisor changes (e.g., from 2 to 4).
+        - An index valid in the old array might change in the new array.
+        - Example: If "Alice" hashed to 27 (instead of 25), 27 mod 2 = 1. But 27 mod 4 = 3.
+        - If you do not move the item, you will look for "Alice" at index 3 but she will still be at index 1.
+    - **The Rehash Process**
+        - When resizing, you must **recompute the hash** for every single key using the *new* size.
+        - Move every element to its new correct position.
+        - This is computationally expensive (iterating through every key) but happens infrequently (average case efficient).
+    - **Example with Resizing**
+        - Map resized to 4. "Brad" (27) is inserted.
+        - Calculation: 27 mod 4 = 3. No collision. Brad goes to index 3.
+        - "Alice" (25) stays at index 1 because 25 mod 4 is still 1.
+
+- **Handling Collisions**
+    - Even after resizing to minimize chances, collisions still happen.
+    - Example: Resized to 8. Insert "Colin" (hash 33).
+    - Calculation: 33 mod 8 = 1. "Alice" is already at index 1. This is a collision.
+    - **Method 1: Chaining (Linked Lists)**
+        - Instead of a single pair, store a **linked list** of pairs at every index.
+        - Multiple pairs can occupy the same index.
+        - **Get Operation with Chaining:**
+            - Go to the index (e.g., 1).
+            - Traverse the list: Is this Alice? Yes -> ignore. Is this Colin? Yes -> return value "Seattle".
+        - **Downside:** Requires maintaining memory/pointers for the list.
+    - **Method 2: Open Addressing**
+        - If the calculated index is occupied, look for the next available position.
+        - **Linear Probing:**
+            - Try `index + 1`. If occupied, try `index + 2`, etc..
+            - Example: Colin (hash 33, index 1) is blocked by Alice. Try index 2. Empty? Insert Colin at index 2.
+        - **Get Operation with Open Addressing:**
+            - Look for Colin at index 1. Found Alice. Not Colin.
+            - Check next index (2). Found Colin. Return "Seattle".
+        - **Determining Non-Existence:**
+            - Look for "Dylan" (hash maps to 1). Index 1 is Alice.
+            - Check Index 2. Index 2 is Colin.
+            - Check Index 3. Index 3 is Empty (Null).
+            - Conclusion: Since we hit an empty spot, Dylan does not exist in the map (logic stops).
+        - **Downside (Clustering):**
+            - Naive open addressing (plus one) leads to clustering, where keys are stored very close together.
+            - Better methods exist (e.g., squaring values), but are math-heavy.
+
+- **Optimization: Prime Numbers**
+    - For math reasons, maintaining the array size as a **prime number** results in fewer collisions.
+    - Instead of size 8, use size 7.
+    - When doubling, find the next prime number roughly double the current size (e.g., 7 -> 17 -> 37).
+    - Note: Implementing prime number logic perfectly is rare in interviews due to complexity.
+
+- **Code Implementation Breakdown**
+    - **Class Structure**
+        - Define a class to store the pair: `key` and `value`.
+    - **Initialization (`__init__`)**
+        - `size`: Tracks number of keys inserted (initially 0).
+        - `capacity`: Size of the array (initially 2).
+        - `map`: The array itself, initialized with `null` values `[None, None]`.
+    - **Hashing Function (`hash`)**
+        - Input: Key (string).
+        - Logic: Loop through every character, convert to integer (ASCII), sum them into a variable `index`.
+        - Final Step: `return index % self.capacity` to ensure the result is within bounds.
+    - **Search / Get (`get`)**
+        - Compute `index = self.hash(key)`.
+        - Loop (Wait for `True` or conditioned on capacity) to handle open addressing.
+        - **Check 1:** If `map[index]` is `None` (empty), return `None` (Key not found).
+        - **Check 2:** If `map[index].key == key`, return `map[index].value` (Found).
+        - **Open Addressing Logic:** If occupied by a different key, increment index: `index = (index + 1) % self.capacity`.
+    - **Insertion (`put`)**
+        - Compute `index = self.hash(key)`.
+        - Loop to find slot:
+            - **Case 1 (Empty Slot):** If `map[index]` is `None`:
+                - Create new pair.
+                - Assign to `map[index]`.
+                - Increment `self.size`.
+                - **Check Resize:** If `self.size >= self.capacity`, call `self.rehash()`.
+                - Return.
+            - **Case 2 (Key Exists/Update):** If `map[index].key == key`:
+                - Overwrite the value.
+                - Return (do not increment size).
+            - **Case 3 (Collision):** Slot occupied by different key:
+                - `index = (index + 1) % self.capacity` (Try next slot).
+    - **Rehash Function (`rehash`)**
+        - Save current map to `old_map`.
+        - Update `self.capacity` (e.g., `2 * self.capacity`).
+        - Create `new_map` with new capacity (filled with `None`).
+        - Reset `self.size` to 0 (because `put` will re-increment it).
+        - Assign `self.map = new_map`.
+        - **Re-insertion:**
+            - Loop through every pair in `old_map`.
+            - If pair is not `None`:
+                - Call `self.put(pair.key, pair.value)`.
+                - This automatically recomputes the new hash index based on the new capacity.
+
+- **Summary of Complexity**
+    - Operations (`insert`, `remove`, `search`) run in **O(1)** time on average.
+    - While the analysis is complex, assuming O(1) is standard for interviews.
+    - Understanding the concepts (collisions, rehashing, open addressing) places you ahead of most candidates.
+
 ## Prompt for Notes Formatting
 
 ```
@@ -2424,6 +2678,7 @@ and no #, just nested - lines plaintext
 \to => => 
 \times => *
 $ => ** or `
+\log => LOG
 ```
 
 ---
