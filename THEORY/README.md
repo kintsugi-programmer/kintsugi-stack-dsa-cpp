@@ -38,6 +38,8 @@
     - [DFS](#dfs)
     - [BFS](#bfs)
     - [BST Sets and Maps](#bst-sets-and-maps)
+  - [Backtracking](#backtracking)
+    - [Tree Maze](#tree-maze)
   - [Prompt for Notes Formatting](#prompt-for-notes-formatting)
 
 
@@ -1928,6 +1930,131 @@ Think of inserting a new book into a library organized by a specific system. You
         - The most important thing is understanding the interface a tree map would have.
         - You must understand operations like insert, remove, search, iterate, and in-order traversal.
         - You must also understand the associated time complexities of those operations.
+
+## Backtracking
+
+### Tree Maze
+
+- **Backtracking Algorithm Fundamentals**
+    - **Core Concept**
+        - The backtracking algorithm pattern is essentially based on the Depth First Search (DFS) algorithm.
+        - In this context, it is applied recursively to a regular binary tree (not a Binary Search Tree).
+        - The best way to understand the concept is through an example problem.
+    - **Problem Scenario: Tree Maze**
+        - **Goal**: Determine if a valid path exists from the root of a tree to a leaf node.
+        - **Restriction**: The path must not contain any zeros.
+        - **Output**: Return `true` if a path exists; return `false` if it does not.
+    - **The Maze Analogy**
+        - The process is similar to navigating a maze: you start at a point and try to reach the end.
+        - You try a path, and if you hit a dead end, you backtrack (go back up) and try a different route.
+        - Because you do not know which path leads to the end, you must recursively try every single possibility.
+    - **Brute Force Approach**
+        - Backtracking is a "brute force" style of algorithm because it goes through every possibility.
+        - **Contrast with Binary Search Trees (BST)**:
+            - In a BST, you can use the sorted order property to ignore half the tree (e.g., looking for a value > 4 means ignoring the left subtree).
+        - **Regular Binary Trees**:
+            - In a regular binary tree, you cannot use sorted properties.
+            - You are forced to check both the left and right subtrees; zeros act as "roadblocks" where you cannot pass.
+
+- **Algorithm 1: Boolean Return (True/False)**
+    - **Execution Logic**
+        - Start at the root node.
+        - **Check Root**: Verify the node is not a zero, because if the root is zero, no valid path exists.
+    - **Step-by-Step Trace (First Example)**
+        - **Step 1**: Start at root (value 4). It is not zero.
+        - **Step 2**: Check left child.
+            - The left child is 0.
+            - Zeros are not allowed, so this path is a dead end.
+            - **Backtrack**: Go back up to the parent to try another possibility.
+        - **Step 3**: Check right child.
+            - The right child is 1 (valid, not zero).
+            - It is not a leaf node, so continue.
+        - **Step 4**: Check left subtree of the current node (1).
+            - The value is 2 (valid).
+            - It has no children (Leaf Node).
+            - **Result**: Path found. Return `true` up to the parent.
+        - **Step 5**: Propagation.
+            - The parent node receives `true` from the left subtree.
+            - Short-circuit: Since the answer was found in the left subtree, there is no need to look in the right subtree.
+            - Return `true` all the way up to the root.
+    - **Failed Path Example**
+        - If a node was changed to 0:
+            - You would go left, find it is invalid, and return `false`.
+            - You would backtrack and try the right subtree.
+            - If the right child is also 0, you run out of options.
+            - You return `false` to the parent, eventually returning `false` for the whole tree.
+    - **Code Logic & Base Cases**
+        - The code is recursive and similar to standard tree traversals.
+        - **Base Case 1 (Failure)**:
+            - If the node is `null` (empty) OR the node value is `0`.
+            - Return `false`.
+        - **Base Case 2 (Success)**:
+            - If the node is a leaf node (no children) and you reached it without hitting a zero.
+            - Return `true`.
+        - **Recursive Step**:
+            - Recursively check the left subtree.
+            - If the left subtree returns `true`, then return `true` immediately.
+            - If the left subtree returns `false`, recursively check the right subtree.
+            - If the right subtree returns `true`, propagate `true` up to the root.
+            - If both fail, return `false`.
+
+- **Algorithm 2: Returning the Path Values**
+    - **Problem Modification**
+        - Instead of just returning `true` or `false`, return the actual values of the valid path (e.g., `4, 1, 2`).
+    - **Data Structure Setup**
+        - **Function Signature**: `leafPath(root, path)`.
+        - **Path Variable**: Passed into the function as an array or dynamic array.
+        - **Role**: Acts as a global variable or reference passed to every recursive call; effectively used as a stack.
+        - **Assumption**: For simplicity, assume there is at most one valid path (zero or one path).
+    - **Algorithm Execution with Stack Operations**
+        - **Step 1: Push**
+            - Start at the root. If not null and not zero, push the current value (e.g., 4) to the `path` array.
+            - Current Path: ``.
+        - **Step 2: Recurse Left**
+            - Check if children exist. If yes, recurse left passing the same path reference.
+            - If the left child is 0, the base case executes and returns `false`.
+        - **Step 3: Backtrack & Recurse Right**
+            - The left side returned `false`.
+            - Recurse to the right subtree.
+            - (Example Tree Modified: Right child is 1, which has left child 3 and right child 0).
+            - Node 1 is valid. Push 1 to path.
+            - Current Path: ``.
+        - **Step 4: Deep Recursion**
+            - From Node 1, check left subtree (Node 3).
+            - Node 3 is valid. Push 3 to path.
+            - Current Path: ``.
+        - **Step 5: Dead End Identification**
+            - Node 3 left child is `null` -> returns `false`.
+            - Node 3 right child is `0` -> returns `false`.
+            - Result: None of the paths from Node 3 work.
+        - **Step 6: The Pop Operation (Crucial Backtracking Step)**
+            - Because Node 3 did not lead to a solution, we must remove it from the path.
+            - **Action**: Pop 3 from the array.
+            - Current Path: ``.
+            - This step is vital; otherwise, the final answer would contain incorrect nodes.
+        - **Step 7: Find Valid Path**
+            - Back at Node 1, try the right subtree.
+            - Node 2 is found. Valid value. Push 2.
+            - Current Path: ``.
+            - Check if Node 2 is a leaf: Yes.
+        - **Step 8: Final Return**
+            - Return `true` from the leaf.
+            - Propagate `true` up the chain.
+            - The `path` variable is now populated with ``.
+
+- **Summary and Complexity**
+    - **General Application**
+        - Backtracking can be used on more than just binary trees.
+        - It is similar to other recursive algorithms (like Fibonacci) but serves as a foundation for complex problems.
+    - **Key Pattern**
+        - Maintain a solution (path).
+        - Add values while searching.
+        - Pop values (backtrack) when a path turns out to be wrong.
+    - **Time Complexity**
+        - **Complexity**: $O(N)$ (Big O of N).
+        - **Reason**: In the worst-case scenario, the algorithm must traverse the entire tree (visit every node).
+        - **Definition of N**: $N$ is the size of the input tree.
+        - This is standard for backtracking as it is essentially a brute force method running over all possibilities.
 
 ## Prompt for Notes Formatting
 
