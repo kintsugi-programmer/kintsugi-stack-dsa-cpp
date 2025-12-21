@@ -74,6 +74,10 @@
     - [Iterative DFS](#iterative-dfs)
   - [Heaps](#heaps)
     - [Heaps](#heaps-1)
+  - [Backtracking](#backtracking-1)
+    - [Subsets](#subsets)
+    - [Combinations](#combinations)
+    - [Permutations](#permutations)
 - [Others](#others)
   - [Prompts](#prompts)
     - [Notes Formatting](#notes-formatting)
@@ -4518,6 +4522,272 @@ class TrieNode:
 
     - **Analogy for Understanding**
         - Think of the two heaps like a **butterfly's wings**. The small values are on the left wing (max heap) and the large values are on the right wing (min heap). The median is essentially the "body" of the butterfly where the two wings meet. By keeping the wings balanced in size and ensuring the left wing values stay smaller than the right, you can always find the center instantly.
+
+## Backtracking
+
+### Subsets
+
+- **Combinatorics and Subsets in Coding Interviews**
+
+    - **Introduction to Combinatorics**
+        - Combinatorics is a **mathematical subject** commonly applied to **coding interviews**, particularly for **backtracking problems**.
+        - Common types of problems include **subsets**, **combinations**, and **permutations**.
+        - Understanding the mathematical background helps make these problems more trivial to solve.
+
+    - **Defining a Subset**
+        - A **subset** is any selection of values from a given list of numbers.
+        - It can include:
+            - Just the first value.
+            - The second or third value individually.
+            - Two values or all values.
+            - **Zero values**, which is technically an **empty set**.
+        - **Distinct Subsets**:
+            - Subsets are considered the same if they contain the same values, regardless of order.
+            - For example, `` and `` are the **same subset** (this would be a permutation, which is not the focus here).
+            - If the input list consists of **distinct numbers**, you do not have to worry about getting duplicate subsets.
+
+- **The Subsets Problem (Distinct Input Numbers)**
+
+    - **The Decision Tree Framework**
+        - For every value in the input, there is a **binary choice**: **include** it in the subset or **not include** it.
+        - This creates a **decision tree structure**.
+        - **Example with input ``**:
+            - **First Position (index i=0)**: Choose to include `1` or not include `1` (leaving an empty set).
+            - **Second Position (index i=1)**: For both branches above, choose to include `2` or skip `2`.
+                - Including `2` appends it to the list; skipping it keeps the list as it was.
+                - One side of the tree will contain all subsets with `1`, while the other contains all subsets without `1`.
+            - **Third Position (index i=2)**: Choose to include `3` or skip `3`.
+        - Every branch guarantees a **unique subset** because each level differentiates based on the inclusion of a specific number.
+        - An **empty set** is produced if every value is skipped.
+
+    - **Mathematical Properties**
+        - Starting from a single root, the number of sets **multiplies by two** at every level because there are two branches.
+        - If there are $n$ input values, the total number of subsets is **$2^n$**.
+
+    - **Complexity Analysis**
+        - **Time Complexity**:
+            - While there are $2^n$ subsets, each subset must be built separately as a sublist.
+            - In the worst case, a subset is size $n$. Therefore, the overall time complexity is **$O(n \times 2^n)$**.
+        - **Space Complexity**:
+            - **Result Space**: The space to hold the output is $O(n \times 2^n)$.
+            - **Big O Space (Algorithm focus)**: Typically, result space is excluded. The space complexity is determined by the **height of the tree**, which is $O(n)$.
+
+    - **Code Implementation with Backtracking**
+        - Backtracking via **recursion** is the easiest implementation method.
+        - **Helper Function Variables**:
+            - **`i`**: The starting index.
+            - **`nums`**: The input array.
+            - **`subsets`**: A global-style result list (array of sublists).
+            - **`currentSet`**: A helper array used to build an individual subset.
+        - **Recursive Steps**:
+            - **Base Case**: If the pointer `i` is out of bounds (equal to or greater than the length of `nums`), the current subset is complete.
+            - **Copying the Set**: In the base case, you must append a **copy** of `currentSet` to the results. Adding the reference itself is a mistake because subsequent modifications (pops) will update the result incorrectly.
+            - **Decision 1 (Include)**:
+                1. Add `nums[i]` to `currentSet`.
+                2. Recursively call the helper with `i + 1`.
+            - **Decision 2 (Exclude/Cleanup)**:
+                1. **Pop** the value `nums[i]` from `currentSet` to undo the previous decision (cleanup).
+                2. Recursively call the helper with `i + 1`.
+        - This pattern ensures the first recursive call calculates all subsets including the number, and the second call calculates all subsets excluding it.
+
+- **The Subsets II Problem (Inputs with Duplicates)**
+
+    - **The Challenge of Duplicates**
+        - If the input array has duplicates (e.g., ``), the standard method will produce **duplicate subsets**.
+        - This happens because different paths in the decision tree may end up with the same combination of values.
+
+    - **The Sorting Solution**
+        - To solve this efficiently, **sort the input array** first.
+        - Sorting is $O(n \log n)$, which is negligible compared to the exponential complexity of generating subsets.
+        - Sorting ensures that all **duplicate values are adjacent**, making them easier to manage.
+
+    - **Modified Decision Logic**
+        - Instead of simply choosing to include or exclude a number, the logic changes to:
+            - **Path A**: Include one or more occurrences of the value.
+            - **Path B**: Skip **all** occurrences of that specific value.
+        - **Example with ``**:
+            - For the value `2`, one branch will contain at least one `2`.
+            - The other branch will **skip every 2** in the array until it reaches a new value (like `3`).
+        - This ensures that the subsets generated by each branch remain **distinct**.
+
+    - **Implementation Details (Subsets II)**
+        - The code is similar to the first version but requires a **while loop** for the "skip" decision.
+        - **The Skip Loop**:
+            - After the first recursive call (the "include" path) and the cleanup (pop), use a while loop to increment the index `i` as long as the next value is the same as the current value.
+            - Check `i + 1 < length` to stay in bounds.
+            - Increment `i` while `nums[i] == nums[i + 1]`.
+            - Finally, call the recursive helper with `i + 1` to start at the **next unique value**.
+        - **Complexity**: Remains **Time $O(n \times 2^n)$** and **Space $O(n)$**.
+
+- **Analogy for Understanding**
+    - To understand the **Subsets II** strategy, imagine you are at a buffet with multiple identical plates of cookies. To ensure every snack plate you create is unique, you have two choices at the cookie station: you can take at least one cookie and move to the next item, or you can decide you want **no cookies at all** and walk past every single plate of cookies until you reach the brownies. This ensures you don't accidentally make two identical snack plates just by picking cookies from different spots on the table.
+
+### Combinations
+
+- **Combinations Overview**
+    - **Relationship to Subsets**
+        - Combinations are almost exactly like subsets in terms of mathematical definition and computer science implementation.
+        - Solving combination problems with code is very similar to solving subset problems.
+    - **Core Parameters**
+        - **n**: Represents the range of numbers available to choose from. Usually, this is the set of integers between 1 and n.
+        - **k**: Represents the required size of each combination.
+        - **Example**: If n = 5 and k = 2, you choose from numbers {1, 2, 3, 4, 5} to create all possible combinations of size two.
+
+- **Distinction Between Combinations, Subsets, and Permutations**
+    - **Size Requirements**
+        - In general subset problems, the result includes every possible size (e.g., an empty set, sets of size 1, etc.).
+        - In combinations, the result only includes subsets of exactly size **k**.
+    - **Uniqueness and Order**
+        - Combinations must be distinct, and the order of elements is irrelevant.
+        - **Permutations** care about order (e.g., and are different permutations).
+        - **Combinations** do not care about order; and are considered the same, so only one is added to the result set.
+
+- **Method 1: Trivial Subset-Style Solution**
+    - **The Decision Tree Logic**
+        - Iterate through every number from 1 through n.
+        - For every number, you have two choices:
+            1. **Include** the number in the current combination.
+            2. **Skip** the number (do not include it).
+        - This branching occurs recursively for every value in the range.
+    - **Base Cases**
+        - **Success**: When the current combination length is exactly equal to **k**, a copy of the combination is appended to the result, and the function returns.
+        - **Out of Bounds**: If the current value **i** exceeds the range **n** (e.g., reaching 6 when n=5) without the combination reaching size k, the function returns.
+    - **Implementation Details**
+        - A helper function starts at the value 1 with an empty array for the current combination.
+        - After including a value and returning from the recursive call, the value is **popped** (removed) from the array to allow for the "skip" decision path.
+    - **Complexity Analysis**
+        - **Tree Height**: The height of the tree is **n** because a decision is made for every value in the range.
+        - **Tree Size**: The size of the decision tree is $2^n$ because of the two branches at each step.
+        - **Time Complexity**: An upper bound is approximately $O(k \cdot 2^n)$, where $k$ is the time needed to build or copy each combination.
+
+- **Method 2: Optimized Backtracking Solution**
+    - **Concept: Filling Slots**
+        - Instead of "include or skip" for every number, think of the problem as having **k** empty slots to fill.
+        - For the first slot, you can choose any number between 1 and n.
+    - **Minimizing the Tree**
+        - This method avoids "choosing nothing" paths, which prevents the creation of unnecessary branches.
+        - To prevent duplicates and ensure combinations are distinct, once a number is chosen, the next choices for the following slots must only be numbers that come **after** it in the range.
+    - **Example Branching (n=5, k=2)**
+        - **Path for 1**: Choices for the second slot are {2, 3, 4, 5}. This covers all combinations containing 1.
+        - **Path for 2**: Choices for the second slot are {3, 4, 5}. It cannot include 1 because combinations with 1 were already generated.
+        - **Path for 3**: Choices for the second slot are {4, 5}.
+        - **Path for 4**: Choice for the second slot is {5}.
+        - **Path for 5**: No remaining numbers available to fill the second slot, so this branch stops.
+    - **Mathematical Verification (n choose k)**
+        - The number of combinations is determined by the formula: $\frac{n!}{k!(n-k)!}$.
+        - For n=5 and k=2: $\frac{5!}{2!(3!)} = \frac{120}{2 \cdot 6} = \frac{120}{12} = 10$.
+        - The optimized branching approach produces exactly these 10 distinct combinations.
+
+- **Optimized Code Implementation**
+    - **Structure**
+        - The function uses a loop to iterate through the range of valid choices.
+        - **Loop Logic**: For a current value **i**, the loop goes through every number after it to find potential children.
+    - **Recursive Steps**
+        - 1. Add the current loop value **J** to the combination.
+        - 2. Recursively call the helper with **J + 1** to ensure no values are reused and no duplicates are created.
+        - 3. **Backtrack**: Pop the value **J** from the combination to try the next number in the loop.
+    - **Code Logic Summary**
+        ```python
+        def helper(i, current_combination):
+            if len(current_combination) == k:
+                res.append(current_combination.copy())
+                return
+            
+            for j in range(i, n + 1):
+                current_combination.append(j)
+                helper(j + 1, current_combination)
+                current_combination.pop()
+        ```
+    - **Efficiency**
+        - This provides a tighter Big O time complexity bound than Method 1.
+        - While Method 1 is often sufficient for interviews, this optimized pattern is a standard variation for backtracking that is useful when efficiency or specific constraints (like non-distinct inputs) are involved.
+
+- **Analogy for Understanding**
+    - Think of combinations like **filling a team of size K from a pool of N players**. In the trivial method, you walk down the line of players and ask each one "Are you on the team or not?" In the optimized method, you have K empty jerseys and you only pick players who haven't been considered yet to fill those specific spots, ensuring you don't end up with the same team twice just because you picked the players in a different order.
+
+### Permutations
+
+- Permutations Overview
+    - Definition: Permutations involve taking a list of numbers and returning all possible distinct arrangements of those numbers.
+    - Assumption: For simplicity, the numbers in the input list are assumed to be distinct.
+    - Permutations vs. Combinations/Subsets: 
+        - In subsets, the logic is based on whether to include each number or not. 
+        - In permutations, every single number from the original list is included, but their order is rearranged.
+    - Calculating the Number of Permutations:
+        - For an array of size $n$, there are $n$ possible values for the first position.
+        - Once a value is placed in the first position, it cannot be reused, leaving $n-1$ choices for the second position.
+        - This continues until only one choice remains for the final position.
+        - Total permutations = $n \times (n-1) \times (n-2) \times \dots \times 1$, also known as **$n$ factorial ($n!$)**.
+
+- Logic and Decision Trees
+    - Approach 1: Position-Based Decision Tree
+        - In this logical model, each layer of the tree represents choosing a value for a specific position in the permutation.
+        - Layer 1 (First Position): You can choose any value (e.g., 1, 2, 3, or 4).
+        - Layer 2 (Second Position): For each branch, you have three choices (all values except the one chosen for the first position).
+        - Distinctiveness: In permutations, the order matters. For example, is a different permutation than.
+        - Structure: The tree has $n$ children at the first level, $n-1$ at the next, and continues down to 1.
+        - Complexity: Multiplying these choices results in a time complexity of **$n!$**.
+        - Drawback: Coding this specific approach is more "annoying" because it requires removing elements from the array to expand child paths.
+    - Approach 2: Insertion-Based Backtracking (The "Clever" Way)
+        - This approach breaks the problem into subproblems based on generating permutations for a subset of numbers and inserting the next value into every possible position.
+        - Example Process (Input:):
+            - Start at the end with a single value (the base case), such as 4.
+            - To create permutations with {3, 4}, take the value 3 and insert it at the beginning or the end of 4, resulting in and.
+            - To create permutations with {2, 3, 4}, take the value 2 and insert it into every possible position of the existing permutations.
+                - For, insert 2 at the beginning, middle, and end:.
+                - For, insert 2 at the beginning, middle, and end:.
+            - To create the final permutations with {1, 2, 3, 4}, take the value 1 and insert it into all four possible positions of each of the six existing permutations.
+            - Final Result: $6 \text{ permutations} \times 4 \text{ positions} = 24$ permutations ($4!$).
+
+- Time Complexity Analysis
+    - Number of Permutations: The total number of results is $n!$.
+    - Permutation Size: Each permutation is of size $n$.
+    - Array Construction Cost:
+        - Inserting a value into an arbitrary position in an array is an **$O(n)$** operation.
+        - To build a single permutation of size $n$ using this method (doing $n$ insertions), the cost is **$O(n^2)$**.
+    - Total Time Complexity: The overall big-O complexity is **$O(n^2 \cdot n!)$**.
+
+- Recursive Implementation
+    - Structure:
+        - A main function `permutation` accepts a list of numbers.
+        - A `helper` function calculates permutations by moving through the array using an index pointer `i`, starting at 0.
+    - Base Case:
+        - When the pointer reaches the end of the array, the function returns a list containing an empty list `[[]]`. 
+        - Alternatively, the base case could be the last value in the array, returning a list containing a single-value list, e.g., `[]`.
+    - Recursive Step:
+        - The function calls itself with `i + 1` to get permutations of the remaining numbers.
+        - It then iterates through every permutation returned by that recursive call.
+        - For each permutation, it determines the number of possible insertion positions, which is `length + 1`.
+        - It uses a pointer `j` to iterate through every position in that permutation.
+        - It creates a **copy** of the permutation to ensure distinct lists.
+        - It inserts `nums[i]` at index `j` in the copy and adds it to the result list.
+    - Benefit: This method is "clever" because it reduces the amount of code written.
+
+- Iterative Implementation
+    - Concept: This translates the insertion-based recursive logic into an iterative format.
+    - Process:
+        - Start with an initial list of permutations containing one empty list `[[]]`.
+        - Iterate through every number `n` in the input `nums`.
+        - For each `n`, build a `next_list` of permutations.
+        - To build `next_list`, take every existing permutation in the current list and insert `n` into every possible position.
+        - Example:
+            - Start with `[[]]`.
+            - For the first number (1), insert into the 0th position: `[]`.
+            - For the second number (2), insert into the 0th and 1st positions of ``: `[]`.
+            - For the third number (3), insert into every position of `` and `` to create the next set.
+        - Update the current list of permutations to be the `next_list` and repeat until all numbers are processed.
+    - Conclusion: The iterative code is often shorter but can be harder to conceptualize than the recursive version.
+
+- Summary of Complexity and Logic
+    - Mathematical Basis: The $n!$ results and $O(n)$ insertion time are inherent to the problem's nature, regardless of whether the approach is iterative or recursive.
+    - Flexibility: There are multiple ways to write the code, including removing numbers from the list before recursive calls, but the insertion method is often the simplest to implement.
+
+- Analogy for Understanding
+    - Imagine you are trying to find all possible ways to line up four people (1, 2, 3, and 4) for a photo. 
+    - You start with just one person (4). 
+    - Then you bring in the second person (3) and realize they can stand either to the left or right of person 4. 
+    - When the third person (2) arrives, you take every existing line-up you've made and find every possible spot person 2 could squeeze into (the front, the back, or between people). 
+    - By the time the fourth person (1) joins, you just repeat the process, squeezing them into every available gap in all your previously established lines.
 
 # Others
 
