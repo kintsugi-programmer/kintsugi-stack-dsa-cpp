@@ -78,6 +78,11 @@
     - [Subsets](#subsets)
     - [Combinations](#combinations)
     - [Permutations](#permutations)
+  - [Graphs](#graphs-1)
+    - [Dijkstra's Algorithm](#dijkstras-algorithm)
+    - [Prim's Algorithm](#prims-algorithm)
+    - [Kruskal's Algorithm](#kruskals-algorithm)
+    - [Topological Sort](#topological-sort)
 - [Others](#others)
   - [Prompts](#prompts)
     - [Notes Formatting](#notes-formatting)
@@ -4788,6 +4793,398 @@ class TrieNode:
     - Then you bring in the second person (3) and realize they can stand either to the left or right of person 4. 
     - When the third person (2) arrives, you take every existing line-up you've made and find every possible spot person 2 could squeeze into (the front, the back, or between people). 
     - By the time the fourth person (1) joins, you just repeat the process, squeezing them into every available gap in all your previously established lines.
+
+## Graphs
+
+### Dijkstra's Algorithm
+
+- **Dijkstra's Algorithm Overview**
+    - Dijkstra's algorithm is a **shortest path algorithm** used to find the length of the shortest path from a starting source node to every other node in a graph.
+    - It is very similar to **Breadth-First Search (BFS)** but is designed to handle graphs with weighted edges.
+
+- **Comparison with Breadth-First Search (BFS)**
+    - **BFS Limitation**: BFS only works for finding the shortest path when the edges in a graph are **unweighted**.
+    - **Unweighted Equivalence**: An unweighted graph is equivalent to a graph where every edge has a weight of exactly one.
+    - **BFS Logic**: BFS searches layer by layer. It finds all nodes reachable with one jump, then all nodes reachable within two jumps, and so on.
+    - **Weight Conflict**: In a weighted graph, a path with more edges (jumps) might actually have a lower total cost than a path with fewer edges.
+        - **Example**: If node A reaches B directly with a weight of 10, BFS would pick that as the shortest path because it is one jump. However, if node A reaches C with weight 1 and C reaches B with weight 1, the total cost to reach B through C is 2. Dijkstra's algorithm will correctly identify the cost as 2, whereas BFS would incorrectly identify it as 10.
+
+- **Problem Setup and Requirements**
+    - **Inputs**: A graph with nodes and weighted edges, starting from an arbitrary source node (e.g., node A).
+    - **Outputs**: A result (typically a hashmap) mapping every node to the length of the shortest path from the source.
+    - **Initial Value**: The shortest path from the source node to itself is always **zero**.
+    - **Key Assumption**: Dijkstra's algorithm assumes that there are **no negative weights** in the graph.
+
+- **Greedy Logic of the Algorithm**
+    - Dijkstra's is a **greedy BFS**.
+    - It maintains a **frontier** of visited nodes for which the shortest path has already been calculated.
+    - At every step, the algorithm considers all outgoing edges from the frontier and chooses the one that results in the **minimum total cost** from the starting node to a target node.
+    - **Why it works**: Because weights are non-negative, if we pick the current shortest possible path to a node, no other alternative path through a more expensive edge will ever be able to "beat" that cost later.
+
+- **Step-by-Step Execution Example**
+    - **Scenario**: Source node **A** has neighbors **B** (cost 10) and **C** (cost 3).
+    - **Step 1**: Start at **A** with cost 0. A is the first node in the frontier.
+    - **Step 2**: Explore neighbors of A. Add B (cost 10) and C (cost 3) to the min heap.
+    - **Step 3**: Pop the smallest cost from the heap, which is **C** (cost 3).
+    - **Step 4**: Explore neighbors of C.
+        - Path to **E**: 3 (from A to C) + 2 (from C to E) = **5**.
+        - Path to **D**: 3 (from A to C) + 8 (from C to D) = **11**.
+        - Path to **B**: 3 (from A to C) + 4 (from C to B) = **7**.
+    - **Step 5**: The heap now contains B (cost 10), E (cost 5), D (cost 11), and B (cost 7).
+    - **Step 6**: Pop the smallest, which is **E** (cost 5). E has no neighbors, so move on.
+    - **Step 7**: Pop the next smallest, which is **B** (cost 7). Note that this is shorter than the original cost 10 path to B.
+    - **Step 8**: Explore neighbors of B. Path to **D**: 7 (from A to B) + 2 (from B to D) = **9**.
+    - **Step 9**: The heap now contains B (cost 10), D (cost 11), and D (cost 9). Pop **D** (cost 9).
+    - **Result**: The shortest paths are A:0, C:3, E:5, B:7, D:9.
+
+- **Data Structures Used**
+    - **Min Heap**: Used to store pairs of `(cost, node)`. The **key** is the cost because we want to pop the node with the lowest total cost.
+    - **Hashmap**: Used to store the final shortest path results (`node -> minimum cost`). This also serves to keep track of visited nodes.
+    - **Adjacency List**: The most efficient way to represent the graph, where each node maps to a list of its neighbors and the weights of the connecting edges.
+
+- **Detailed Algorithm Steps**
+    - 1. Initialize the **shortest path hashmap** as empty.
+    - 2. Initialize the **min heap** with the starting node: `(0, source_node)`.
+    - 3. While the min heap is not empty:
+        - a. Pop the `(cost, node)` with the smallest cost.
+        - b. If the node is already in the hashmap (already visited), **skip** it to avoid overwriting with a larger weight.
+        - c. Add the node and its cost to the hashmap.
+        - d. For each neighbor of the current node:
+            - i. If the neighbor has not been visited (not in the hashmap):
+            - ii. Calculate `total_cost = current_node_cost + edge_weight_to_neighbor`.
+            - iii. Push `(total_cost, neighbor)` onto the min heap.
+    - 4. Return the hashmap once the heap is empty or all nodes are visited.
+
+- **Time Complexity Analysis**
+    - **Variables**: Let `V` be the number of vertices (nodes) and `E` be the number of edges.
+    - **Heap Size**: In the worst case, the heap size can be equal to the number of edges `E` because a node might be pushed multiple times (once for every incoming edge).
+    - **Operations**: Each push/pop operation on the heap takes `log E` time.
+    - **Total Complexity**: The algorithm performs `E` operations on the heap, leading to **O(E log E)**.
+    - **Mathematical Reduction**:
+        - In the worst case, `E` is proportional to `V^2`.
+        - Using logarithm properties, `log(V^2)` is equal to `2 * log V`.
+        - Therefore, **O(E log E)** can be reduced to **O(E log V)** by removing constants.
+    - **Precision**: While some write it as **O(V^2 log V)**, **O(E log V)** is considered more precise because graphs do not always have the maximum possible number of edges.
+
+- **Code Implementation Details**
+    - **Input Format**: Usually given as a list of edges, where each edge is a triplet: `[source, destination, weight]`.
+    - **Setup**:
+        ```python
+        # Convert edge list to adjacency list
+        adj = {}
+        for i in range(1, n + 1):
+            adj[i] = []
+        for s, d, w in edges:
+            adj[s].append([d, w])
+        ```
+       
+    - **Infinite Loop Prevention**: By checking if a node is already in the `shortest` hashmap before pushing neighbors or processing it, the algorithm avoids infinite loops caused by cycles.
+
+- **Conclusion**
+    - Dijkstra's algorithm is considered an **advanced textbook algorithm**.
+    - It is a essential tool for coding interviews and general graph problem-solving.
+
+**Analogy to Solidify Understanding**
+Imagine you are trying to find the fastest way to travel through a series of cities connected by toll roads with different prices. Instead of just looking for the route with the fewest cities (which is what BFS does), you always look at all the cities you can reach from where you’ve already been and pick the absolute cheapest one next. Once you reach a city using the cheapest possible total toll, you know you’ll never find a cheaper way there because every other road you haven't taken yet only adds more to the cost.
+
+
+### Prim's Algorithm
+
+- **Prim's Algorithm and Minimum Spanning Trees (MST)**
+    - **Introduction to Prim's Algorithm**
+        - Prim's algorithm is a graph algorithm used to find the **minimum spanning tree** of an **undirected graph**.
+        - In an undirected graph, edges do not have directions, meaning you can travel in both directions along any edge.
+    - **Definitions and Criteria for Trees**
+        - Trees are defined as undirected, connected graphs.
+        - **Connected Graph:** This means all nodes in the graph are connected together. There must be a path from one node to every other node in the entire graph.
+        - **Acyclical:** A tree must not contain any cycles.
+        - If a graph has cycles or disconnected nodes, it does not form a tree.
+    - **The Concept of a Minimum Spanning Tree (MST)**
+        - An MST is a **subset of edges** from a graph that connects all nodes based on the tree criteria (connected and acyclical) while **minimizing the total cost** of the edges.
+        - **Applications:** An MST can be used to connect cities or computers such that every point is reachable from every other point with the minimum amount of road or connection cost.
+        - We do not necessarily need every original edge to exist; we only need enough to ensure connectivity without cycles.
+    - **Properties of Nodes and Edges in a Tree**
+        - To connect $n$ nodes together without forming a cycle, it will always take exactly **$n - 1$ edges**.
+        - **Examples of the $n - 1$ Rule:**
+            - 1 node requires 0 edges to be connected.
+            - 2 nodes require 1 edge.
+            - 3 nodes require 2 edges.
+            - 4 nodes require 3 edges.
+        - If you have $n$ nodes and $n$ edges, the graph will contain a cycle and is therefore not a tree.
+    - **Uniqueness of Solutions**
+        - There can be **multiple valid solutions** for a minimum spanning tree if different subsets of edges result in the same minimum total cost.
+        - In such cases, returning any one of the valid MSTs is acceptable.
+        - This is similar to the shortest path algorithm, where multiple paths might have the same minimum cost.
+    - **Overview of Prim's Algorithm Logic**
+        - Prim's algorithm is very similar to Dijkstra's algorithm and uses almost the same ideas.
+        - Unlike Dijkstra's, which starts at a specific source node to find paths to all others, Prim's can **start at any arbitrary node**.
+        - This is because the MST must eventually include every node in the graph regardless of the starting point.
+        - The algorithm can be used to find either the total cost of the MST or the list of edges that form the MST.
+    - **Essential Data Structures**
+        - **Adjacency List:** Used to easily find the neighbors of any given node.
+        - **Min Heap:** Used to decide which edge to process next by popping the value with the smallest weight. It typically stores three values:
+            1. The weight of the edge (the key for the heap).
+            2. The source node.
+            3. The destination node.
+        - **Visit Hash Set:** Used to track visited nodes to ensure we don't visit the same node twice, which would create a cycle.
+        - **MST List:** An array or list used to store the edges that make up the final minimum spanning tree.
+    - **Step-by-Step Algorithm Execution**
+        - **1. Initialization:**
+            - Build an adjacency list from the input edges. Since the graph is undirected, add the edge for both the source and the destination.
+            - Choose a starting node (e.g., node 1) and add its neighbors to the min heap.
+            - Add the starting node to the visit hash set.
+        - **2. The Main Loop:**
+            - Continue the algorithm while the min heap is not empty.
+            - Alternative loop conditions include:
+                - While the number of visited nodes is less than the total number of nodes ($n$).
+                - While the number of edges in the MST is less than $n - 1$.
+            - **Pop** the edge with the smallest weight from the min heap.
+        - **3. Processing Edges:**
+            - If the destination node has already been visited, skip it to avoid cycles.
+            - If it has not been visited:
+                - Add the edge (source and destination) to the MST list.
+                - Mark the destination node as visited in the hash set.
+                - Iterate through all neighbors of this newly visited node.
+                - If a neighbor has not been visited, push it onto the min heap with its edge weight and the current node as the source.
+        - **4. Completion:**
+            - The algorithm finishes when all nodes are connected or the heap is empty.
+            - The result is a list of $n - 1$ edges connecting $n$ nodes at the minimum cost.
+    - **Proof of Correctness and Behavior**
+        - Every time a new node is introduced to the "frontier," the algorithm ensures it is added with the **minimum possible cost** to connect it to the existing tree.
+        - Because we always pick the smallest weight available in the min heap, we skip redundant or more expensive edges that would lead to nodes we've already reached through a cheaper path.
+        - Order of nodes in the heap matters because the second node represents the new node being added to the graph frontier.
+    - **Comparison: Prim's vs. Dijkstra's**
+        - **Dijkstra's:** Focuses on the shortest path from a start node to every other node, requiring the algorithm to track the cumulative path cost.
+        - **Prim's:** Focuses on the total cost of all edges in the tree. When adding a neighbor to the heap, it only uses the weight of the edge itself, not the total cost to reach that point from the start.
+    - **Complexity Analysis**
+        - **Time Complexity:** $O(E \log V)$.
+            - We may add $E$ edges to the min heap, and each push/pop operation is $\log E$.
+            - Since $E$ is at most $V^2$, $\log E$ simplifies to $\log V$ in big O notation.
+        - **Memory Complexity:** $O(E)$.
+            - This is the maximum possible size of the min heap and the adjacency list.
+    - **Example Implementation Logic**
+        ```python
+        # Build Adjacency List
+        adj = {i: [] for i in range(1, n + 1)}
+        for s, d, w in edges:
+            adj[s].append([d, w])
+            adj[d].append([s, w])
+
+        # Initialize
+        minHeap = []
+        for neighbor, weight in adj:
+            heapq.heappush(minHeap, [weight, 1, neighbor])
+        
+        visit = set()
+        mst = []
+
+        # Process Heap
+        while minHeap:
+            weight, source, destination = heapq.heappop(minHeap)
+            if destination in visit:
+                continue
+            
+            mst.append([source, destination])
+            visit.add(destination)
+
+            for neighbor, weight in adj[destination]:
+                if neighbor not in visit:
+                    heapq.heappush(minHeap, [weight, destination, neighbor])
+        ```
+        - The core algorithm is the loop that pops the minimum weight and explores unvisited neighbors.
+
+- **Analogy for Understanding:**
+    - Think of Prim's algorithm like a **growing oil spill**. It starts at one point and always flows into the easiest (lowest cost/resistance) adjacent area first. It keeps expanding this way until it has covered every required spot, ensuring it never flows back into an area it has already covered (no cycles) and always taking the easiest path available at that moment to reach new ground.
+
+### Kruskal's Algorithm 
+
+- **Kruskal's Algorithm Overview**
+    - Kruskal's algorithm is an alternative method to find the **minimum spanning tree (MST)** of a **connected graph**.
+    - Conceptually, it is often considered easier to understand than Prim's algorithm.
+    - It is a **greedy algorithm**, similar to Dijkstra's and Prim's algorithms.
+    - The core idea is to add edges with the **smallest weights** to connect all nodes together at the minimum cost.
+    - Implementation may be more complex than Prim's because it relies on the **Union-Find data structure**.
+        - If a built-in Union-Find is available, it is easy to code.
+        - If not, you must implement Union-Find yourself, which requires extra code but is not overly complicated.
+
+- **Kruskal's vs. Prim's Algorithm**
+    - **Prim's Algorithm**:
+        - Starts at a single node.
+        - Adds adjacent nodes to a "frontier" and expands outward by choosing the minimum neighbor.
+    - **Kruskal's Algorithm**:
+        - Skips the single-node starting point and frontier approach.
+        - Considers **all possible edges** in the graph at once.
+        - Starts by taking the absolute minimum weight edge from the entire set.
+        - Does not mark nodes as "visited" in the traditional sense; instead, it manages connectivity through Union-Find.
+
+- **The Process and Cycle Prevention**
+    - **Initial State**:
+        - The graph starts with individual, unconnected nodes (e.g., five nodes are five individual components).
+    - **Adding Edges**:
+        - Pick the edge with the smallest weight and add it to the MST.
+        - For example, if the smallest weight is 1, those two nodes are joined into a single connected component.
+        - Continue adding the next smallest edges (e.g., weight 2).
+    - **Using Union-Find to Prevent Cycles**:
+        - Union-Find tracks which nodes belong to which connected components.
+        - When considering a new edge, you check if the two nodes are already part of the same component.
+        - If they are **not** previously connected, adding the edge will **not** create a cycle.
+        - If they **are** already in the same component, there is already a path between them. Adding another edge would create a second path, resulting in a **cycle** in an undirected graph.
+        - Redundant edges that create cycles are skipped and removed from consideration.
+    - **Termination**:
+        - For a graph with **n nodes**, the algorithm requires exactly **n - 1 edges** to form the MST.
+        - Once n - 1 edges are successfully added without forming cycles, all nodes are connected and the MST is complete.
+
+- **Step-by-Step Example Walkthrough**
+    - 1. Consider all edges and pick the smallest weight (e.g., weight 1).
+    - 2. Union the two nodes associated with that edge into one component.
+    - 3. Pick the next smallest edge. If it connects two different components, union them.
+    - 4. If a tie occurs between edge weights, choose one arbitrarily.
+    - 5. If an edge (e.g., weight 3) connects two nodes already in the same component, skip it to avoid a cycle.
+    - 6. Repeat until you have n - 1 edges.
+
+- **Detailed Implementation Logic**
+    - **Data Structures**:
+        - **Min-Heap**: Initialized with **every single edge** in the input.
+        - **Union-Find**: Initialized with **n** (the total number of nodes, labeled 1 through n).
+        - **Result Array**: An empty list to store the edges of the Minimum Spanning Tree.
+    - **Edge Representation**:
+        - Each edge contains two nodes and a weight.
+        - Because the graph is **undirected**, the order of the nodes (source vs. destination) does not matter for the Union-Find or the heap.
+        - The **weight** is the primary value used by the min-heap to determine the order of popping.
+    - **Connectivity**:
+        - An **adjacency list is not needed** for Kruskal's because the algorithm only cares about the global list of edges, not specific neighbors of a node.
+    - **Algorithm Loop**:
+        ```python
+        # Conceptual logic based on the source
+        while length of MST < n - 1:
+            pop (weight, node1, node2) from min-heap
+            if union(node1, node2) is successful:
+                add edge (node1, node2) to MST result
+            else:
+                skip/continue (edge is redundant)
+        return MST
+        ```
+
+- **Complexity Analysis**
+    - **Time Complexity**: **O(E log V)**.
+        - Pushing and popping from the min-heap takes **log E** time.
+        - In the worst case, $E$ can be up to $V^2$, making log E equivalent to **log V**.
+        - Union-Find operations (with path compression and union by rank) are extremely efficient, potentially near constant time, so they do not bottleneck the algorithm.
+        - The heap operations are performed for up to $E$ edges, leading to the overall O(E log V) complexity.
+    - **Memory Complexity**: **O(E)**.
+        - This is required to store every single edge in the min-heap.
+
+- **Conclusion**
+    - Kruskal's is "pretty dang easy" if you have a pre-implemented Union-Find structure.
+    - While Prim's is often preferred by some because of its similarity to Dijkstra's, Kruskal's is a robust and efficient alternative for finding MSTs.
+
+### Topological Sort
+
+- **Introduction to Topological Sort**
+    - Topological sorting, also known as topological order, is a sequence of the nodes in a graph.
+    - It is called a "sort," but it is not sorting an array; it is sorting the nodes of a graph based on their relationships.
+    - This algorithm is often something that can be learned intuitively without even knowing it is an official algorithm.
+
+- **Definition and Requirements**
+    - **Valid Topological Ordering**
+        - For every single directed edge in a graph, a valid topological ordering guarantees that the source node appears before the destination node in the final sequence,.
+        - Example: If there is an edge from node A to node C, A must come before C in the result.
+        - Example: If A leads to C and C leads to E, then A must eventually appear before E in the sequence.
+    - **Open-Ended Results**
+        - Topological sort is open-ended because there can be many valid orderings for a single graph.
+        - If two nodes are siblings (e.g., A leads to both B and C) and there is no requirement between them, the sequence could be "A, B, C" or "A, C, B".
+    - **Graph Constraints**
+        - **Directed Edges:** The graph must have directed edges to establish a before-and-after relationship,.
+        - **Acyclic (No Cycles):** The algorithm only works on graphs that are acyclic, meaning there are no loops.
+        - **DAG:** Therefore, topological sort can only be run on a Directed Acyclic Graph (DAG).
+    - **Why it Fails on Cycles**
+        - If a cycle exists (e.g., A leads to C, C leads to E, and E leads back to A), the definition breaks.
+        - A must be before C, and C must be before E, but E must be before A; it is impossible to satisfy all these conditions in a linear sequence.
+
+- **Graph Structure and Components**
+    - **Connectedness**
+        - A graph does not have to be connected to run a topological sort.
+        - You can have a graph with multiple connected components, and it is still valid.
+    - **Component Ordering**
+        - If you have two separate components (e.g., A-B-C-D-E-F and G-H), the relative order between them does not matter.
+        - You could put G-H before, after, or even in the middle of the other component's nodes, as long as G appears before H.
+    - **Identifying Start and End Nodes**
+        - A node with no incoming edges is guaranteed to come first in the sequence.
+        - A node with no outgoing edges (nothing coming after it) is guaranteed to be the last in the ordering.
+
+- **Finding a Topological Ordering using DFS**
+    - There are two common traversal algorithms to find an ordering: Depth First Search (DFS) and Breadth First Search (BFS).
+    - **The DFS Approach**
+        - Start at the beginning of a component and add values to an array representing the topological order.
+        - To avoid adding the same node multiple times (which can happen if a node has multiple incoming edges), use a **visit hash set**.
+        - This hash set tracks nodes already visited and prevents the algorithm from running DFS on the same node or its neighbors twice.
+    - **Technique 1: Modifying the Graph (Non-Preferred)**
+        - One technique involves reversing every edge in the graph.
+        - You start at what was originally the end of the components (e.g., node F).
+        - You visit nodes but do not add them to the result until all their descendants in the reversed graph are visited (post-order logic).
+        - This ensures a node like F is added only after its descendants are processed.
+        - This is often considered harder because you might not be allowed to modify the input graph.
+    - **Technique 2: Post-Order DFS and Reversing (Preferred)**
+        - Start at the beginning of a component but do not add the node to the result immediately.
+        - Use DFS to visit all descendants first.
+        - Only when you reach a base case (a node with no children/descendants) do you add that node to the result.
+        - After a node's recursive DFS calls are finished, add the current node to the result.
+        - This results in a "post-order traversal" where descendants are added before their ancestors.
+        - Because this is the opposite of a topological sort, you must **reverse the final output** to get the correct order,.
+
+- **Handling Arbitrary Start Points**
+    - You do not always know which nodes are the "heads" of a component.
+    - You can solve this by looping through every single node in the input graph.
+    - For each node, run the DFS if it has not been visited yet,.
+    - The visit hash set ensures that even if you start in the middle of a component or jump between them, you won't process nodes twice.
+    - This method works regardless of the order in which you loop through the nodes.
+
+- **Implementation Details**
+    - **Input Data**
+        - Usually, you are given the number of nodes (labeled 1 to n) and a list of directed edges (e.g., A to B).
+    - **Adjacency List**
+        - It is common to first transform the list of edges into an adjacency list for better graph representation,.
+    - **Main Algorithm Steps**
+        - Create a result array (`topological sort array`) and a `visit` hash set.
+        - Loop through every node from 1 to n.
+        - If a node is not in the `visit` set, call the DFS function.
+        - After looping through all nodes, reverse the result array and return it.
+    - **DFS Function Logic**
+        - **Parameters:** Current node, adjacency list, visit hash set, and the topological sort array,.
+        - **Base Case:** If the current node is already in the visit hash set, return immediately.
+        - **Marking Visit:** Add the current node to the visit hash set.
+        - **Recursive Step:** Loop through all neighbors of the current node using the adjacency list and call DFS on each neighbor.
+        - **Add to Result:** After all neighbors are processed, add the current node to the topological sort array.
+
+- **Cycle Detection**
+    - If the graph is not guaranteed to be acyclic, you must add cycle detection.
+    - **Path Hash Set**
+        - Use a second hash set called `path` to keep track of nodes in the current DFS branch.
+        - Before visiting a node's neighbors, add the node to the `path` set.
+        - Check if a node is already in the `path` set; if it is, a cycle is detected.
+        - If a cycle is found, you might return a default value like -1 or an empty array.
+        - Once the DFS for a node and its neighbors is finished, remove (pop) that node from the `path` set.
+    - **Difference Between Visit and Path**
+        - The `visit` set tracks every node ever visited to avoid redundant work.
+        - The `path` set only tracks nodes visited along the *same* recursive path.
+        - Reaching a node that is "visited" but not in the "path" is not a cycle; it just means that node was reached via a different branch.
+
+- **Application: Course Prerequisites**
+    - A famous application is the course schedule problem,.
+    - Courses often have prerequisites (e.g., Calc 1 must be taken before Calc 2).
+    - A topological sort provides an order in which you can take all courses while satisfying their requirements.
+    - **Graph Direction in Problems**
+        - Sometimes graphs are built "in reverse," where the edge points from the course to its prerequisite.
+        - If an edge from Physics 3 points to Physics 2, it means Physics 2 is a prerequisite.
+        - In such cases, running the post-order DFS might build the correct order without needing to reverse the final output.
+        - It is important to recognize how the graph is constructed in a specific problem.
+
+- **Open-Ended Problems**
+    - Some problems might not require a full topological ordering but may only ask you to detect a cycle in a directed graph.
+    - Topological sort techniques can be adapted for various graph-related challenges.
+
+**Analogy for Topological Sort:**
+Think of **assembling furniture** with a complex instruction manual. Some steps can't be done until others are finished—you can't put the cushions on the sofa until the frame is built. Topological sort is like creating a master checklist where every "prerequisite" task is listed before the task that depends on it, ensuring you never get stuck.
 
 # Others
 
