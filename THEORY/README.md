@@ -11,6 +11,7 @@
   - [Table of Contents](#table-of-contents)
   - [About](#about)
     - [Overview](#overview)
+- [Data Structure and Algorithms](#data-structure-and-algorithms)
   - [Arrays](#arrays)
     - [RAM](#ram)
     - [Static Arrays](#static-arrays)
@@ -57,8 +58,9 @@
     - [2-Dimension DP](#2-dimension-dp)
   - [Bit Operator](#bit-operator)
     - [Bit Operator](#bit-operator-1)
-  - [Prompt for Notes Formatting](#prompt-for-notes-formatting)
-
+  - [Prompts](#prompts)
+    - [Notes Formatting](#notes-formatting)
+    - [LaTeX math symbols/commands -\> Markdown-friendly alternatives](#latex-math-symbolscommands---markdown-friendly-alternatives)
 
 ## About
 
@@ -88,6 +90,8 @@
     - **Next Steps**
         - For further details on what the course covers, users should **scroll down**.
         - Users are encouraged to **get started** when they are ready.
+
+# Data Structure and Algorithms
 
 ## Arrays
 
@@ -121,7 +125,7 @@
   - RAM can be visualized as a **contiguous block of data**.
   - RAM consists of two primary components: **values** and **addresses**.
   - Every value is stored at a **distinct location**, which is referred to as its **address**.
-  - In technical diagrams, addresses are often distinguished from values by placing a **dollar sign ($)** in front of the address number.
+  - In technical diagrams, addresses are often distinguished from values by placing a **dollar sign (`)** in front of the address number.
   - The first address in a sequence is typically **0**.
 
 - **Memory Properties of Arrays**
@@ -135,19 +139,19 @@
   - Because **32-bit integers** take up **four bytes**, the memory addresses for an integer array must **increment by four** for each new element.
   ```text
   Example Integer Array Memory Map:
-  Address: $0 -> Value: 1
-  Address: $4 -> Value: 3
-  Address: $8 -> Value: 5
+  Address: `0 -> Value: 1
+  Address: `4 -> Value: 3
+  Address: `8 -> Value: 5
   ```
-  - If the addresses were incremented by only one ($0, $1, $2) for integers, there would not be enough room, as each integer requires a full four-byte slot.
+  - If the addresses were incremented by only one (`0, `1, `2) for integers, there would not be enough room, as each integer requires a full four-byte slot.
   - Other data types, such as **characters** (e.g., 'A', 'B', 'C'), have different size requirements.
   - **ASCII characters** typically take up only **one byte** of memory.
   - Consequently, the addresses for a character array increment by **one** for each element.
   ```text
   Example Character Array Memory Map:
-  Address: $0 -> Value: 'A'
-  Address: $1 -> Value: 'B'
-  Address: $2 -> Value: 'C'
+  Address: `0 -> Value: 'A'
+  Address: `1 -> Value: 'B'
+  Address: `2 -> Value: 'C'
   ```
   - The general rule for storing values contiguously is that the address must increment by the **size of the value** being stored.
 
@@ -337,7 +341,7 @@ Storing data in RAM is like a **long row of lockers** in a school hallway; each 
     - Big O focuses on **growth rates** as input sizes (N) become very large.
     - We care about how the runtime grows: is it linear (O(N)) or quadratic (O(N^2))?.
     - **Interaction of Functions**: 
-      - A faster-growing function like $N^2$ will always eventually intersect and surpass a slower-growing function like $N$ or $2N$, regardless of the starting constant.
+      - A faster-growing function like `N^2` will always eventually intersect and surpass a slower-growing function like `N` or `2N`, regardless of the starting constant.
       - We ignore small input sizes (like 1, 8, or 1000) because only very large inputs significantly slow down a CPU.
 
 - DYNAMIC ARRAY PERFORMANCE SUMMARY
@@ -645,15 +649,15 @@ Think of a **Singly Linked List** like a **one-way train** where each car only k
     - Recursion is a vital concept for data structures and algorithms that will be used throughout the course.
     - It is often difficult to understand initially, so it is introduced using **one branch recursion** through a math formula: **n factorial**.
     - **Definition of n Factorial:**
-        - It is a shorthand for writing $n * (n - 1) * (n - 2)$ all the way until reaching the base number, which is 1.
-        - **Example:** 5 factorial (5!) is $5 * 4 * 3 * 2 * 1$, which equals 120.
+        - It is a shorthand for writing `n * (n - 1) * (n - 2)` all the way until reaching the base number, which is 1.
+        - **Example:** 5 factorial (5!) is `5 * 4 * 3 * 2 * 1`, which equals 120.
         - While recursion is useful for learning, you do not strictly need it for this calculation; a loop is often the easiest way.
 
 - **The Logic of Recursion and Sub-problems**
     - Recursion is centered on the idea of **sub-problems**.
     - A complex problem is broken down into a slightly smaller version of the same problem.
-    - **Example Logic:** 5 factorial is the same as $5 * 4!$ because 4 factorial is $(4 * 3 * 2 * 1)$.
-    - **General Equation:** $n! = n * (n - 1)!$.
+    - **Example Logic:** 5 factorial is the same as `5 * 4!` because 4 factorial is `(4 * 3 * 2 * 1)`.
+    - **General Equation:** `n! = n * (n - 1)!`.
     - By using this equation, a big problem (n!) is reduced to a smaller sub-problem ((n - 1)!).
 
 - **Visualizing Recursion with Decision Trees**
@@ -692,10 +696,10 @@ Think of a **Singly Linked List** like a **one-way train** where each car only k
         - Input 2: Not <= 1, so it calls `2 * factorial(1)`.
         - Input 1: **Base Case reached**. It returns 1.
     - **2. Going Back Up (The Returns):**
-        - The call for 2! receives 1, calculates $2 * 1$, and returns **2** to its parent.
-        - The call for 3! receives 2, calculates $3 * 2$, and returns **6** to its parent.
-        - The call for 4! receives 6, calculates $4 * 6$, and returns **24** to its parent.
-        - The original call for 5! receives 24, calculates $5 * 24$, and returns the final result: **120**.
+        - The call for 2! receives 1, calculates `2 * 1`, and returns **2** to its parent.
+        - The call for 3! receives 2, calculates `3 * 2`, and returns **6** to its parent.
+        - The call for 4! receives 6, calculates `4 * 6`, and returns **24** to its parent.
+        - The original call for 5! receives 24, calculates `5 * 24`, and returns the final result: **120**.
 
 - **Complexity Analysis**
     - **Time Complexity:**
@@ -715,7 +719,7 @@ Think of a **Singly Linked List** like a **one-way train** where each car only k
         - Initialize a `result` variable to 1.
         - Use a `while` loop that runs as long as `n > 1`.
         - Multiply the `result` by `n`, then decrement `n` by 1 in each iteration.
-        - This calculates $n * (n-1) * (n-2)...$ until n reaches 1.
+        - This calculates `n * (n-1) * (n-2)...` until n reaches 1.
     - **Iterative Code Example:**
         ```python
         def factorial_iterative(n):
@@ -731,42 +735,42 @@ Think of a **Singly Linked List** like a **one-way train** where each car only k
 
 - **TWO-BRANCH RECURSION: THE FIBONACCI EXAMPLE**
     - **General Mathematical Formula**
-        - To calculate the nth Fibonacci number, the formula is: $F(n) = F(n-1) + F(n-2)$.
-        - This means you take the $n-1$ Fibonacci number and the $n-2$ Fibonacci number and add them together to get the nth value.
+        - To calculate the nth Fibonacci number, the formula is: `F(n) = F(n-1) + F(n-2)`.
+        - This means you take the `n-1` Fibonacci number and the `n-2` Fibonacci number and add them together to get the nth value.
     - **The Necessity of Base Cases**
         - Without base cases, calculating a Fibonacci number (like the fifth one) would continue forever.
         - **Defined Base Cases**:
             - The zeroth Fibonacci number is 0.
             - The first Fibonacci number is 1.
         - **Example: Calculating the Second Fibonacci Number (F(2))**:
-            - Formula: $F(2) = F(2-1) + F(2-2)$.
-            - This simplifies to $F(1) + F(0)$.
-            - Using the base cases: $1 + 0 = 1$.
+            - Formula: `F(2) = F(2-1) + F(2-2)`.
+            - This simplifies to `F(1) + F(0)`.
+            - Using the base cases: `1 + 0 = 1`.
             - Therefore, the second Fibonacci number is 1.
         - **Example: Calculating the Third Fibonacci Number (F(3))**:
-            - Formula: $F(3) = F(3-1) + F(3-2)$.
-            - This simplifies to $F(2) + F(1)$.
-            - Since $F(2) = 1$ and $F(1) = 1$, the calculation is $1 + 1$.
+            - Formula: `F(3) = F(3-1) + F(3-2)`.
+            - This simplifies to `F(2) + F(1)`.
+            - Since `F(2) = 1` and `F(1) = 1`, the calculation is `1 + 1`.
             - Therefore, the third Fibonacci number is 2.
     - **Recursion vs. Looping**
         - Fibonacci numbers can be calculated in a straightforward way by looping through them, which allows for calculating values as high as desired.
         - The recursive solution is actually less efficient than looping, but it is used to illustrate "two-branch recursion".
     - **The Recursive Decision Tree for F(5)**
         - A decision tree is used to visualize the recursive subproblems.
-        - **Level 1**: To compute $F(5)$, the problem is broken into $F(4)$ and $F(3)$.
-        - **Level 2 (Left Path)**: $F(4)$ is broken into $F(3)$ and $F(2)$.
-        - **Level 2 (Right Path)**: $F(3)$ is broken into $F(2)$ and $F(1)$.
+        - **Level 1**: To compute `F(5)`, the problem is broken into `F(4)` and `F(3)`.
+        - **Level 2 (Left Path)**: `F(4)` is broken into `F(3)` and `F(2)`.
+        - **Level 2 (Right Path)**: `F(3)` is broken into `F(2)` and `F(1)`.
         - **Further Breakdown**:
-            - $F(3)$ breaks into $F(2)$ and $F(1)$.
-            - $F(2)$ breaks into $F(1)$ and $F(0)$.
-        - This process continues until every branch reaches a base case ($0$ or $1$).
+            - `F(3)` breaks into `F(2)` and `F(1)`.
+            - `F(2)` breaks into `F(1)` and `F(0)`.
+        - This process continues until every branch reaches a base case (`0` or `1`).
     - **Code Implementation and Logic**
         - **Base Case Code**:
             - Individual cases: `if n == 0: return 0` and `if n == 1: return 1`.
             - **Condensed version**: `if n <= 1: return n`.
-            - This works because if $n$ is 1, it returns 1, and if $n$ is 0, it returns 0.
+            - This works because if `n` is 1, it returns 1, and if `n` is 0, it returns 0.
         - **Recursive Case Code**:
-            - The function must compute the $n-1$ and $n-2$ values, add them together, and return that integer value.
+            - The function must compute the `n-1` and `n-2` values, add them together, and return that integer value.
             ```python
             # Representative logic based on the description
             if n <= 1:
@@ -775,28 +779,28 @@ Think of a **Singly Linked List** like a **one-way train** where each car only k
             ```
     - **Executing the Recursive Steps for F(5)**
         - The code executes down the tree and returns values back up once base cases are hit.
-        - **Calculating F(2)**: Reaches base cases $F(1)$ (returns 1) and $F(0)$ (returns 0). Adding them ($1 + 0$) returns 1.
-        - **Calculating F(3)**: Uses results from $F(2)$ (which is 1) and $F(1)$ (which is 1). Adding them returns 2.
-        - **Calculating F(4)**: Uses results from $F(3)$ (which is 2) and $F(2)$ (which is 1). Adding them returns 3.
-        - **Calculating F(5)**: Uses results from $F(4)$ (which is 3) and $F(3)$ (which is 2). Adding them returns the final result: 5.
+        - **Calculating F(2)**: Reaches base cases `F(1)` (returns 1) and `F(0)` (returns 0). Adding them (`1 + 0`) returns 1.
+        - **Calculating F(3)**: Uses results from `F(2)` (which is 1) and `F(1)` (which is 1). Adding them returns 2.
+        - **Calculating F(4)**: Uses results from `F(3)` (which is 2) and `F(2)` (which is 1). Adding them returns 3.
+        - **Calculating F(5)**: Uses results from `F(4)` (which is 3) and `F(3)` (which is 2). Adding them returns the final result: 5.
     - **Time Complexity Analysis**
-        - **Loop Technique**: The time complexity is $O(N)$.
+        - **Loop Technique**: The time complexity is `O(N)`.
         - **Recursive Technique**: The complexity is much higher and requires analyzing the decision tree.
         - **Tree Height**:
-            - The height of the tree (number of levels) is $n$.
-            - For $F(5)$, the longest path is $5 \to 4 \to 3 \to 2 \to 1$, resulting in roughly 5 levels.
+            - The height of the tree (number of levels) is `n`.
+            - For `F(5)`, the longest path is `5 -> 4 -> 3 -> 2 -> 1`, resulting in roughly 5 levels.
         - **Branching and Doubling**:
             - Each node generally breaks into two subproblems because there are two branches in the recursive tree.
-            - Theoretically, the number of terms doubles at every level: $1 \to 2 \to 4 \to 8...$.
-            - The number of values in the last level is roughly $2^n$.
+            - Theoretically, the number of terms doubles at every level: `1 -> 2 -> 4 -> 8...`.
+            - The number of values in the last level is roughly `2^n`.
         - **The Power Series and Upper Bounds**:
             - In a series where values double (1, 2, 4, 8), the series is dominated by the last term.
-            - The last term ($2^n$) is greater than or equal to all previous terms combined.
-            - Therefore, $2^n$ serves as an upper bound for the total number of values in the decision tree.
+            - The last term (`2^n`) is greater than or equal to all previous terms combined.
+            - Therefore, `2^n` serves as an upper bound for the total number of values in the decision tree.
         - **Big O Constants**:
-            - Precise values like $n+1$ or $n-1$ in the exponent do not matter in Big O notation.
-            - Multiplying by a constant (like $2 \times 2^n$) also results in the same Big O complexity.
-            - **Final Complexity**: The recursive solution is bounded by $O(2^n)$.
+            - Precise values like `n+1` or `n-1` in the exponent do not matter in Big O notation.
+            - Multiplying by a constant (like `2 * 2^n`) also results in the same Big O complexity.
+            - **Final Complexity**: The recursive solution is bounded by `O(2^n)`.
 
 ## Sorting
 
@@ -946,22 +950,22 @@ Think of a **Singly Linked List** like a **one-way train** where each car only k
 - Time Complexity Analysis
     - Depth of Recursion (Levels):
         - The number of levels is determined by how many times a number `n` can be divided by 2 until it reaches 1.
-        - Algebraically: $n / 2^x = 1$, which rearranges to $n = 2^x$.
-        - Solving for $x$ (the number of levels) using logarithms: $x = \log_2 n$.
-        - Therefore, there are $\log n$ levels in the algorithm.
+        - Algebraically: `n / 2^x = 1`, which rearranges to `n = 2^x`.
+        - Solving for `x` (the number of levels) using logarithms: `x = LOG_2 n`.
+        - Therefore, there are `LOG n` levels in the algorithm.
     - Work Per Level:
         - At each level, the merge step requires iterating through every element of the input array to put them back in order.
-        - This results in $O(n)$ time complexity for each level.
+        - This results in `O(n)` time complexity for each level.
     - Total Time Complexity:
-        - Multiply the number of levels by the work per level: $\log n \times n$.
-        - Overall Big O time complexity is $O(n \log n)$.
-        - This is much more efficient than $O(n^2)$ algorithms like insertion sort.
-        - Comparison: $n \log n$ vs $n$:
+        - Multiply the number of levels by the work per level: `LOG n * n`.
+        - Overall Big O time complexity is `O(n LOG n)`.
+        - This is much more efficient than `O(n^2)` algorithms like insertion sort.
+        - Comparison: `n LOG n` vs `n`:
             - Decrementing a value (linear) is much slower than repeatedly dividing it by 2.
-            - Example: With a value of 8, decrementing takes 8 steps to reach 1 ($8, 7, 6, 5, 4, 3, 2, 1$), while dividing by 2 takes only 3 steps ($8 \rightarrow 4 \rightarrow 2 \rightarrow 1$).
+            - Example: With a value of 8, decrementing takes 8 steps to reach 1 (`8, 7, 6, 5, 4, 3, 2, 1`), while dividing by 2 takes only 3 steps (`8 -> 4 -> 2 -> 1`).
 
 - Space Complexity
-    - The memory complexity is $O(n)$.
+    - The memory complexity is `O(n)`.
     - This is because extra memory is needed for the temporary arrays used during the merge step, which is roughly the size of the original input array.
 
 - Stability
@@ -1066,8 +1070,8 @@ Think of a **Singly Linked List** like a **one-way train** where each car only k
 
 - **BUCKET SORT OVERVIEW**
     - **Definition and Efficiency**
-        - Bucket sort is a unique sorting algorithm because it can run in **big O of n** ($O(n)$) time, even in the worst-case scenario.
-        - It is considered super efficient compared to other algorithms that run in $O(n \log n)$ time.
+        - Bucket sort is a unique sorting algorithm because it can run in **big O of n** (`O(n)`) time, even in the worst-case scenario.
+        - It is considered super efficient compared to other algorithms that run in `O(n LOG n)` time.
     - **The "Forbidden Technique" and Constraints**
         - Bucket sort is referred to as a "**forbidden technique**" or "forbidden jutsu" because it is very rare that you are actually able to use it.
         - It can only be used if the problem has specific constraints on the values being sorted.
@@ -1076,7 +1080,7 @@ Think of a **Singly Linked List** like a **one-way train** where each car only k
 
 - **RANGE REQUIREMENTS**
     - The range of values is the difference between the minimum and maximum possible values, such as 0 and 2.
-    - While standard 32-bit or 64-bit integers have a range (approximately $-2^{31}$ to $2^{31}$), this range is usually too large for bucket sort to be practical.
+    - While standard 32-bit or 64-bit integers have a range (approximately `-2^{31}` to `2^{31}`), this range is usually too large for bucket sort to be practical.
     - Typical ranges that qualify for bucket sort are relatively small, such as 0 to 100, 1,000, 10,000, or even 100,000.
 
 - **THE BUCKET SORT PROCESS**
@@ -1111,14 +1115,14 @@ Think of a **Singly Linked List** like a **one-way train** where each car only k
 
 - **COMPLEXITY ANALYSIS**
     - **Time Complexity**
-        - The overall time complexity is **big O of n** ($O(n)$).
-        - Although the overwriting phase uses nested loops, it is not $O(n^2)$.
-        - The inner loop only executes a total of $n$ times across the entire process because the `i` pointer only moves from the beginning of the array to the end once.
-        - Total time is $O(n)$ for the counting pass plus $O(n)$ for the overwriting pass, which equals $O(2n)$ and reduces to **$O(n)$** because constants are ignored.
+        - The overall time complexity is **big O of n** (`O(n)`).
+        - Although the overwriting phase uses nested loops, it is not `O(n^2)`.
+        - The inner loop only executes a total of `n` times across the entire process because the `i` pointer only moves from the beginning of the array to the end once.
+        - Total time is `O(n)` for the counting pass plus `O(n)` for the overwriting pass, which equals `O(2n)` and reduces to **`O(n)`** because constants are ignored.
     - **Space Complexity**
         - Bucket sort requires extra memory for the `counts` array.
-        - The size of this array is determined by the **range** of values (from $m$ to $n$).
-        - If the range is a fixed constant size, the extra memory is considered **big O of 1** ($O(1)$) space complexity.
+        - The size of this array is determined by the **range** of values (from `m` to `n`).
+        - If the range is a fixed constant size, the extra memory is considered **big O of 1** (`O(1)`) space complexity.
 
 - **STABILITY AND PRACTICALITY**
     - **Stability**
@@ -1259,9 +1263,9 @@ To think of binary search simply, imagine you are looking for a specific page in
     - **Key Differences from Original Binary Search**
         - You are not necessarily given an array of numbers in sorted order.
         - You are not searching for the index of a specific target value.
-        - Instead, you are given a range of values and must find a correct value $n$ that satisfies specific conditions.
+        - Instead, you are given a range of values and must find a correct value `n` that satisfies specific conditions.
         - This is a more general case of binary search.
-        - While the original case checked if $n$ was equal to a target, this version can involve much more complex requirements or computations.
+        - While the original case checked if `n` was equal to a target, this version can involve much more complex requirements or computations.
 
 - **The General Template**
     - This range-style binary search is very similar to the original algorithm template.
@@ -1276,9 +1280,9 @@ To think of binary search simply, imagine you are looking for a specific page in
         - This function takes a single number as an input and computes whether the guess satisfies the requirements.
         - The function must determine not only if a guess is wrong but also if it was "too big" or "too small".
         - **Logic of the Helper Function (Example)**
-            - If $n$ is greater than the desired value, return `1` (indicates the guess is too big).
-            - If $n$ is less than the desired value, return `-1` (indicates the guess is too small).
-            - If $n$ is exactly the desired value, return `0` (indicates the guess is correct).
+            - If `n` is greater than the desired value, return `1` (indicates the guess is too big).
+            - If `n` is less than the desired value, return `-1` (indicates the guess is too small).
+            - If `n` is exactly the desired value, return `0` (indicates the guess is correct).
             - This function can contain any algorithm or computation required by the specific problem.
 
 - **Step-by-Step Example: Finding the Number 10 in a Range of 1 to 100**
@@ -1286,28 +1290,28 @@ To think of binary search simply, imagine you are looking for a specific page in
         - Range: 1 to 100.
         - Target value (hardcoded in this example): 10.
     - **Iteration 1**
-        - Calculate mid: $(1 + 100) / 2 = 50$.
+        - Calculate mid: `(1 + 100) / 2 = 50`.
         - Call `isCorrect(50)`. Since 50 is greater than 10, it returns `1` (too big).
-        - Update range: Set `high` to `mid - 1` ($50 - 1 = 49$).
+        - Update range: Set `high` to `mid - 1` (`50 - 1 = 49`).
         - Half of the possibilities are now eliminated.
     - **Iteration 2**
-        - Calculate mid: $(1 + 49) / 2 = 25$.
+        - Calculate mid: `(1 + 49) / 2 = 25`.
         - Call `isCorrect(25)`. Since 25 is greater than 10, it returns `1` (too big).
-        - Update range: Set `high` to `mid - 1` ($25 - 1 = 24$).
+        - Update range: Set `high` to `mid - 1` (`25 - 1 = 24`).
     - **Iteration 3**
-        - Calculate mid: $(1 + 24) / 2 = 12$.
+        - Calculate mid: `(1 + 24) / 2 = 12`.
         - Call `isCorrect(12)`. Since 12 is greater than 10, it returns `1` (too big).
-        - Update range: Set `high` to `mid - 1` ($12 - 1 = 11$).
+        - Update range: Set `high` to `mid - 1` (`12 - 1 = 11`).
     - **Iteration 4**
-        - Calculate mid: $(1 + 11) / 2 = 6$.
+        - Calculate mid: `(1 + 11) / 2 = 6`.
         - Call `isCorrect(6)`. Since 6 is less than 10, it returns `-1` (too small).
-        - Update range: Set `low` to `mid + 1` ($6 + 1 = 7$).
+        - Update range: Set `low` to `mid + 1` (`6 + 1 = 7`).
     - **Iteration 5**
-        - Calculate mid: $(7 + 11) / 2 = 9$.
+        - Calculate mid: `(7 + 11) / 2 = 9`.
         - Call `isCorrect(9)`. Since 9 is less than 10, it returns `-1` (too small).
-        - Update range: Set `low` to `mid + 1` ($9 + 1 = 10$).
+        - Update range: Set `low` to `mid + 1` (`9 + 1 = 10`).
     - **Iteration 6**
-        - Calculate mid: $(10 + 11) / 2 = 10.5$, which rounds down to 10.
+        - Calculate mid: `(10 + 11) / 2 = 10.5`, which rounds down to 10.
         - Call `isCorrect(10)`. Since 10 is the target, it returns `0` (correct).
     - **Final Result**
         - The algorithm returns the value 10.
@@ -1315,10 +1319,10 @@ To think of binary search simply, imagine you are looking for a specific page in
 
 - **Algorithm Complexity**
     - **Time Complexity**
-        - The Big O time complexity remains **$O(\log n)$**.
-    - **Definition of $n$**
-        - In original binary search, $n$ represented the size of the array.
-        - In range-style binary search, $n$ represents the size of the range of values (e.g., if the range is 1 to 100, $n$ is 100).
+        - The Big O time complexity remains **`O(LOG n)`**.
+    - **Definition of `n`**
+        - In original binary search, `n` represented the size of the array.
+        - In range-style binary search, `n` represents the size of the range of values (e.g., if the range is 1 to 100, `n` is 100).
 
 - **Conclusion**
     - This method allows the core binary search template to be extended to various types of problems by searching a space of values rather than a physical data structure.
@@ -1438,8 +1442,8 @@ To think of binary search simply, imagine you are looking for a specific page in
 
 - **Searching in a BST**
     - The sorted property allows for efficient searching, achieving the same benefits as a sorted array.
-    - In an unsorted structure, finding a target requires looking at every individual element, resulting in $O(n)$ time complexity.
-    - With a BST, searching can be done in $\log n$ time because the sorted property allows the algorithm to follow the same logic as a binary search.
+    - In an unsorted structure, finding a target requires looking at every individual element, resulting in `O(n)` time complexity.
+    - With a BST, searching can be done in `LOG n` time because the sorted property allows the algorithm to follow the same logic as a binary search.
     - **Step-by-Step Search Example (Target: 5)**
         - 1. Start at the root node (e.g., value 2).
         - 2. Compare the target (5) to the root (2).
@@ -1466,9 +1470,9 @@ To think of binary search simply, imagine you are looking for a specific page in
         - The result (true or false) is then returned back up through the parent recursive calls until the original call is resolved.
 
 - **Time Complexity and Balance**
-    - The time complexity for searching a BST is $\log n$, similar to binary search.
+    - The time complexity for searching a BST is `LOG n`, similar to binary search.
     - This efficiency depends on the assumption that every comparison eliminates roughly half of the remaining possibilities.
-    - However, the search is only $\log n$ if the tree is "roughly balanced".
+    - However, the search is only `LOG n` if the tree is "roughly balanced".
     - **Defining a Balanced Tree:**
         - A tree is balanced if, for every single subtree (including the root), the heights of the left and right subtrees differ by no more than one.
         - For example, if a root has a left subtree of height 1 and a right subtree of height 2, it is balanced because the difference is one.
@@ -1476,17 +1480,17 @@ To think of binary search simply, imagine you are looking for a specific page in
     - **Unbalanced Trees:**
         - A tree might not be balanced; for instance, it could be a long string of nodes resembling a linked list.
         - In an unbalanced tree, you cannot go "halfway" between nodes, and the search may not eliminate half the possibilities with each step.
-        - In the worst case, the time complexity for an unbalanced BST is Big $O(n)$.
+        - In the worst case, the time complexity for an unbalanced BST is Big `O(n)`.
     - **General Complexity:**
-        - Technically, the time complexity of a search is Big $O(h)$, where $h$ is the height of the tree.
-        - For an imbalanced tree, $h$ equals $n$.
-        - For a balanced tree, $h$ equals $\log n$ because the structure is multiplied by two at every level.
+        - Technically, the time complexity of a search is Big `O(h)`, where `h` is the height of the tree.
+        - For an imbalanced tree, `h` equals `n`.
+        - For a balanced tree, `h` equals `LOG n` because the structure is multiplied by two at every level.
 
 - **BST vs. Sorted Arrays**
-    - A common question is why one should use a BST when a sorted array already allows for $\log n$ searches.
+    - A common question is why one should use a BST when a sorted array already allows for `LOG n` searches.
     - The primary downside of sorted arrays is the cost of adding or removing values while maintaining the sorted property.
-    - In an array, removing or adding a value requires shifting all subsequent values, which takes $O(n)$ time.
-    - In a binary search tree, both inserting and deleting values can be achieved in $\log n$ time.
+    - In an array, removing or adding a value requires shifting all subsequent values, which takes `O(n)` time.
+    - In a binary search tree, both inserting and deleting values can be achieved in `LOG n` time.
     - This ability to perform insertions and deletions efficiently while maintaining search speed is the main benefit of using a binary search tree.
 
 - **Summary Analogy**
@@ -1847,15 +1851,15 @@ Think of inserting a new book into a library organized by a specific system. You
 
 - **Time Complexity Analysis**
     - **Confusion regarding Nested Loops**:
-        - Seeing a `for` loop inside a `while` loop often leads people to assume the complexity is $O(n^2)$, but this is incorrect for BFS.
-    - **Actual Complexity**: **$O(n)$**.
+        - Seeing a `for` loop inside a `while` loop often leads people to assume the complexity is `O(n^2)`, but this is incorrect for BFS.
+    - **Actual Complexity**: **`O(n)`**.
     - **Reasoning**:
         - Every node is traversed exactly once.
         - For each node, a constant number of operations are performed:
             1.  Printing the node.
             2.  Appending the node to the queue.
             3.  Popping the node from the queue.
-        - The total operations equal some constant $C$ times $N$ (number of nodes), which reduces to $O(n)$.
+        - The total operations equal some constant `C` times `N` (number of nodes), which reduces to `O(n)`.
         - The complexity is determined by the size of the data structure (number of nodes).
 
 - **Summary**
@@ -1871,7 +1875,7 @@ Think of inserting a new book into a library organized by a specific system. You
         - While it is similar to having an array, the word "set" usually implies that there is a different underlying data structure being used rather than an array.
         - One implementation of a set could be a binary search tree.
             - If you have values 1, 2, 3 in a binary search tree, the structure would look different than an array.
-        - The advantage of implementing a set with a binary search tree instead of an array is that you can search for values, insert values, and remove values in $O(\log n)$ time.
+        - The advantage of implementing a set with a binary search tree instead of an array is that you can search for values, insert values, and remove values in `O(LOG n)` time.
     - **Maps**
         - **Concept and Example**
             - To understand why maps are important, consider the example of a phone book sorted in alphabetical order from A to Z based on the name of the person,.
@@ -2068,9 +2072,9 @@ Think of inserting a new book into a library organized by a specific system. You
         - Add values while searching.
         - Pop values (backtrack) when a path turns out to be wrong.
     - **Time Complexity**
-        - **Complexity**: $O(N)$ (Big O of N).
+        - **Complexity**: `O(N)` (Big O of N).
         - **Reason**: In the worst-case scenario, the algorithm must traverse the entire tree (visit every node).
-        - **Definition of N**: $N$ is the size of the input tree.
+        - **Definition of N**: `N` is the size of the input tree.
         - This is standard for backtracking as it is essentially a brute force method running over all possibilities.
 
 ## Heap Priority Queue
@@ -2314,15 +2318,15 @@ Think of inserting a new book into a library organized by a specific system. You
       - In a heap, you can get the minimum or maximum element (depending on implementation) in **constant time**.
       - In a Binary Search Tree (BST), this takes **log n time** because you must traverse all the way to the left of the tree.
     - **Building the Structure:**
-      - **BST Construction:** Requires inserting a node every single time. Time complexity is **n log n** (n insertions $\times$ log n time per insertion).
+      - **BST Construction:** Requires inserting a node every single time. Time complexity is **n log n** (n insertions `*` log n time per insertion).
       - **Heap Construction:**
         - Can be built by pushing elements one by one (taking n log n time).
-        - **Heapify (Build Heap):** A special algorithm that builds a heap in **linear time ($O(N)$)**,.
+        - **Heapify (Build Heap):** A special algorithm that builds a heap in **linear time (`O(N)`)**,.
 
 - **The Heapify Algorithm (Build Heap)**
   - **Concept**
     - Takes a set/list of values in no particular order (e.g., an array) and turns them into a heap satisfying heap properties.
-    - Time Complexity: **$O(N)$**.
+    - Time Complexity: **`O(N)`**.
   - **Initial Structure Property Adjustment**
     - Input arrays often do not satisfy the structure property initially (e.g., having a real value at the 0th index).
     - **Step:** Move the element at the 0th index to the last position.
@@ -2388,7 +2392,7 @@ Think of inserting a new book into a library organized by a specific system. You
     - **Helper Function:** In a class implementation, "percolate down" logic is usually a helper function because it is also used in `heap_pop`.
 
 - **Time Complexity Analysis: Why O(N)?**
-  - **Misconception:** At first glance, it looks like $O(N \log N)$ because we visit every node and percolate down (log n operation).
+  - **Misconception:** At first glance, it looks like `O(N LOG N)` because we visit every node and percolate down (log n operation).
   - **Intuition:**
     - **Percolating Down vs. Up:**
       - Percolating **up**: Leaf nodes (the majority) must travel the full height of the tree.
@@ -2398,22 +2402,22 @@ Think of inserting a new book into a library organized by a specific system. You
         - The level above leaves travels distance 1.
       - Shifting down is more efficient because the majority of nodes (at the bottom) do little to no work.
   - **Mathematical Explanation:**
-    - In a complete binary tree, roughly $N/2$ nodes are at the last level (height 0). Work: $0 \times (N/2)$.
-    - Roughly $N/4$ nodes are at the next level. Work: $1 \times (N/4)$.
+    - In a complete binary tree, roughly `N/2` nodes are at the last level (height 0). Work: `0 * (N/2)`.
+    - Roughly `N/4` nodes are at the next level. Work: `1 * (N/4)`.
     - Summation series: The sum of these terms converges to roughly **N**.
-  - **Conclusion:** The Big O complexity is **$O(N)$** (linear time). Note: You typically do not need to prove this, just know it.
+  - **Conclusion:** The Big O complexity is **`O(N)`** (linear time). Note: You typically do not need to prove this, just know it.
 
 - **Heap Sort and Searching**
   - **Heap Sort:**
-    - Building a heap takes **$O(N)$**.
+    - Building a heap takes **`O(N)`**.
     - To output a sorted array, you must **pop** every single element.
-    - Popping takes **$\log N$**. Doing this $N$ times takes **$N \log N$**.
-    - Total Time: **$N \log N$** (similar to Merge Sort).
+    - Popping takes **`LOG N`**. Doing this `N` times takes **`N LOG N`**.
+    - Total Time: **`N LOG N`** (similar to Merge Sort).
   - **Searching in a Heap:**
     - **Disadvantage:** Heaps are **not good for searching** specific values.
     - **Reason:** Unlike BSTs, there is no strict left/right logic (e.g., a value of 30 could be in either the left or right subtree).
-    - **Complexity:** Searching requires checking every node: **$O(N)$**.
-    - BST Search Complexity: **$O(\log N)$**.
+    - **Complexity:** Searching requires checking every node: **`O(N)`**.
+    - BST Search Complexity: **`O(LOG N)`**.
     - **Purpose:** Heaps are intended for priority access (Min/Max), not random searching.
 
 - **Usage in Coding Interviews**
@@ -2422,9 +2426,9 @@ Think of inserting a new book into a library organized by a specific system. You
     - BST problems usually involve implementing BST logic.
     - Heap problems usually involve using the heap to find min/max values efficiently.
   - **Key Concepts to Know:**
-    - **Heapify:** Runs in linear time ($O(N)$).
-    - **Push/Pop:** Runs in log time ($O(\log N)$).
-    - **Get Min/Max:** Runs in constant time ($O(1)$).
+    - **Heapify:** Runs in linear time (`O(N)`).
+    - **Push/Pop:** Runs in log time (`O(LOG N)`).
+    - **Get Min/Max:** Runs in constant time (`O(1)`).
 
 ## Hashing
 
@@ -2450,27 +2454,27 @@ Think of inserting a new book into a library organized by a specific system. You
 
 - **Comparison: Tree Maps vs. Hashmaps**
     - **Tree Maps**
-        - **Insertion:** Runs in $O(\log n)$ time.
-            - This is better than maintaining a sorted array, which has a worst-case insertion of $O(n)$.
-        - **Removal:** Runs in $O(\log n)$ time.
-        - **Searching:** Runs in $O(\log n)$ time using binary search.
+        - **Insertion:** Runs in `O(LOG n)` time.
+            - This is better than maintaining a sorted array, which has a worst-case insertion of `O(n)`.
+        - **Removal:** Runs in `O(LOG n)` time.
+        - **Searching:** Runs in `O(LOG n)` time using binary search.
         - **Ordering:** Tree maps are ordered, allowing iteration in sorted order.
-            - This in-order traversal takes $O(n)$ time.
+            - This in-order traversal takes `O(n)` time.
     - **Hashmaps**
-        - **Insertion:** Runs in $O(1)$ constant time.
-        - **Removal:** Runs in $O(1)$ constant time.
-        - **Searching:** Runs in $O(1)$ constant time.
+        - **Insertion:** Runs in `O(1)` constant time.
+        - **Removal:** Runs in `O(1)` constant time.
+        - **Searching:** Runs in `O(1)` constant time.
         - **Performance:** Hashmaps generally outperform tree maps significantly regarding these operations.
 
 - **Time Complexity Details for Hashmaps**
     - **Average vs. Worst Case**
-        - The $O(1)$ complexity is actually the **average-case** time complexity.
-        - In the worst case, inserting, removing, and searching can be $O(n)$ depending on the implementation.
-        - However, in coding interviews and jobs, people assume these operations are constant time $O(1)$.
+        - The `O(1)` complexity is actually the **average-case** time complexity.
+        - In the worst case, inserting, removing, and searching can be `O(n)` depending on the implementation.
+        - However, in coding interviews and jobs, people assume these operations are constant time `O(1)`.
     - **Trade-offs and Downsides**
         - Hashmaps do not maintain any ordering.
-        - You cannot iterate through keys in sorted order in $O(n)$ time.
-        - To iterate in order, you must take all keys and sort them (e.g., merge sort), which typically takes $N \log N$ time.
+        - You cannot iterate through keys in sorted order in `O(n)` time.
+        - To iterate in order, you must take all keys and sort them (e.g., merge sort), which typically takes `N LOG N` time.
         - Despite this downside, the positive aspects (fast insert/search) usually outweigh the negatives, especially when order is not required (like a phone book).
 
 - **Use Case Example: Counting Name Frequencies**
@@ -2483,7 +2487,7 @@ Think of inserting a new book into a library organized by a specific system. You
         - **1. Processing "Alice"**
             - Search checks if "Alice" exists (not found).
             - Insert "Alice" into the map with a value of 1.
-            - This operation is $O(1)$, whereas a tree map would be $O(\log n)$.
+            - This operation is `O(1)`, whereas a tree map would be `O(LOG n)`.
         - **2. Processing "Brad"**
             - Search checks for "Brad" (not found).
             - Add "Brad" as a key with a value of 1.
@@ -2504,12 +2508,12 @@ Think of inserting a new book into a library organized by a specific system. You
 
 - **Algorithm Efficiency Analysis**
     - **Time Complexity**
-        - The algorithm runs in **$O(n)$** linear time.
-        - For each position in the input array, we performed a few $O(1)$ operations.
-        - Comparison: A tree map would take $\log n$ for each insertion, resulting in a total time of $N \log N$.
+        - The algorithm runs in **`O(n)`** linear time.
+        - For each position in the input array, we performed a few `O(1)` operations.
+        - Comparison: A tree map would take `LOG n` for each insertion, resulting in a total time of `N LOG N`.
     - **Space Complexity**
-        - The space complexity is **$O(n)$**.
-        - In the worst case, every single name is unique, making the map size proportional to $n$.
+        - The space complexity is **`O(n)`**.
+        - In the worst case, every single name is unique, making the map size proportional to `n`.
         - This space usage is roughly the same as a tree map.
 
 - **Implementation Code Logic**
@@ -2700,13 +2704,13 @@ Think of inserting a new book into a library organized by a specific system. You
         - A cycle occurs when you can follow edges from a node and eventually return to that same node (e.g., A to B to C and back to A).
         - In a generic graph, there are no restrictions on the number of nodes or the edges connecting them.
     - Mathematical Constraints on Edges
-        - Technically, the number of edges (E) is less than or equal to the number of vertices (V) squared ($E \le V^2$).
+        - Technically, the number of edges (E) is less than or equal to the number of vertices (V) squared (`E \le V^2`).
         - V refers to the number of vertices (nodes).
-        - Example: If there are 3 nodes, $3^2 = 9$, so the number of edges is less than or equal to 9.
+        - Example: If there are 3 nodes, `3^2 = 9`, so the number of edges is less than or equal to 9.
     - Logic Behind the Formula
         - From every single vertex (singular of vertices), there can be a pointer going to every other vertex.
         - A node can also have a pointer going into itself (a self-loop).
-        - Since every node can have V edges (where V is the total number of nodes), the maximum is $V \times V$ or $V^2$.
+        - Since every node can have V edges (where V is the total number of nodes), the maximum is `V * V` or `V^2`.
         - Duplicate edges are typically not considered in graphs.
 
 - Directed vs. Undirected Graphs
@@ -2757,7 +2761,7 @@ Think of inserting a new book into a library organized by a specific system. You
 
     - Representation 2: Adjacency Matrix
         - Basic Structure
-            - This is typically a square matrix with dimensions $V \times V$ (where V is the number of vertices).
+            - This is typically a square matrix with dimensions `V * V` (where V is the number of vertices).
             - The dimensions represent the nodes themselves (e.g., Row 0 represents Vertex 0, Column 0 represents Vertex 0).
         - Storing Edges
             - The values inside the matrix represent the existence of edges.
@@ -2770,8 +2774,8 @@ Think of inserting a new book into a library organized by a specific system. You
             - To check the reverse direction (0 to 1), you must check `matrix`.
             - Self Loops: An edge from a node to itself is represented by a 1 at the index `[i][i]` (e.g., `matrix`).
         - Space Complexity
-            - Space complexity is $O(V^2)$ because it requires an entire matrix regardless of the number of actual edges.
-            - Even if a graph has very few edges (e.g., 4 edges for 4 nodes), the matrix still takes up $V \times V$ space.
+            - Space complexity is `O(V^2)` because it requires an entire matrix regardless of the number of actual edges.
+            - Even if a graph has very few edges (e.g., 4 edges for 4 nodes), the matrix still takes up `V * V` space.
             - This inefficiency makes it rare to use adjacency matrices compared to other methods.
 
     - Representation 3: Adjacency List
@@ -2900,8 +2904,8 @@ Think of inserting a new book into a library organized by a specific system. You
         - This is not efficient, but expected for brute force DFS backtracking.
     - **Space Complexity: O(N * M)**
         - The memory complexity is determined by the recursive call stack.
-        - In the worst case, the recursion depth can equal the size of the matrix ($N \times M$).
-        - Additionally, the `visit` hash set (or grid) stores up to $N \times M$ elements.
+        - In the worst case, the recursion depth can equal the size of the matrix (`N * M`).
+        - Additionally, the `visit` hash set (or grid) stores up to `N * M` elements.
 
 ### Matrix BFS
 
@@ -2919,12 +2923,12 @@ Think of inserting a new book into a library organized by a specific system. You
         - DFS could be used as a brute force approach to check every possible path and find the shortest one, but it is much less efficient.
 
     - **Time and Space Complexity**
-        - **BFS Time Complexity**: $O(N \times M)$.
-            - This represents the size of the grid (Rows $\times$ Columns).
+        - **BFS Time Complexity**: `O(N * M)`.
+            - This represents the size of the grid (Rows `*` Columns).
             - In the worst case, the algorithm visits the entire grid.
-        - **DFS Time Complexity**: $4^{(N \times M)}$.
+        - **DFS Time Complexity**: `4^{(N * M)}`.
             - This is significantly less efficient.
-        - **Space Complexity**: $O(N \times M)$.
+        - **Space Complexity**: `O(N * M)`.
             - This is the maximum size that the visit hash set or the queue could reach.
 
 - **Algorithm Setup and Data Structures**
@@ -2996,7 +3000,7 @@ Think of inserting a new book into a library organized by a specific system. You
         - **Crucial Logic**:
             - When adding a neighbor to the queue, immediately add it to the visit hash set.
             - This prevents adding the same position to the queue twice if it is reached from two different parent nodes.
-            - This ensures the algorithm runs in $N \times M$ complexity.
+            - This ensures the algorithm runs in `N * M` complexity.
         - Continue expanding layer by layer (Length 3, 4, 5, etc.),.
 
     - **Reaching the Destination**
@@ -3124,10 +3128,10 @@ Think of inserting a new book into a library organized by a specific system. You
         - At the second B, the algorithm detects B is already in `visit`. Returns 0 immediately to prevent infinite loops.
     - Time Complexity Analysis (DFS)
         - This is a brute force backtracking approach.
-        - **Path Length**: In the worst case, the path length is equal to the number of vertices ($V$), acting as the height of the decision tree.
-        - **Choices**: Let $N$ be the average number of edges per node.
-        - **Complexity**: $O(N^V)$ (Exponential).
-        - As the size of the graph ($V$) grows, the time grows extremely quickly, making this inefficient.
+        - **Path Length**: In the worst case, the path length is equal to the number of vertices (`V`), acting as the height of the decision tree.
+        - **Choices**: Let `N` be the average number of edges per node.
+        - **Complexity**: `O(N^V)` (Exponential).
+        - As the size of the graph (`V`) grows, the time grows extremely quickly, making this inefficient.
 
 - Breadth First Search (BFS) on Adjacency Lists
     - Overview
@@ -3165,14 +3169,14 @@ Think of inserting a new book into a library organized by a specific system. You
             - Pop E. **Is Target**. Return `length` (which is 2).
         - Result: Shortest path is length 2.
     - Time Complexity Analysis (BFS)
-        - Unlike the matrix complexity ($4 \cdot N \cdot M$), we analyze based on Vertices ($V$) and Edges ($E$).
-        - **Graph Size**: $V$ (number of vertices).
-        - **Edges**: While edges could theoretically be $V^2$, we use $E$ to represent actual edges.
+        - Unlike the matrix complexity (`4 * N * M`), we analyze based on Vertices (`V`) and Edges (`E`).
+        - **Graph Size**: `V` (number of vertices).
+        - **Edges**: While edges could theoretically be `V^2`, we use `E` to represent actual edges.
         - **Worst Case**: We visit every vertex (add to set/queue) and travel along every edge.
-        - **Formula**: $O(V + E)$.
+        - **Formula**: `O(V + E)`.
     - Space Complexity Analysis (BFS)
         - In the worst case, we add every node to the `visit` hash set and the `queue`.
-        - **Formula**: $O(V)$.
+        - **Formula**: `O(V)`.
 
 - Limitations and Advanced Topics
     - Weighted Graphs
@@ -3293,23 +3297,23 @@ An analogy for Dynamic Programming is building a staircase where you can only re
     - The grid itself is not a parameter for the function; instead, the dimensions of the grid are what matter.
     - For a square grid of 4x4, the function is called with the starting coordinates of (0, 0) and dimensions 4x4.
     - **Base Cases for Recursion:**
-      - **Out of Bounds:** If the row ($r$) equals the total number of rows (e.g., 4) or the column ($c$) equals the total number of columns, the path is invalid. This returns a value of **0**.
-      - **Goal Reached:** If the current row ($R$) is equal to `rows - 1` and the current column is equal to `columns - 1`, the path is valid. This returns a value of **1**.
+      - **Out of Bounds:** If the row (`r`) equals the total number of rows (e.g., 4) or the column (`c`) equals the total number of columns, the path is invalid. This returns a value of **0**.
+      - **Goal Reached:** If the current row (`R`) is equal to `rows - 1` and the current column is equal to `columns - 1`, the path is valid. This returns a value of **1**.
     - **Decision Tree and Complexity:**
-      - At every position, there are two choices: move down ($row + 1$) or move right ($column + 1$).
+      - At every position, there are two choices: move down (`row + 1`) or move right (`column + 1`).
       - This creates a decision tree with **two branches** at every node.
-      - The height of the decision tree is approximately the number of rows plus the number of columns ($n + m$).
-      - The time complexity for this brute force method is **$2^{(n + m)}$**.
+      - The height of the decision tree is approximately the number of rows plus the number of columns (`n + m`).
+      - The time complexity for this brute force method is **`2^{(n + m)}`**.
   - **Top-Down Dynamic Programming (Memoization)**
     - Efficiency can be improved by noticing **repeated work**; many sub-problems are solved multiple times.
     - For example, to solve the problem for one cell, you must solve the two cells below and to the right of it. Those cells in turn solve their neighbours, leading to exponential repetition.
-    - **Caching** (memoization) reduces the time complexity to the **size of the grid** ($n \times m$).
+    - **Caching** (memoization) reduces the time complexity to the **size of the grid** (`n * m`).
     - **Cache Implementation:**
       - The cache is a two-dimensional array of the same dimensions as the grid, or a hashmap.
       - In Python, a 4x4 grid of zeros can be created by taking an array with one zero ``, multiplying it by four to get ``, and then creating an outer array with four copies of that inner array.
     - **Execution Logic:**
       - **Crucial Step:** You must check if a move is **out of bounds** before checking if it is in the cache to avoid indexing errors or exceptions.
-      - If the position is not in the cache and not a base case, the function recursively calls itself for $r + 1$ and $c + 1$.
+      - If the position is not in the cache and not a base case, the function recursively calls itself for `r + 1` and `c + 1`.
       - It uses a single cache object passed by reference throughout all recursive calls.
       - The result for a cell is the sum of the results from the move down and the move to the right.
       - In a 4x4 grid, the final result calculated at the starting point (0, 0) is **20 unique paths**.
@@ -3326,14 +3330,14 @@ An analogy for Dynamic Programming is building a staircase where you can only re
     - To calculate values for a current row, you only need the values from the **row immediately below it** (the previous row).
     - At any point, only **two rows** are needed in memory: the `current_row` and the `previous_row`.
     - **Complexity:**
-      - **Time Complexity:** $O(n \times m)$ because you still iterate through the entire grid.
-      - **Space Complexity:** $O(m)$, where $m$ is the number of columns, because you only store two rows (constants are ignored in Big O).
+      - **Time Complexity:** `O(n * m)` because you still iterate through the entire grid.
+      - **Space Complexity:** `O(m)`, where `m` is the number of columns, because you only store two rows (constants are ignored in Big O).
     - **Step-by-Step Calculation (4x4 Grid Example):**
       - 1. Initialize a `previous_row` of all zeros.
       - 2. Create a `current_row` where the last position is set to **1**.
       - 3. Iterate through the grid from the last row upwards and from the second-to-last column to the left.
       - 4. In the bottom row, calculations result in all **1s**.
-      - 5. For the next row up: the last cell is 1; the next is $1 (below) + 1 (right) = 2$; then $1+2=3$; then $1+3=4$.
+      - 5. For the next row up: the last cell is 1; the next is `1 (below) + 1 (right) = 2`; then `1+2=3`; then `1+3=4`.
       - 6. For the row above that: values become **1, 3, 6, 10**.
       - 7. For the top row: values become **1, 4, 10, 20**.
       - 8. The `current_row` is assigned to `previous_row` after each row is completed.
@@ -3398,17 +3402,17 @@ To understand this, imagine building a brick wall from the bottom up; you only n
         - This is the standard system where the maximum value of a digit is nine.
         - When you reach ten, you add a new digit.
         - Places are powers of 10:
-            - Ones place ($10^0$).
-            - Tens place ($10^1$).
-            - Hundreds place ($10^2$).
+            - Ones place (`10^0`).
+            - Tens place (`10^1`).
+            - Hundreds place (`10^2`).
     - **Base 2 (Binary)**
         - When you reach the value of two, you add a new digit.
         - For example, the number 2 is represented as `10` in binary.
         - Places are powers of 2:
-            - Ones place ($2^0$).
-            - Twos place ($2^1$).
-            - Fours place ($2^2$).
-            - Eights place ($2^3$).
+            - Ones place (`2^0`).
+            - Twos place (`2^1`).
+            - Fours place (`2^2`).
+            - Eights place (`2^3`).
     - **Integer Storage**
         - Programming languages usually use 32-bit integers.
         - A small number like 23 would be represented with its binary bits preceded by many leading zeros to fill the 32-bit requirement.
@@ -3430,19 +3434,19 @@ To understand this, imagine building a brick wall from the bottom up; you only n
     - **Example:** The integer 23 (base 10) is `10111` in binary.
     - **Steps:**
         1. Declare a `count` variable starting at zero.
-        2. Run a loop while the integer $n$ is greater than zero.
+        2. Run a loop while the integer `n` is greater than zero.
         3. Check the "ones place" of the current number by using bitwise AND with 1 (`n & 1`).
             - The value 1 is used because it has all zeros except for the last bit.
             - If the result of `n & 1` is 1, it means there is a 1 in the ones place.
         4. If `n & 1` is true, increment the `count`.
-        5. Shift the integer $n$ to the right by one (`n >> 1`) to discard the bit that was just checked.
-        6. Repeat until $n$ becomes zero.
+        5. Shift the integer `n` to the right by one (`n >> 1`) to discard the bit that was just checked.
+        6. Repeat until `n` becomes zero.
     - **Tracing the example (Integer 23 / `10111`):**
-        - `10111 & 1` is 1 $\rightarrow$ Count becomes 1. Shift right to get `1011`.
-        - `1011 & 1` is 1 $\rightarrow$ Count becomes 2. Shift right to get `101`.
-        - `101 & 1` is 1 $\rightarrow$ Count becomes 3. Shift right to get `10`.
-        - `10 & 1` is 0 $\rightarrow$ Count stays 3. Shift right to get `1`.
-        - `1 & 1` is 1 $\rightarrow$ Count becomes 4. Shift right to get `0`.
+        - `10111 & 1` is 1 `->` Count becomes 1. Shift right to get `1011`.
+        - `1011 & 1` is 1 `->` Count becomes 2. Shift right to get `101`.
+        - `101 & 1` is 1 `->` Count becomes 3. Shift right to get `10`.
+        - `10 & 1` is 0 `->` Count stays 3. Shift right to get `1`.
+        - `1 & 1` is 1 `->` Count becomes 4. Shift right to get `0`.
         - Loop ends; result is 4.
 
 - **FINAL NOTES ON BIT MANIPULATION**
@@ -3451,20 +3455,24 @@ To understand this, imagine building a brick wall from the bottom up; you only n
     - However, mastering these basics is useful for general programming tasks outside of interviews.
 
 **Analogy for Understanding Bit Shifting:**
-Think of bit shifting like a queue of people sitting in a row of chairs. **Left shifting** is like everyone moving one chair to the left; the person at the far left falls off the end and disappears, while a new person (a zero) sits in the empty chair on the right. **Right shifting** is the same process in reverse: everyone moves right, the person on the far right disappears, and a new zero sits in the chair on the far left. Just as adding a zero to the end of a decimal number ($15 \rightarrow 150$) multiplies it by 10, adding a zero to the end of a binary number multiplies it by 2.
+Think of bit shifting like a queue of people sitting in a row of chairs. **Left shifting** is like everyone moving one chair to the left; the person at the far left falls off the end and disappears, while a new person (a zero) sits in the empty chair on the right. **Right shifting** is the same process in reverse: everyone moves right, the person on the far right disappears, and a new zero sits in the chair on the far left. Just as adding a zero to the end of a decimal number (`15 -> 150`) multiplies it by 10, adding a zero to the end of a binary number multiplies it by 2.
 
-## Prompt for Notes Formatting
+## Prompts
 
+### Notes Formatting
 ```
 Create super depth notes in Markdown (.md) format with 100% information preserved, no loss. Use simple grammar and keep everything clear, direct, and well-structured. using headings, subheadings,paragraphs, statements and code blocks when needed. Include every detail, definition, example, and step exactly from the source. transform the given content into clean, readable .md format.
 and no #, just nested - lines plaintext
 ```
 
+### LaTeX math symbols/commands -> Markdown-friendly alternatives
 ```
-\to => => 
+\to => ->
 \times => *
 $ => ** or `
 \log => LOG
+\rightarrow => -> 
+\cdot => *
 ```
 
 ---
