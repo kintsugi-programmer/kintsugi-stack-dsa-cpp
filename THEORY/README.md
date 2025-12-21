@@ -6,6 +6,8 @@
 
 > Disclaimer: The content presented here is a curated blend of my personal learning journey, experiences, open-source documentation, and invaluable knowledge gained from diverse sources. I do not claim sole ownership over all the material; this is a community-driven effort to learn, share, and grow together.
 
+---
+
 ## Table of Contents
 - [kintsugi-stack-dsa-cpp: THEORY](#kintsugi-stack-dsa-cpp-theory)
   - [Table of Contents](#table-of-contents)
@@ -83,12 +85,21 @@
     - [Prim's Algorithm](#prims-algorithm)
     - [Kruskal's Algorithm](#kruskals-algorithm)
     - [Topological Sort](#topological-sort)
+  - [Dynamic Programming](#dynamic-programming-1)
+    - [0-1 Knapsack](#0-1-knapsack)
+    - [Unbounded Knapsack](#unbounded-knapsack)
+    - [LCS](#lcs)
+    - [Palindromes](#palindromes)
 - [Others](#others)
   - [Prompts](#prompts)
     - [Notes Formatting](#notes-formatting)
   - [LaTeX math symbols/commands -\> Markdown-friendly alternatives](#latex-math-symbolscommands---markdown-friendly-alternatives)
 
+---
+
 ## About
+
+---
 
 ### Overview
 - **Course Overview: Fundamental Data Structures and Algorithms**
@@ -120,6 +131,8 @@
 # Data Structure and Algorithms
 
 ## Arrays
+
+---
 
 ### RAM
 
@@ -187,6 +200,8 @@
   - This includes understanding how arrays are used in real-world scenarios, as well as their specific **properties and tradeoffs**.
 
 Storing data in RAM is like a **long row of lockers** in a school hallway; each locker has a unique number (the address), and depending on what you are storing, you might occupy just one locker (a character) or a block of four lockers (an integer), but you always make sure your items are in a row without any empty lockers between them.
+
+---
 
 ### Static Arrays
 
@@ -300,6 +315,8 @@ Storing data in RAM is like a **long row of lockers** in a school hallway; each 
     }
     ```
 
+---
+
 ### Dynamic Arrays
 - DYNAMIC ARRAYS OVERVIEW
   - **Dynamic arrays** are much more common and useful than **static arrays**.
@@ -382,6 +399,8 @@ Storing data in RAM is like a **long row of lockers** in a school hallway; each 
 - ANALOGY
   - Imagine a dynamic array as a growing dinner party table. You start with a small table (the original capacity). When more guests arrive than there are chairs, you don't just squeeze them in; you move the entire party to a new room with a table twice as big. While the move itself (copying elements) takes a lot of effort, it happens so rarely compared to guests just sitting down (pushing elements) that on average, seating a guest is still a very quick process.
 
+---
+
 ### Stacks
 
 - **Stacks Overview**
@@ -441,7 +460,11 @@ Storing data in RAM is like a **long row of lockers** in a school hallway; each 
 **Analogy for Understanding:**
 Think of a **stack of cafeteria trays**. When you add a new tray, you place it on the very top (Push). When someone needs a tray, they take the one that was most recently placed on top (Pop). The tray at the very bottom of the stack—the first one placed there—will be the very last one to be used.
 
+---
+
 ## Linked Lists
+
+---
 
 ### Singly Linked Lists
 - **Singly Linked Lists Overview**
@@ -530,6 +553,8 @@ Think of a **stack of cafeteria trays**. When you add a new tray, you place it o
 **Analogy for Understanding**
 A singly linked list is like a **scavenger hunt**. Each location (node) contains a prize (value) and a slip of paper (pointer) telling you exactly where to find the next location. You can't jump straight to the third location unless you go to the first and second locations to get the clues. Even if the locations are scattered randomly across a city (memory), the clues keep them in a specific logical order.
 
+---
+
 ### Doubly Linked Lists
 
 - **DOUBLY LINKED LISTS**
@@ -614,6 +639,8 @@ A singly linked list is like a **scavenger hunt**. Each location (node) contains
 **Analogy to Solidify Understanding**
 Think of a **Singly Linked List** like a **one-way train** where each car only knows the car in front of it; if you want to find the person second-to-last, you have to walk from the engine all the way down. A **Doubly Linked List** is like a **train with walkie-talkies between every car**; every car knows who is in front *and* who is behind. If you are at the very last car (the tail) and need to unhook it, you can just talk to the car right behind you to tell it that it's now the new end of the train.
 
+---
+
 ### Queues
 
 - Queues
@@ -667,7 +694,11 @@ Think of a **Singly Linked List** like a **one-way train** where each car only k
 
 **Analogy:** Think of a queue like a line at a grocery store checkout. The first person to join the line is the first person served and the first to leave (FIFO). If the store had to shift every single person forward physically every time the person at the front left (like an array implementation), it would be very inefficient. Instead, the cashier just looks at whoever is next in line (like moving a head pointer in a linked list), which is a quick and constant process regardless of how long the line is.
 
+---
+
 ## Recursion
+
+---
 
 ### Factorial
 
@@ -757,6 +788,8 @@ Think of a **Singly Linked List** like a **one-way train** where each car only k
         ```
     - This approach avoids the O(n) memory overhead of the recursive call stack.
 
+---
+
 ### Fibonacci
 
 - **TWO-BRANCH RECURSION: THE FIBONACCI EXAMPLE**
@@ -828,7 +861,11 @@ Think of a **Singly Linked List** like a **one-way train** where each car only k
             - Multiplying by a constant (like `2 * 2^n`) also results in the same Big O complexity.
             - **Final Complexity**: The recursive solution is bounded by `O(2^n)`.
 
+---
+
 ## Sorting
+
+---
 
 ### Insertion Sort
 
@@ -907,6 +944,8 @@ Think of a **Singly Linked List** like a **one-way train** where each car only k
     - **Best-Case Runtime:** O(N).
     - **Worst-Case Runtime:** O(N^2).
     - **Tradeoff:** While simple and stable, other sorting algorithms exist with better worst-case time complexities than N squared.
+
+---
 
 ### Merge Sort
 
@@ -1002,6 +1041,8 @@ Think of a **Singly Linked List** like a **one-way train** where each car only k
         - Logic: An element in the left array appeared before the element in the right array in the original order.
         - Code condition: `if left_element <= right_element`, then insert the left element.
 
+---
+
 ### Quick Sort
 
 - **Introduction to Quicksort**
@@ -1092,6 +1133,8 @@ Think of a **Singly Linked List** like a **one-way train** where each car only k
 - **Analogy for Understanding**
     - Imagine a teacher organizing students by height. The teacher picks one student (the pivot) and tells everyone shorter to stand on the left and everyone taller to stand on the right. The pivot student then stands exactly between those two groups. The teacher then repeats this for the group on the left and the group on the right until every single student is in the correct order.
 
+---
+
 ### Bucket Sort
 
 - **BUCKET SORT OVERVIEW**
@@ -1179,7 +1222,11 @@ Think of a **Singly Linked List** like a **one-way train** where each car only k
 - **ANALOGY**
     - Bucket sort is like sorting a collection of colored tokens (red, blue, yellow) by simply counting how many of each you have. Instead of rearranging the actual tokens, you throw them away and lay out new ones in the right order based on your count: all red first, then all blue, then all yellow. You end up with a sorted line, but you don't care which specific red token was which.
 
+---
+
 ## Binary Search
+
+---
 
 ### Search Array
 
@@ -1277,9 +1324,9 @@ Think of a **Singly Linked List** like a **one-way train** where each car only k
     - No additional data structures or variable-length arrays are created.
     - Memory complexity: Big O of 1 (constant space).
 
-***
-
 To think of binary search simply, imagine you are looking for a specific page in a thick textbook; instead of flipping every single page from the front (Linear Search), you open it exactly to the middle. If the page you need is higher, you ignore the entire first half of the book and repeat the process with the remaining half until you land on the correct page.
+
+---
 
 ### Search Range
 
@@ -1353,7 +1400,11 @@ To think of binary search simply, imagine you are looking for a specific page in
 - **Conclusion**
     - This method allows the core binary search template to be extended to various types of problems by searching a space of values rather than a physical data structure.
 
+---
+
 ## Tree
+
+---
 
 ### Binary Tree
 
@@ -1443,6 +1494,8 @@ To think of binary search simply, imagine you are looking for a specific page in
             ```
             - To connect nodes: The root node's left pointer is assigned to the left child node, and its right pointer is assigned to the right child node.
 
+---
+
 ### Binary Search Trees (BST)
 
 - **Core Concept and Sorted Property**
@@ -1521,6 +1574,8 @@ To think of binary search simply, imagine you are looking for a specific page in
 
 - **Summary Analogy**
     - Searching a balanced BST is like using a directory where every choice you make immediately throws away half of the remaining pages you don't need to look at. However, if the tree is unbalanced, it is like a directory where every page just tells you to look at the very next page, forcing you to read the whole book one page at many times until you find what you need.
+
+---
 
 ### BST Insert and Remove
 
@@ -1642,10 +1697,10 @@ To think of binary search simply, imagine you are looking for a specific page in
       ```
      
 
-***
-
 **Analogy for BST Insertion:**
 Think of inserting a new book into a library organized by a specific system. You start at the main entrance (the root) and look at a sign. If your book's category is "higher" than the sign, you go to the right wing; if "lower," you go to the left. You keep following signs at every junction until you find an empty spot on a shelf (a null leaf position) where the book fits perfectly while keeping the whole library in order.
+
+---
 
 ### DFS
 
@@ -1770,6 +1825,8 @@ Think of inserting a new book into a library organized by a specific system. You
         - Example: Visit the root (layer 1), then all direct children (layer 2), then all grandchildren (layer 3).
         - It does not reach the bottom immediately like DFS.
 
+---
+
 ### BFS
 
 - **Introduction to Breadth-First Search (BFS)**
@@ -1892,6 +1949,8 @@ Think of inserting a new book into a library organized by a specific system. You
     - BFS is likely the second most common tree algorithm after DFS (or potentially the most common).
     - It is a fundamental algorithm that will appear again in future contexts.
 
+---
+
 ### BST Sets and Maps
 
 - **Sets and Maps Overview**
@@ -1978,7 +2037,11 @@ Think of inserting a new book into a library organized by a specific system. You
         - You must understand operations like insert, remove, search, iterate, and in-order traversal.
         - You must also understand the associated time complexities of those operations.
 
+---
+
 ## Backtracking
+
+---
 
 ### Tree Maze
 
@@ -2103,7 +2166,11 @@ Think of inserting a new book into a library organized by a specific system. You
         - **Definition of N**: `N` is the size of the input tree.
         - This is standard for backtracking as it is essentially a brute force method running over all possibilities.
 
+---
+
 ## Heap Priority Queue
+
+---
 
 ### Heap Properties
 
@@ -2252,6 +2319,8 @@ Think of inserting a new book into a library organized by a specific system. You
     - These properties are critical; without them, the data structure is no longer a heap.
     - Future topics include inserting and removing values while maintaining these specific properties.
 
+---
+
 ### Push and Pop
 
 - **Heap Class Initialization**
@@ -2335,6 +2404,8 @@ Think of inserting a new book into a library organized by a specific system. You
     - **Time Complexity**
         - The complexity is **log n**, which is the height of the balanced binary tree,.
         - This cost comes from the percolate down process.
+
+---
 
 ### Heapify
 
@@ -2456,7 +2527,11 @@ Think of inserting a new book into a library organized by a specific system. You
     - **Push/Pop:** Runs in log time (`O(LOG N)`).
     - **Get Min/Max:** Runs in constant time (`O(1)`).
 
+---
+
 ## Hashing
+
+---
 
 ### Hash Usage
 
@@ -2554,6 +2629,8 @@ Think of inserting a new book into a library organized by a specific system. You
         - **Action (If New):** Assign the name an initial value of 1.
         - **Action (If Exists):** Increment the existing count by 1.
     - This results in a straightforward algorithm running in linear time.
+
+---
 
 ### Hash Implementation
 
@@ -2707,7 +2784,11 @@ Think of inserting a new book into a library organized by a specific system. You
     - While the analysis is complex, assuming O(1) is standard for interviews.
     - Understanding the concepts (collisions, rehashing, open addressing) places you ahead of most candidates.
 
+---
+
 ## Graphs
+
+---
 
 ### Introduction to Graphs
 
@@ -2730,7 +2811,7 @@ Think of inserting a new book into a library organized by a specific system. You
         - A cycle occurs when you can follow edges from a node and eventually return to that same node (e.g., A to B to C and back to A).
         - In a generic graph, there are no restrictions on the number of nodes or the edges connecting them.
     - Mathematical Constraints on Edges
-        - Technically, the number of edges (E) is less than or equal to the number of vertices (V) squared (`E \le V^2`).
+        - Technically, the number of edges (E) is less than or equal to the number of vertices (V) squared (`E <= V^2`).
         - V refers to the number of vertices (nodes).
         - Example: If there are 3 nodes, `3^2 = 9`, so the number of edges is less than or equal to 9.
     - Logic Behind the Formula
@@ -2830,6 +2911,8 @@ Think of inserting a new book into a library organized by a specific system. You
             - Example: If there is a connection between Node 0 and Node 1:
                 - Node 1 is in Node 0's `neighbors`.
                 - Node 0 is in Node 1's `neighbors`.
+
+---
 
 ### Matrix DFS
 
@@ -2932,6 +3015,8 @@ Think of inserting a new book into a library organized by a specific system. You
         - The memory complexity is determined by the recursive call stack.
         - In the worst case, the recursion depth can equal the size of the matrix (`N * M`).
         - Additionally, the `visit` hash set (or grid) stores up to `N * M` elements.
+
+---
 
 ### Matrix BFS
 
@@ -3066,6 +3151,8 @@ Think of inserting a new book into a library organized by a specific system. You
         - Handling all edge cases and conditionals correctly takes time and practice.
     - **Recommendation**:
         - Practice graph problems to get used to writing the boilerplate efficiently.
+
+---
 
 ### Adjacency List
 
@@ -3214,7 +3301,11 @@ Think of inserting a new book into a library organized by a specific system. You
         - Understanding DFS and BFS provides a strong foundation.
         - The shortest path algorithm is essentially a modified BFS.
 
+---
+
 ## Dynamic Programming
+
+---
 
 ### 1-Dimension DP
 
@@ -3310,6 +3401,8 @@ Think of inserting a new book into a library organized by a specific system. You
 
 An analogy for Dynamic Programming is building a staircase where you can only reach a higher step by standing on the ones directly below it; rather than jumping from the top and trying to figure out where the ground is (recursion), you start firmly on the ground floor and lay each brick one by one until you reach the desired height.
 
+---
+
 ### 2-Dimension DP
 
 - **2-Dimension Dynamic Programming**
@@ -3371,7 +3464,11 @@ An analogy for Dynamic Programming is building a staircase where you can only re
 
 To understand this, imagine building a brick wall from the bottom up; you only need the layer of bricks directly beneath the one you are currently laying to provide support, so you don't need to keep the blueprints for the entire foundation in your hands once that specific layer is finished.
 
+---
+
 ## Bit Operator 
+
+---
 
 ### Bit Operator 
 
@@ -3483,9 +3580,15 @@ To understand this, imagine building a brick wall from the bottom up; you only n
 **Analogy for Understanding Bit Shifting:**
 Think of bit shifting like a queue of people sitting in a row of chairs. **Left shifting** is like everyone moving one chair to the left; the person at the far left falls off the end and disappears, while a new person (a zero) sits in the empty chair on the right. **Right shifting** is the same process in reverse: everyone moves right, the person on the far right disappears, and a new zero sits in the chair on the far left. Just as adding a zero to the end of a decimal number (`15 -> 150`) multiplies it by 10, adding a zero to the end of a binary number multiplies it by 2.
 
+---
+
 # Advanced Algorithms
 
+---
+
 ## Arrays
+
+---
 
 ### Kadanes Algorithm
 
@@ -3510,7 +3613,7 @@ Think of bit shifting like a queue of people sitting in a row of chairs. **Left 
         - Iterate through every possible starting position (i).
         - For each starting position, iterate through every possible ending position (j) to find every subarray starting at i.
         - This involves a nested loop structure.
-    - **Time Complexity**: $O(n^2)$, where $n$ is the size of the array, because you check every subarray starting at every position.
+    - **Time Complexity**: `O(n^2)`, where `n` is the size of the array, because you check every subarray starting at every position.
     - **Initialization**:
         - The `maxSum` is initialized to the first element of the array because the subarray must be non-empty.
         - If empty subarrays were allowed, `maxSum` could be initialized to zero.
@@ -3523,7 +3626,7 @@ Think of bit shifting like a queue of people sitting in a row of chairs. **Left 
         - If `currentSum > maxSum`, then `maxSum` is reassigned.
 
 - **Optimization and Logic of Kadane's Algorithm**
-    - To improve on $O(n^2)$, redundant work must be identified.
+    - To improve on `O(n^2)`, redundant work must be identified.
     - **Core Insight**: 
         - Positive numbers contribute to a larger sum, while negative numbers make the sum smaller.
         - If a subarray has a positive sum, it is worth including in the next calculation because it contributes to the total.
@@ -3531,7 +3634,7 @@ Think of bit shifting like a queue of people sitting in a row of chairs. **Left 
         - **When to Discard**: You should never add a negative previous sum to a current value because a negative value will never increase the total sum.
     - **Comparison Choice**: The "current sum" at any given position is the largest subarray sum ending at that position. You choose the larger value between the current element alone or the current element plus the previous sum.
 
-- **The Linear Time Algorithm ($O(n)$)**
+- **The Linear Time Algorithm (`O(n)`)**
     - This version does not require nested loops.
     - **Variables**:
         - `maxSum`: Initialized to the first element.
@@ -3575,11 +3678,13 @@ Think of bit shifting like a queue of people sitting in a row of chairs. **Left 
     - **Example Context**: If the max sum of 7 was found between index 4 and 5, the algorithm would return those specific pointers.
 
 - **Complexity Summary**
-    - **Time Complexity**: Linear $O(n)$ because it only requires a single pass through the array.
+    - **Time Complexity**: Linear `O(n)` because it only requires a single pass through the array.
     - **Space Complexity**: Efficient, as it only tracks a few variables (`maxSum`, `currentSum`, and pointers).
 
 - **Analogy for Understanding**
     - Think of the `currentSum` as a traveler's bank account while walking across a path. Positive numbers are gifts of money, and negative numbers are tolls. If the traveler's account drops below zero (becomes negative), they are better off declaring bankruptcy (resetting to zero) and starting fresh at the next town rather than carrying that debt forward to future gifts. [This analogy is provided for clarity based on source logic in].
+
+---
 
 ### Sliding Window Fixed
 
@@ -3646,6 +3751,8 @@ Think of bit shifting like a queue of people sitting in a row of chairs. **Left 
 
 - **Analogy for Understanding**
     - Imagine you are looking at a long row of houses through a **fixed-size binoculars frame** that only lets you see 3 houses at a time. To find if two houses have the same color, you check the 3 houses currently in view. Instead of comparing house #1 to #2 and #3 every single time you move, you keep a **list (the Hash Set)** of the colors currently in your view. As you slide your view one house to the right, you cross off the color of the house that just left your view on the left and add the color of the new house appearing on the right. If the new house's color is already on your list, you've found a match within your view.
+
+---
 
 ### Sliding Window Variable
 
@@ -3743,6 +3850,8 @@ Think of bit shifting like a queue of people sitting in a row of chairs. **Left 
 - **Analogy for Understanding**
     - Imagine an **accordion** being pulled across a floor. The front end (right pointer) moves forward to cover more ground. If the accordion gets too long or reaches a specific goal, you pull the back end (left pointer) forward to shorten it. Even though you are moving both the front and the back, each part of the accordion only travels the length of the room once. In the end, the total movement is proportional to the size of the room, not the square of it.
 
+---
+
 ### Two Pointers
 
 - **Two Pointers and Sliding Window Relationship**
@@ -3818,6 +3927,8 @@ Think of bit shifting like a queue of people sitting in a row of chairs. **Left 
 
 To understand the two-pointer approach on a sorted array, imagine you are **adjusting the temperature of a shower with two separate knobs**: one for freezing cold and one for scalding hot. If the water is too hot (sum > target), you turn down the hot knob (decrement right pointer). If the water is too cold (sum < target), you turn up the cold knob (increment left pointer). You keep adjusting from the extremes until you hit the perfect temperature.
 
+---
+
 ### Prefix Sums
 
 - **Prefix Sums Pattern Overview**
@@ -3890,7 +4001,11 @@ To understand the two-pointer approach on a sorted array, imagine you are **adju
 - **Analogy for Understanding**
     - Think of prefix sums like the distance markers on a highway. If you want to know the distance between Exit 10 and Exit 50, you don't need to remeasure the road; you simply take the distance at marker 50 and subtract the distance at marker 10.
 
+---
+
 ## Linked Lists
+
+---
 
 ### Fast and Slow Pointers
 
@@ -3958,7 +4073,7 @@ To understand the two-pointer approach on a sorted array, imagine you are **adju
             - In a straight line, the fast pointer will always be twice as far ahead as the slow pointer.
             - In a loop, the fast pointer will eventually "catch up" and overlap the slow pointer from behind.
         - **Guarantee of Intersection**:
-            - Once both pointers enter a cycle of length $C$, there is a distance between them.
+            - Once both pointers enter a cycle of length `C`, there is a distance between them.
             - Every iteration, the slow pointer moves 1 and the fast pointer moves 2. This means the **distance between them shrinks by 1** every iteration.
             - Eventually, the distance becomes zero, and they intersect.
         - **Time Complexity**: 
@@ -3996,14 +4111,14 @@ To understand the two-pointer approach on a sorted array, imagine you are **adju
         - Define **C** as the length of the cycle.
         - Define the intersection point as **X** distance from the head of the cycle.
         - The remaining portion of the cycle after the intersection point is **C - X**.
-        - **Slow pointer distance**: Travels $P$ and then some portion of the cycle ($C - X$).
-        - **Fast pointer distance**: Travels $P$, a full cycle $C$, and then the same portion of the cycle ($C - X$).
-        - Because the fast pointer is twice as fast: $2 \times (\text{Slow Distance}) = \text{Fast Distance}$.
-        - $2(P + C - X) = P + C + (C - X)$.
-        - Simplified: $2P + 2C - 2X = P + 2C - X$.
-        - Subtract $P$ from both sides and $2C$ from both sides: $P - 2X = -X$.
-        - Solve for $P$: **$P = X$**.
-        - This proves the distance from the head of the list to the start of the cycle ($P$) is equal to the distance from the intersection point to the start of the cycle ($X$).
+        - **Slow pointer distance**: Travels `P` and then some portion of the cycle (`C - X`).
+        - **Fast pointer distance**: Travels `P`, a full cycle `C`, and then the same portion of the cycle (`C - X`).
+        - Because the fast pointer is twice as fast: `2 * (\text{Slow Distance}) = \text{Fast Distance}`.
+        - `2(P + C - X) = P + C + (C - X)`.
+        - Simplified: `2P + 2C - 2X = P + 2C - X`.
+        - Subtract `P` from both sides and `2C` from both sides: `P - 2X = -X`.
+        - Solve for `P`: **`P = X`**.
+        - This proves the distance from the head of the list to the start of the cycle (`P`) is equal to the distance from the intersection point to the start of the cycle (`X`).
     - **Code Implementation**:
         ```python
         slow = head
@@ -4030,11 +4145,13 @@ To understand the two-pointer approach on a sorted array, imagine you are **adju
         ```
     - While the proof is mathematically complex, the algorithm itself is simple and worth memorizing for interviews.
 
-***
-
 **Analogy**: Imagine a race on a track that has a straight path leading into a circular loop. If a fast runner (the hair) and a slow runner (the tortoise) start together, the fast runner will enter the loop first and eventually "lap" the slow runner. The moment they are at the exact same spot on the loop is the intersection used to detect the cycle.
 
+---
+
 ## Tries
+
+---
 
 ### Trie
 
@@ -4135,9 +4252,9 @@ class TrieNode:
         self.isWordEnd = False 
 ```
 
-***
-
 **Analogy for Understanding**: Think of a Trie like a **structured dictionary** where you don't look up a whole word at once, but follow a **path of breadcrumbs**. Each letter is a signpost pointing to the next. If you are looking for the word "apple," you follow the 'A' path, then 'P', and so on. If you reach the end of your word and find a "Finished" sign (the `wordEnd` boolean), the word exists. If you are just checking for a prefix, you only care that the path exists, not necessarily that there is a "Finished" sign at the end of it.
+
+---
 
 ### Union Find
 
@@ -4227,6 +4344,8 @@ class TrieNode:
 
 - **Analogy for Understanding**
     - Think of Union Find like several different families (sets) merging through marriage. When two people from different families marry, one entire family (the smaller one) joins the other. Path compression is like everyone in the family getting the direct phone number for the family patriarch (the root), rather than having to call their parents, who then call their grandparents, to get information.
+
+---
 
 ### Segment Tree
 
@@ -4325,6 +4444,8 @@ class TrieNode:
 
 - **Analogy**
     - A segment tree is like a **corporate management structure**. The CEO (root) knows the total productivity of the entire company. Each department head (child node) knows the productivity of their specific branch. If one employee (leaf node) changes their output, the employee's manager must update their total, then the department head must update theirs, and finally the CEO updates the company total. When the CEO needs to know the productivity of a specific group of departments, they don't ask every employee; they just ask the few managers who already have the totals for those specific groups.
+
+---
 
 ### Iterative DFS
 
@@ -4438,7 +4559,11 @@ class TrieNode:
         - A BST iterator allows fetching values in order one by one (e.g., getting the first two values and pausing) without traversing the entire tree at once.
         - If recursion is allowed, it is generally recommended over iterative methods because recursive DFS is easier to implement.
 
+---
+
 ## Heaps
+
+---
 
 ### Heaps
 
@@ -4459,19 +4584,19 @@ class TrieNode:
     - **Complexity Analysis of Finding Medians**
         - **Unsorted Input Array**:
             - You cannot do much better than sorting the array first.
-            - **Time Complexity**: Big O of N log N ($O(N \log N)$).
+            - **Time Complexity**: Big O of N log N (`O(N LOG N)`).
         - **Sorted Input Array**:
-            - You can solve the problem in **constant time** ($O(1)$) by simply accessing the middle indices and returning the result.
+            - You can solve the problem in **constant time** (`O(1)`) by simply accessing the middle indices and returning the result.
         - **Stream of Values (The Challenge)**:
             - In a streaming scenario, values are not given all at once but are received continuously over time.
             - *The Problem with Naive Sorting*: If you re-sort the set every time a new value is inserted, it becomes inefficient as the set grows.
             - *Inserting into a Sorted Array*:
-                - To maintain sorted order while adding a new value, the insertion takes **Big O of N** ($O(N)$) time.
-                - While getting the median remains $O(1)$, the continuous insertion becomes expensive.
-                - If the set grows to size N, the total time complexity for inserting all values would be **N squared** ($O(N^2)$).
+                - To maintain sorted order while adding a new value, the insertion takes **Big O of N** (`O(N)`) time.
+                - While getting the median remains `O(1)`, the continuous insertion becomes expensive.
+                - If the set grows to size N, the total time complexity for inserting all values would be **N squared** (`O(N^2)`).
 
     - **The Two Heaps Solution**
-        - This approach allows for **insertion in Log N** ($O(\log N)$) time while keeping **getting the median at constant time** ($O(1)$).
+        - This approach allows for **insertion in Log N** (`O(LOG N)`) time while keeping **getting the median at constant time** (`O(1)`).
         - **Structure**:
             - **Small Heap**: A **Max Heap** that contains the smaller half of the values seen so far.
             - **Large Heap**: A **Min Heap** that contains the larger half of the values seen so far.
@@ -4484,7 +4609,7 @@ class TrieNode:
             - Arbitrarily insert it into the small heap.
             - Median = 4.
         - **2. Insert second value (e.g., 7)**:
-            - Criteria: We want half of the values in the small heap and half in the large heap. Every value in the small heap must be $\le$ every value in the large heap.
+            - Criteria: We want half of the values in the small heap and half in the large heap. Every value in the small heap must be `<=` every value in the large heap.
             - 7 is greater than 4, so it is placed in the large heap.
             - Now both heaps have equal length (1), meaning the total number of values is even.
             - Median = (Root of Small Heap + Root of Large Heap) / 2 = (4 + 7) / 2 = 5.5.
@@ -4497,7 +4622,7 @@ class TrieNode:
     - **Maintaining Heap Properties During Insertion**
         - **Simplified Insertion Logic**:
             1. Every time a new value arrives, arbitrarily push it into the **Small Heap** (Max Heap) first.
-            2. **Verify Sorted Property**: Ensure the maximum value of the small heap is $\le$ the minimum value of the large heap.
+            2. **Verify Sorted Property**: Ensure the maximum value of the small heap is `<=` the minimum value of the large heap.
                 - If both heaps are non-empty and the Small Heap root > Large Heap root, pop from the Small Heap and push to the Large Heap.
             3. **Verify Size Property**: Ensure heap lengths do not differ by more than 1.
                 - If `len(Small Heap) > len(Large Heap) + 1`, pop the maximum from the small heap and push it to the large heap.
@@ -4522,13 +4647,17 @@ class TrieNode:
         - This pattern is elegant because it avoids messy conditionals by performing arbitrary pushes followed by balancing steps.
         - Even if a solution uses more conditionals, the core concepts are:
             1. Heaps must be roughly even in size.
-            2. Values in the small heap must be $\le$ values in the large heap.
+            2. Values in the small heap must be `<=` values in the large heap.
         - This pattern is common in interviews and is essential for solving streaming median problems optimally.
 
     - **Analogy for Understanding**
         - Think of the two heaps like a **butterfly's wings**. The small values are on the left wing (max heap) and the large values are on the right wing (min heap). The median is essentially the "body" of the butterfly where the two wings meet. By keeping the wings balanced in size and ensuring the left wing values stay smaller than the right, you can always find the center instantly.
 
+---
+
 ## Backtracking
+
+---
 
 ### Subsets
 
@@ -4567,15 +4696,15 @@ class TrieNode:
 
     - **Mathematical Properties**
         - Starting from a single root, the number of sets **multiplies by two** at every level because there are two branches.
-        - If there are $n$ input values, the total number of subsets is **$2^n$**.
+        - If there are `n` input values, the total number of subsets is **`2^n`**.
 
     - **Complexity Analysis**
         - **Time Complexity**:
-            - While there are $2^n$ subsets, each subset must be built separately as a sublist.
-            - In the worst case, a subset is size $n$. Therefore, the overall time complexity is **$O(n \times 2^n)$**.
+            - While there are `2^n` subsets, each subset must be built separately as a sublist.
+            - In the worst case, a subset is size `n`. Therefore, the overall time complexity is **`O(n * 2^n)`**.
         - **Space Complexity**:
-            - **Result Space**: The space to hold the output is $O(n \times 2^n)$.
-            - **Big O Space (Algorithm focus)**: Typically, result space is excluded. The space complexity is determined by the **height of the tree**, which is $O(n)$.
+            - **Result Space**: The space to hold the output is `O(n * 2^n)`.
+            - **Big O Space (Algorithm focus)**: Typically, result space is excluded. The space complexity is determined by the **height of the tree**, which is `O(n)`.
 
     - **Code Implementation with Backtracking**
         - Backtracking via **recursion** is the easiest implementation method.
@@ -4603,7 +4732,7 @@ class TrieNode:
 
     - **The Sorting Solution**
         - To solve this efficiently, **sort the input array** first.
-        - Sorting is $O(n \log n)$, which is negligible compared to the exponential complexity of generating subsets.
+        - Sorting is `O(n LOG n)`, which is negligible compared to the exponential complexity of generating subsets.
         - Sorting ensures that all **duplicate values are adjacent**, making them easier to manage.
 
     - **Modified Decision Logic**
@@ -4622,10 +4751,12 @@ class TrieNode:
             - Check `i + 1 < length` to stay in bounds.
             - Increment `i` while `nums[i] == nums[i + 1]`.
             - Finally, call the recursive helper with `i + 1` to start at the **next unique value**.
-        - **Complexity**: Remains **Time $O(n \times 2^n)$** and **Space $O(n)$**.
+        - **Complexity**: Remains **Time `O(n * 2^n)`** and **Space `O(n)`**.
 
 - **Analogy for Understanding**
     - To understand the **Subsets II** strategy, imagine you are at a buffet with multiple identical plates of cookies. To ensure every snack plate you create is unique, you have two choices at the cookie station: you can take at least one cookie and move to the next item, or you can decide you want **no cookies at all** and walk past every single plate of cookies until you reach the brownies. This ensures you don't accidentally make two identical snack plates just by picking cookies from different spots on the table.
+
+---
 
 ### Combinations
 
@@ -4662,8 +4793,8 @@ class TrieNode:
         - After including a value and returning from the recursive call, the value is **popped** (removed) from the array to allow for the "skip" decision path.
     - **Complexity Analysis**
         - **Tree Height**: The height of the tree is **n** because a decision is made for every value in the range.
-        - **Tree Size**: The size of the decision tree is $2^n$ because of the two branches at each step.
-        - **Time Complexity**: An upper bound is approximately $O(k \cdot 2^n)$, where $k$ is the time needed to build or copy each combination.
+        - **Tree Size**: The size of the decision tree is `2^n` because of the two branches at each step.
+        - **Time Complexity**: An upper bound is approximately `O(k * 2^n)`, where `k` is the time needed to build or copy each combination.
 
 - **Method 2: Optimized Backtracking Solution**
     - **Concept: Filling Slots**
@@ -4679,8 +4810,8 @@ class TrieNode:
         - **Path for 4**: Choice for the second slot is {5}.
         - **Path for 5**: No remaining numbers available to fill the second slot, so this branch stops.
     - **Mathematical Verification (n choose k)**
-        - The number of combinations is determined by the formula: $\frac{n!}{k!(n-k)!}$.
-        - For n=5 and k=2: $\frac{5!}{2!(3!)} = \frac{120}{2 \cdot 6} = \frac{120}{12} = 10$.
+        - The number of combinations is determined by the formula: `\{n!}{k!(n-k)!}`.
+        - For n=5 and k=2: `\{5!}{2!(3!)} = \{120}{2 * 6} = \{120}{12} = 10`.
         - The optimized branching approach produces exactly these 10 distinct combinations.
 
 - **Optimized Code Implementation**
@@ -4710,6 +4841,8 @@ class TrieNode:
 - **Analogy for Understanding**
     - Think of combinations like **filling a team of size K from a pool of N players**. In the trivial method, you walk down the line of players and ask each one "Are you on the team or not?" In the optimized method, you have K empty jerseys and you only pick players who haven't been considered yet to fill those specific spots, ensuring you don't end up with the same team twice just because you picked the players in a different order.
 
+---
+
 ### Permutations
 
 - Permutations Overview
@@ -4719,10 +4852,10 @@ class TrieNode:
         - In subsets, the logic is based on whether to include each number or not. 
         - In permutations, every single number from the original list is included, but their order is rearranged.
     - Calculating the Number of Permutations:
-        - For an array of size $n$, there are $n$ possible values for the first position.
-        - Once a value is placed in the first position, it cannot be reused, leaving $n-1$ choices for the second position.
+        - For an array of size `n`, there are `n` possible values for the first position.
+        - Once a value is placed in the first position, it cannot be reused, leaving `n-1` choices for the second position.
         - This continues until only one choice remains for the final position.
-        - Total permutations = $n \times (n-1) \times (n-2) \times \dots \times 1$, also known as **$n$ factorial ($n!$)**.
+        - Total permutations = `n * (n-1) * (n-2) * \dots * 1`, also known as **`n` factorial (`n!`)**.
 
 - Logic and Decision Trees
     - Approach 1: Position-Based Decision Tree
@@ -4730,8 +4863,8 @@ class TrieNode:
         - Layer 1 (First Position): You can choose any value (e.g., 1, 2, 3, or 4).
         - Layer 2 (Second Position): For each branch, you have three choices (all values except the one chosen for the first position).
         - Distinctiveness: In permutations, the order matters. For example, is a different permutation than.
-        - Structure: The tree has $n$ children at the first level, $n-1$ at the next, and continues down to 1.
-        - Complexity: Multiplying these choices results in a time complexity of **$n!$**.
+        - Structure: The tree has `n` children at the first level, `n-1` at the next, and continues down to 1.
+        - Complexity: Multiplying these choices results in a time complexity of **`n!`**.
         - Drawback: Coding this specific approach is more "annoying" because it requires removing elements from the array to expand child paths.
     - Approach 2: Insertion-Based Backtracking (The "Clever" Way)
         - This approach breaks the problem into subproblems based on generating permutations for a subset of numbers and inserting the next value into every possible position.
@@ -4742,15 +4875,15 @@ class TrieNode:
                 - For, insert 2 at the beginning, middle, and end:.
                 - For, insert 2 at the beginning, middle, and end:.
             - To create the final permutations with {1, 2, 3, 4}, take the value 1 and insert it into all four possible positions of each of the six existing permutations.
-            - Final Result: $6 \text{ permutations} \times 4 \text{ positions} = 24$ permutations ($4!$).
+            - Final Result: `6 \text{ permutations} * 4 \text{ positions} = 24` permutations (`4!`).
 
 - Time Complexity Analysis
-    - Number of Permutations: The total number of results is $n!$.
-    - Permutation Size: Each permutation is of size $n$.
+    - Number of Permutations: The total number of results is `n!`.
+    - Permutation Size: Each permutation is of size `n`.
     - Array Construction Cost:
-        - Inserting a value into an arbitrary position in an array is an **$O(n)$** operation.
-        - To build a single permutation of size $n$ using this method (doing $n$ insertions), the cost is **$O(n^2)$**.
-    - Total Time Complexity: The overall big-O complexity is **$O(n^2 \cdot n!)$**.
+        - Inserting a value into an arbitrary position in an array is an **`O(n)`** operation.
+        - To build a single permutation of size `n` using this method (doing `n` insertions), the cost is **`O(n^2)`**.
+    - Total Time Complexity: The overall big-O complexity is **`O(n^2 * n!)`**.
 
 - Recursive Implementation
     - Structure:
@@ -4784,7 +4917,7 @@ class TrieNode:
     - Conclusion: The iterative code is often shorter but can be harder to conceptualize than the recursive version.
 
 - Summary of Complexity and Logic
-    - Mathematical Basis: The $n!$ results and $O(n)$ insertion time are inherent to the problem's nature, regardless of whether the approach is iterative or recursive.
+    - Mathematical Basis: The `n!` results and `O(n)` insertion time are inherent to the problem's nature, regardless of whether the approach is iterative or recursive.
     - Flexibility: There are multiple ways to write the code, including removing numbers from the list before recursive calls, but the insertion method is often the simplest to implement.
 
 - Analogy for Understanding
@@ -4794,7 +4927,11 @@ class TrieNode:
     - When the third person (2) arrives, you take every existing line-up you've made and find every possible spot person 2 could squeeze into (the front, the back, or between people). 
     - By the time the fourth person (1) joins, you just repeat the process, squeezing them into every available gap in all your previously established lines.
 
+---
+
 ## Graphs
+
+---
 
 ### Dijkstra's Algorithm
 
@@ -4888,6 +5025,8 @@ class TrieNode:
 Imagine you are trying to find the fastest way to travel through a series of cities connected by toll roads with different prices. Instead of just looking for the route with the fewest cities (which is what BFS does), you always look at all the cities you can reach from where you’ve already been and pick the absolute cheapest one next. Once you reach a city using the cheapest possible total toll, you know you’ll never find a cheaper way there because every other road you haven't taken yet only adds more to the cost.
 
 
+---
+
 ### Prim's Algorithm
 
 - **Prim's Algorithm and Minimum Spanning Trees (MST)**
@@ -4904,13 +5043,13 @@ Imagine you are trying to find the fastest way to travel through a series of cit
         - **Applications:** An MST can be used to connect cities or computers such that every point is reachable from every other point with the minimum amount of road or connection cost.
         - We do not necessarily need every original edge to exist; we only need enough to ensure connectivity without cycles.
     - **Properties of Nodes and Edges in a Tree**
-        - To connect $n$ nodes together without forming a cycle, it will always take exactly **$n - 1$ edges**.
-        - **Examples of the $n - 1$ Rule:**
+        - To connect `n` nodes together without forming a cycle, it will always take exactly **`n - 1` edges**.
+        - **Examples of the `n - 1` Rule:**
             - 1 node requires 0 edges to be connected.
             - 2 nodes require 1 edge.
             - 3 nodes require 2 edges.
             - 4 nodes require 3 edges.
-        - If you have $n$ nodes and $n$ edges, the graph will contain a cycle and is therefore not a tree.
+        - If you have `n` nodes and `n` edges, the graph will contain a cycle and is therefore not a tree.
     - **Uniqueness of Solutions**
         - There can be **multiple valid solutions** for a minimum spanning tree if different subsets of edges result in the same minimum total cost.
         - In such cases, returning any one of the valid MSTs is acceptable.
@@ -4936,8 +5075,8 @@ Imagine you are trying to find the fastest way to travel through a series of cit
         - **2. The Main Loop:**
             - Continue the algorithm while the min heap is not empty.
             - Alternative loop conditions include:
-                - While the number of visited nodes is less than the total number of nodes ($n$).
-                - While the number of edges in the MST is less than $n - 1$.
+                - While the number of visited nodes is less than the total number of nodes (`n`).
+                - While the number of edges in the MST is less than `n - 1`.
             - **Pop** the edge with the smallest weight from the min heap.
         - **3. Processing Edges:**
             - If the destination node has already been visited, skip it to avoid cycles.
@@ -4948,7 +5087,7 @@ Imagine you are trying to find the fastest way to travel through a series of cit
                 - If a neighbor has not been visited, push it onto the min heap with its edge weight and the current node as the source.
         - **4. Completion:**
             - The algorithm finishes when all nodes are connected or the heap is empty.
-            - The result is a list of $n - 1$ edges connecting $n$ nodes at the minimum cost.
+            - The result is a list of `n - 1` edges connecting `n` nodes at the minimum cost.
     - **Proof of Correctness and Behavior**
         - Every time a new node is introduced to the "frontier," the algorithm ensures it is added with the **minimum possible cost** to connect it to the existing tree.
         - Because we always pick the smallest weight available in the min heap, we skip redundant or more expensive edges that would lead to nodes we've already reached through a cheaper path.
@@ -4957,10 +5096,10 @@ Imagine you are trying to find the fastest way to travel through a series of cit
         - **Dijkstra's:** Focuses on the shortest path from a start node to every other node, requiring the algorithm to track the cumulative path cost.
         - **Prim's:** Focuses on the total cost of all edges in the tree. When adding a neighbor to the heap, it only uses the weight of the edge itself, not the total cost to reach that point from the start.
     - **Complexity Analysis**
-        - **Time Complexity:** $O(E \log V)$.
-            - We may add $E$ edges to the min heap, and each push/pop operation is $\log E$.
-            - Since $E$ is at most $V^2$, $\log E$ simplifies to $\log V$ in big O notation.
-        - **Memory Complexity:** $O(E)$.
+        - **Time Complexity:** `O(E LOG V)`.
+            - We may add `E` edges to the min heap, and each push/pop operation is `LOG E`.
+            - Since `E` is at most `V^2`, `LOG E` simplifies to `LOG V` in big O notation.
+        - **Memory Complexity:** `O(E)`.
             - This is the maximum possible size of the min heap and the adjacency list.
     - **Example Implementation Logic**
         ```python
@@ -4995,6 +5134,8 @@ Imagine you are trying to find the fastest way to travel through a series of cit
 
 - **Analogy for Understanding:**
     - Think of Prim's algorithm like a **growing oil spill**. It starts at one point and always flows into the easiest (lowest cost/resistance) adjacent area first. It keeps expanding this way until it has covered every required spot, ensuring it never flows back into an area it has already covered (no cycles) and always taking the easiest path available at that moment to reach new ground.
+
+---
 
 ### Kruskal's Algorithm 
 
@@ -5068,15 +5209,17 @@ Imagine you are trying to find the fastest way to travel through a series of cit
 - **Complexity Analysis**
     - **Time Complexity**: **O(E log V)**.
         - Pushing and popping from the min-heap takes **log E** time.
-        - In the worst case, $E$ can be up to $V^2$, making log E equivalent to **log V**.
+        - In the worst case, `E` can be up to `V^2`, making log E equivalent to **log V**.
         - Union-Find operations (with path compression and union by rank) are extremely efficient, potentially near constant time, so they do not bottleneck the algorithm.
-        - The heap operations are performed for up to $E$ edges, leading to the overall O(E log V) complexity.
+        - The heap operations are performed for up to `E` edges, leading to the overall O(E log V) complexity.
     - **Memory Complexity**: **O(E)**.
         - This is required to store every single edge in the min-heap.
 
 - **Conclusion**
     - Kruskal's is "pretty dang easy" if you have a pre-implemented Union-Find structure.
     - While Prim's is often preferred by some because of its similarity to Dijkstra's, Kruskal's is a robust and efficient alternative for finding MSTs.
+
+---
 
 ### Topological Sort
 
@@ -5186,6 +5329,420 @@ Imagine you are trying to find the fastest way to travel through a series of cit
 **Analogy for Topological Sort:**
 Think of **assembling furniture** with a complex instruction manual. Some steps can't be done until others are finished—you can't put the cushions on the sofa until the frame is built. Topological sort is like creating a master checklist where every "prerequisite" task is listed before the task that depends on it, ensuring you never get stuck.
 
+---
+
+## Dynamic Programming
+
+---
+
+### 0-1 Knapsack
+
+- **0-1 Knapsack Dynamic Programming Pattern**
+
+    - **Introduction and Basic Concepts**
+        - The 0-1 Knapsack is one of the most common dynamic programming patterns.
+        - **The Scenario**: You are given a bag (backpack/knapsack) with a fixed capacity, such as 8 units (lbs, kg, etc.).
+        - **Input Data**: You are provided with two arrays:
+            - **Profits**: Values you want to maximize.
+            - **Weights**: Values that affect how much can fit in the bag.
+            - Each index in the arrays corresponds to a single item.
+        - **Objective**: Maximize the total profit contained in the bag while staying within or at the fixed capacity.
+        - **Variations**:
+            - **0-1 Knapsack**: For every item, you can either include it (1 copy) or not include it (0 copies).
+            - **Unbounded Knapsack**: You can include an item an infinite number of times as long as you do not exceed capacity.
+            - **Capacity Determination**: A variation where you determine if you can reach an exact capacity given specific items.
+
+    - **The Failure of the Greedy Approach**
+        - A greedy approach involves taking items with the maximum profit first until the bag is full.
+        - **Example Case**:
+            - Capacity: 8.
+            - Items: One with profit 7/weight 3, one with profit 4/weight 5, one with profit 4/weight 2, and one with profit 1/weight 1.
+            - **Greedy execution**: Choose profit 7 (weight 3), then choose profit 4 (weight 5). Total weight is 8, bag is full. Total profit is 11.
+            - **Optimal execution**: Skip the item with weight 5 and include others. Profit 7 (weight 3) + Profit 4 (weight 2) + Profit 1 (weight 1) = Total Profit 12. Total weight is 6, which is within capacity.
+        - **Conclusion**: Greedy is not guaranteed to work and often fails to find the maximum profit.
+
+    - **Brute Force Approach (Recursive)**
+        - Start with a brute force approach to understand choices and build toward an optimal solution.
+        - **Decision Tree**:
+            - This is a binary decision tree where every node has two branches: include the item or skip it.
+            - **Include Choice**: Remaining capacity is decremented by the item's weight; profit is increased.
+            - **Skip Choice**: Remaining capacity remains the same; profit does not increase.
+        - **Complexity**:
+            - The height of the tree is `n` (number of items).
+            - The size of the tree is `2^n`.
+            - This is not efficient for large inputs.
+        - **Recursive Logic Details**:
+            - If a choice leads to a capacity less than zero, that path is invalid and cannot be continued.
+            - A capacity of exactly zero is valid but means no more items can be added.
+        - **Structure of the Code**:
+            - A recursive helper function is used.
+            - **Parameters**: Profits array, weights array, remaining capacity, and the current index `i`.
+            - **Base Case**: Reaching the end of the input (index `i` exceeds the number of items).
+            - **Case 1 (Skip)**: Call the function for index `i + 1` with the same capacity.
+            - **Case 2 (Include)**: If current capacity minus item weight `\ge 0`, call the function for index `i + 1` with the new reduced capacity and add the current item's profit to the result.
+            - **Result**: The function returns the maximum of the "Include" and "Skip" results.
+
+    - **Optimization: Memoization (Caching)**
+        - Brute force often solves the same sub-problem multiple times (e.g., same index and same remaining capacity appearing in different branches).
+        - **Solution**: Store (cache) the result of a sub-problem the first time it is calculated.
+        - **Time Complexity**: Reduced to `O(n * m)`, where `n` is the number of items and `m` is the capacity.
+        - **Memory Complexity**: Typically `n * m` to store the cache.
+        - **Implementation**:
+            - Use a two-dimensional array (or hashmap) where dimensions represent the inputs (index `i` and capacity).
+            - **Example**: If capacity is 8 and items are 4, the array is `4 * 9` (to include 0 through 8).
+            - **Initialization**: Fill the cache with a default value like -1 to indicate the sub-problem hasn't been computed.
+            - **Execution**: Before performing recursive work, check if the value for the current index and capacity is in the cache. If it is not -1, return the cached value.
+            - After calculating the max profit for a state, store it in the cache before returning.
+
+    - **True Dynamic Programming (Iterative Approach)**
+        - This approach skips recursion entirely and fills a 2D array (grid) iteratively.
+        - **Grid Setup**:
+            - Rows represent items.
+            - Columns represent capacities from 0 to the maximum capacity `m`.
+            - A capacity of 0 always results in 0 profit, so the first column is initialized to 0.
+        - **Initialization**:
+            - The first row (zeroth item) is filled based on whether that item fits in each capacity column.
+            - If the zeroth item's weight is 5, then columns 0-4 are profit 0, and columns 5-8 are the profit of that item.
+        - **Iterative Logic (Filling the Grid)**:
+            - Process the grid row by row and column by column.
+            - For each cell (current item and current capacity), calculate two options:
+                - **Skip**: Look at the cell directly above (previous item's max profit for the same capacity).
+                - **Include**: If the item fits, take its profit and add it to the profit from the row above at the column index of `(current capacity - item weight)`.
+            - **Transition Formula**: `DP[i][c] = max(DP[i-1][c], profit[i] + DP[i-1][c - weight[i]])`.
+        - **Solution Location**: The final answer is always found in the bottom-right cell of the grid (all items considered at maximum capacity).
+        - **Space Optimization**: Because each row only depends on the row directly above it, the space complexity can be reduced from `O(n * m)` to something smaller.
+
+    - **Walkthrough of Grid Filling (Example)**
+        - **Item Data**:
+            - Item 0: P4, W5.
+            - Item 1: P4, W2.
+            - Item 2: P7, W3.
+            - Item 3: P1, W1.
+        - **Grid Progressions**:
+            - **Row 0**: All 0s until capacity 5, then all 4s.
+            - **Row 1**: Can include Item 1 (W2) starting at capacity 2. At capacity 7, can include both Item 0 and Item 1 for profit 8.
+            - **Row 2**: At capacity 3, profit becomes 7 (taking Item 2). At capacity 5, profit becomes 11 (Item 1 + Item 2). Max profit stays 11 until capacity 8.
+            - **Row 3**: At capacity 1, profit becomes 1. At capacity 6, adding Item 3 to the previous max for capacity 5 (which was 11) results in 12.
+        - **Final Result**: The bottom-right value is 12.
+
+    - **Practical Advice**
+        - Memoization is often easier to code and is usually acceptable in interviews.
+        - The iterative DP solution is more abstract and difficult to visualize but can be more memory efficient.
+        - Consistent practice is required to handle edge cases and understand the directions in which the grid is accessed.
+
+**Analogy to Solidify Understanding**:
+Think of the 0-1 Knapsack problem like **packing a lunchbox**. You have a list of snacks, each with a "yumminess" score (profit) and a size (weight). You can't fit everything. The Brute Force approach is like trying every possible combination of snacks on your counter until you find the best one. Memoization is like writing down the best score for a specific remaining space so you don't have to re-calculate it if you find yourself with that same space again. The Iterative DP approach is like building a cheat-sheet table where you slowly figure out the best snack combo for a tiny 1-inch box, then a 2-inch box, and so on, until you know the answer for your full-sized lunchbox.
+
+---
+
+### Unbounded Knapsack
+
+- Unbounded Knapsack
+    - Overview
+        - This pattern is very similar to the 01 Knapsack pattern.
+        - In interviews, the Unbounded Knapsack problem is often more common than the 01 Knapsack.
+        - It involves maximizing total profit in a backpack with a fixed capacity using a list of items.
+        - Key Characteristic: You have an unlimited quantity of each item.
+    - Example Item Set and Capacity
+        - Initial Capacity: 8.
+        - Item 1: Profit 4, Weight 5.
+        - Item 2: Profit 4, Weight 2.
+        - Item 3: Profit 7, Weight 3.
+        - Item 4: Profit 1, Weight 1.
+    - Decision Tree Approach (Template 1: Two Branches)
+        - This approach involves making a choice at each step: include the item or skip it.
+        - Choice: Skip the current item
+            - Assume the item will never be used again.
+            - Move to the next index (index + 1).
+            - The capacity stays exactly the same.
+        - Choice: Include the current item
+            - Decrease the capacity by the weight of the item.
+            - Stay at the current index (index) because you can choose the same item again.
+            - If the capacity becomes negative, the path is invalid and stops.
+        - Variables tracking state
+            - Remaining capacity.
+            - Current index of the item being considered.
+    - Decision Tree Approach (Template 2: Multi-Branch Loop)
+        - Start with the original capacity.
+        - Instead of skipping/including one item at a time, create a branch for every possible item available.
+        - For each branch:
+            - Subtract the item weight from the current capacity.
+            - Calculate the profit for that branch.
+            - Repeat the process for every item at every node.
+        - This method is conceptually straightforward but harder to code because it requires a loop instead of two recursive cases.
+    - Time and Space Complexity (Brute Force)
+        - Tree Height: In 01 Knapsack, height is roughly `N` (number of items). In Unbounded Knapsack, height can be much larger because items can be picked multiple times.
+        - Height Calculation: The height is determined by the capacity divided by the smallest item weight (`Capacity / Weight_{min}`).
+        - Worst Case: If an item has a weight of 1, the height is equal to the total capacity `C`.
+        - Time Complexity: `O(2^C)`, where `C` is the capacity.
+    - Dynamic Programming Concepts
+        - Breaking down the problem:
+            - The original problem (root node) is the full capacity and all items.
+            - Left subtrees represent all possibilities including at least one of the current item.
+            - Right subtrees represent all possibilities where the current item is never included.
+        - Subproblems continue to break down until all possibilities are calculated and the maximum result is returned.
+    - Recursive Code with Memoization
+        - The code is nearly identical to 01 Knapsack, with one major change in the recursive call.
+        - Logic:
+            - Base case: If the index is out of bounds, return 0.
+            - Recursive Call 1 (Skip): `DFS(i + 1, capacity)`.
+            - Recursive Call 2 (Include): If `capacity - items[i].weight >= 0`, then `profit[i] + DFS(i, new_capacity)`.
+            - **Crucial Difference**: In the "Include" call, the index stays `i` instead of `i + 1`.
+        - Memoization/Caching:
+            - Use a 2D grid (cache) where the dimensions are `Items` (0 to N) and `Capacity` (0 to C).
+            - Even though brute force is slower, the memoized time complexity is the same as 01 Knapsack: `O(N * C)`.
+    - True Bottom-Up Dynamic Programming (2D Grid)
+        - Grid Structure:
+            - Rows represent items; columns represent capacity.
+            - The grid can be rotated (capacity as rows, items as columns) and still work.
+        - Filling the Grid:
+            - Usually filled from top-left to bottom-right.
+            - Each cell represents the max profit for a specific capacity and set of available items.
+        - Transitions:
+            - Skip item: Look at the value in the row above (same capacity).
+            - Include item: Look at the current row but move left by the weight of the item.
+    - Memory Optimized Dynamic Programming
+        - You do not need the entire 2D grid; you only need two rows: the previous row and the current row.
+        - Process:
+            - Initialize a `DP` row with all zeros (representing no items available).
+            - For each item, create a `current_row` filled with zeros.
+            - Fill the `current_row` by checking:
+                - Profit of skipping: `DP[capacity]` (value from the row above).
+                - Profit of including: `item_profit + current_row[capacity - item_weight]`.
+                - Take the maximum of these two values.
+            - After finishing a row, set `DP = current_row` and move to the next item.
+    - Detailed Example Dry Run (Capacity 8)
+        - Item 1 (W: 5, P: 4): Max profit is 0 for capacities 0-4. At capacity 5-8, max profit is 4 (can only fit one).
+        - Item 2 (W: 2, P: 4): 
+            - Capacity 2: Profit 4.
+            - Capacity 4: Profit 8 (picks Item 2 twice by looking two spots to the left in the current row).
+            - Capacity 6: Profit 12.
+            - Capacity 8: Profit 16.
+        - Item 3 (W: 3, P: 7):
+            - Capacity 3: Profit 7.
+            - Capacity 5: Profit 11 (One Item 3 [P:7] + One Item 2 [P:4]).
+            - Capacity 6: Profit 14 (Two Item 3s).
+            - Capacity 8: Profit 18 (Two Item 3s [P:14] + One Item 2 [P:4]).
+        - Item 4 (W: 1, P: 1):
+            - Comparing profit of item above (18) vs. including Item 4 (1 + profit at capacity 7).
+            - Max profit remains 18.
+    - Conclusion
+        - Final Result for example: 18.
+        - To master this, one should practice drawing the tables and decision trees manually.
+
+    - Metaphor for Understanding:
+        - Think of the 01 Knapsack like a grocery store where there is only one of every product on the shelf; once you put it in your cart, you can't get another. The Unbounded Knapsack is like a grocery store with infinite restocking; if you find a great deal on milk, you can fill your entire cart with as many cartons as will fit.
+
+---
+
+### LCS
+
+- **Longest Common Subsequence (LCS) Algorithm Overview**
+    - The Longest Common Subsequence is a famous algorithm that serves as a pattern for many dynamic programming problems.
+    - There are numerous variations and similar problems that follow this exact pattern.
+    - **Problem Prompt**
+        - You are given two strings, S1 and S2.
+        - The goal is to find the length of the longest common subsequence between these two strings.
+
+- **Understanding Subsequences**
+    - **Definition of a Subsequence**
+        - A subsequence is a subset of characters from a particular string.
+        - Unlike a subarray, a subsequence does not have to be contiguous (the characters do not have to be next to each other).
+        - A subsequence can be the string itself or the string with some characters removed.
+    - **The Rule of Relative Order**
+        - The relative order of characters must be maintained for it to be a subsequence.
+        - Example: In the string "ACB", "AC" is a valid subsequence.
+        - Example: In the string "ACB", "CA" is **not** a subsequence because the order is reversed.
+    - **Common Subsequence Definition**
+        - A common subsequence is a subsequence present in both strings that is equal.
+        - Characters do not need to be in the same position in both strings to be part of a common subsequence.
+        - Example: If S1 is "ADCB" and S2 is "ABC", the LCS is "AC" with a length of 2. Even though "B" exists in both, taking "ACB" would fail if the relative order doesn't match between both strings.
+
+- **Brute Force Recursive Approach (DFS)**
+    - **Initial Thought Process**
+        - Any solution must involve comparing characters between the two strings.
+        - If you can figure out the brute force recursive solution, the optimized solution is relatively easy to derive.
+    - **Pointer Initialization**
+        - Initialize two pointers (indices): `i1` for the first string and `i2` for the second string.
+        - Both pointers start at the beginning of their respective strings (index 0).
+    - **Decision Tree Logic**
+        - **Case 1: Characters are Equal**
+            - If `S1[i1] == S2[i2]`, you have found at least one matching character.
+            - The solution for this sub-problem is **1 + LCS of the remainder of the strings**.
+            - You shift both pointers by one (`i1 + 1` and `i2 + 1`).
+            - There is only one decision to make here because matching equal characters is always optimal.
+        - **Case 2: Characters are Not Equal**
+            - If the characters are not equal, they cannot both be part of the LCS at the current position (proof by contradiction).
+            - You must try two possibilities to see which results in a longer subsequence:
+                1. Increment `i1` and keep `i2` the same (skip a character in S1).
+                2. Keep `i1` the same and increment `i2` (skip a character in S2).
+            - You take the **maximum** result of these two branches.
+            - A third case of incrementing both pointers is automatically handled by the recursion of the first two cases.
+    - **Base Case**
+        - The recursion stops when one or both of the pointers go out of bounds.
+        - This happens when one of the substrings becomes an empty string.
+        - The LCS of any string and an empty string is **0**.
+
+- **Complexity of Brute Force**
+    - **Time Complexity**
+        - In the worst case, the algorithm branches twice at every position.
+        - The maximum height of the tree is the sum of the lengths of the two strings (`n + m`).
+        - Brute force time complexity is `2^{n+m}`.
+    - **Memory Complexity**
+        - The memory complexity is determined by the height of the recursive call stack.
+        - This is `O(n + m)`.
+
+- **Optimization: Memoization (Caching)**
+    - **Identifying Repeated Work**
+        - The decision tree often solves the same sub-problem (same `i1` and `i2` values) in multiple branches.
+    - **Caching Strategy**
+        - The state is defined by the two changing variables: indices `i1` and `i2`.
+        - All possible combinations of these indices are `N * M` (Length of S1 `*` Length of S2).
+        - Create a 2D array (cache) of size `N * M` initialized with a default value like -1 (representing uncomputed states).
+    - **Memoized Function Logic**
+        - Check the base case (out of bounds) first to avoid index errors.
+        - Before performing recursive calls, check if the value for `cache[i1][i2]` is already computed (not -1).
+        - If computed, return the cached value immediately.
+        - If not computed, perform the calculation and store the result in the cache before returning it.
+    - **Optimized Time Complexity**
+        - With caching, the time complexity is reduced to `O(N * M)`.
+
+- **True Dynamic Programming (Bottom-Up)**
+    - **The 2D Grid Structure**
+        - Create a 2D grid with dimensions `(N+1) * (M+1)`.
+        - The extra row and column (the "+1") act as dummy values (all zeros) to handle edge cases and prevent out-of-bounds errors when looking at previous sub-problems.
+    - **Grid Iteration (Top-Left to Bottom-Right)**
+        - Most prefer iterating from top-left to bottom-right, though bottom-right to top-left (more similar to recursion) is also possible.
+        - Use iterators `i` and `j` to read characters from the strings (starting at index 0) but offset the storage in the DP grid by 1.
+    - **Core Logic for Filling the Grid**
+        - **If characters match:** Set the current cell to **1 + the value in the top-left diagonal cell** (`dp[i][j] = 1 + dp[i-1][j-1]`).
+        - **If characters do not match:** Set the current cell to the **maximum of the value above it and the value to its left** (`dp[i][j] = \max(dp[i-1][j], dp[i][j-1]`).
+    - **Final Result**
+        - The final value in the bottom-right corner of the grid represents the length of the LCS for the full strings.
+
+- **Memory Optimization for Dynamic Programming**
+    - **Observation**
+        - When computing the current row, the algorithm only ever looks at the current row and the row immediately above it.
+        - You never need to look back two or more rows.
+    - **Implementation**
+        - Instead of an `N * M` grid, you only need to keep **two rows in memory at a time**.
+        - One row is the "previous" row (already computed), and the other is the "current" row being calculated.
+        - After a row is finished, the current row becomes the previous row for the next iteration.
+    - **Optimized Space Complexity**
+        - This reduces memory complexity to `O(M)` or `O(N)`.
+        - To be most efficient, you can choose the string with the smaller length to be the row size, making the space complexity `O(\min(N, M))`.
+
+- **Summary Tips**
+    - When starting, write the brute force DFS solution first, identify changing variables, and then apply caching.
+    - Drawing out the grid on paper is highly recommended for visualizing how values are computed and how edge cases are handled.
+    - LCS is a foundational problem; mastering it allows you to solve several other similar problems.
+
+**Analogy to Solidify Understanding:**
+Imagine two people are trying to find the longest identical sequence of dance moves they both performed in a talent show. They stand at the start of their video recordings. If the first move they both did is the same, they count "1" and move both videos forward. If the first moves are different, they aren't sure who should fast-forward to find a match. So, they try two scenarios: one person stays on their current move while the other fast-forwards one move, and then they swap roles. They follow whichever path eventually finds the most matches. The 2D grid is like a score sheet that tracks every possible combination of "seconds" in their videos so they don't have to re-watch the same segments over and over.
+
+---
+
+### Palindromes
+
+- Palindromes and Dynamic Programming
+    - Palindrome problems can be efficiently solved using dynamic programming.
+    - They often do not follow the standard pattern of brute force recursive DFS, then memoization, then dynamic programming.
+    - While some debate if it technically counts as dynamic programming, it is best to focus on the concepts rather than technicalities.
+
+- Definitions and Basic Concepts
+    - What is a palindrome?
+        - A string that is the same when reversed.
+        - Examples: "ABA" and "race car".
+    - Determining a Palindrome
+        - Method 1: Reverse the entire string and check if it is the same.
+        - Method 2: Use two pointers. Compare the first and last characters. If they match, move inward to the next characters. Continue until reaching the middle. This effectively compares the first half of the string with the second half.
+
+- Brute Force Approach: Finding the Longest Palindromic Substring
+    - Strategy
+        - Take every single possible substring within the input string.
+        - For every character in the input, find every substring starting at that character.
+    - Substring Count
+        - For a string of length `n`, there are approximately `n` substrings starting at the first character, `n-1` at the second, and so on.
+        - This results in `O(n^2)` total substrings.
+    - Time Complexity Analysis
+        - Determining if a single substring is a palindrome using the two-pointer technique takes `O(n)` time (based on the variable length of the substring).
+        - Total Big O time complexity: `O(n^3)`.
+
+- Transitioning to Dynamic Programming
+    - The Problem with Brute Force
+        - In the brute force method, solving for one substring (e.g., the first two characters) does not help determine if a larger substring (e.g., the first three characters) is a palindrome.
+        - You have to start from scratch and repeat work for every substring.
+    - The Dynamic Programming Insight
+        - DP is about solving subproblems efficiently so their solutions help solve larger problems.
+        - If the two outermost characters of a string are equal, the problem of determining if the whole string is a palindrome reduces to a subproblem: Is the inner string (not including those outer characters) a palindrome?.
+        - If the inner string is a palindrome and the outer characters match, then the entire string is a palindrome.
+
+- The Expansion Strategy (Efficient Solution)
+    - Instead of starting from the edges and moving inward (intuitive way), it is better to solve subproblems first by starting in the middle and expanding outward.
+    - Logic for Odd-Length Palindromes
+        - Start at a single character (which is always a palindrome).
+        - Expand outward in both directions as long as the characters match.
+        - Example: If the middle is "B", check the characters to the left and right. If both are "A", the substring "ABA" is a palindrome.
+        - Stop expansion if characters do not match or if pointers go out of bounds.
+        - If a sub-string is not a palindrome, any larger string containing it as the center cannot be a palindrome.
+    - Logic for Even-Length Palindromes
+        - Expanding from a single character only finds odd-length palindromes (1, 3, 5, etc.).
+        - To find even-length palindromes, start with a base substring of two adjacent characters.
+        - If the two adjacent characters are equal, expand outward using two pointers.
+        - Example: Starting with two equal characters, expansion could find a palindrome of length 4.
+
+- Complexity of the Expansion Method
+    - Iterate through every character in the string: `n`.
+    - For each character, expand outward: up to `n`.
+    - This is done twice (once for odd-length bases, once for even-length bases).
+    - Total Time Complexity: `O(n^2)` (technically `2 * n^2`, which simplifies to `n^2`).
+    - This is significantly more efficient than the `O(n^3)` brute force solution.
+
+- Implementation Details
+    - Initialize the length of the longest palindromic substring at 0.
+    - Use a loop to go through every index `i` in the string `s`.
+    - For each index `i`:
+        - Handle Odd Lengths: Set left and right pointers to `i`.
+        - Handle Even Lengths: Set left pointer to `i` and right pointer to `i + 1`.
+    - Expansion Loop Logic:
+        - While the left pointer is `\ge 0` AND the right pointer is within string bounds AND the characters at both pointers are equal:
+            - Check if current substring length is greater than the recorded maximum; if so, update the maximum.
+            - Move the left pointer further left (`left--`) and the right pointer further right (`right++`).
+    - After checking all indices, return the longest length found.
+
+- Code Structure and Optimization
+    - You can write the expansion logic twice within the main loop, or use a helper function to reduce duplication.
+    - Using a helper function involves passing the initial left and right pointers to a function that performs the expansion and returns the max length found.
+
+    ```python
+    # Example logic for the expansion approach
+    def longestPalindrome(s):
+        resLen = 0
+        
+        for i in range(len(s)):
+            # Odd length expansion
+            l, r = i, i
+            while l >= 0 and r < len(s) and s[l] == s[r]:
+                if (r - l + 1) > resLen:
+                    resLen = r - l + 1
+                l -= 1
+                r += 1
+                
+            # Even length expansion
+            l, r = i, i + 1
+            while l >= 0 and r < len(s) and s[l] == s[r]:
+                if (r - l + 1) > resLen:
+                    resLen = r - l + 1
+                l -= 1
+                r += 1
+        return resLen
+    ```
+    - The duplication of the `while` loop logic is acceptable in interviews, but a helper function can be used if preferred.
+
+To understand this expansion method, imagine a **raindrop hitting a pool of water**. The single point of impact is like the middle character of an odd palindrome; the ripples that expand outward evenly in all directions represent the two pointers checking for matching characters to form a larger and larger circle.
+
+---
+
 # Others
 
 ## Prompts
@@ -5202,9 +5759,10 @@ and no #, just nested - lines plaintext
 \times => *
 $ => ** or `
 \log => LOG
+\frac => \
 \rightarrow => -> 
 \cdot => *
-\frac => \
+\le => <=
 ```
 
 ---
