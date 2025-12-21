@@ -40,6 +40,10 @@
     - [BST Sets and Maps](#bst-sets-and-maps)
   - [Backtracking](#backtracking)
     - [Tree Maze](#tree-maze)
+  - [Heap Priority Queue](#heap-priority-queue)
+    - [Heap Properties](#heap-properties)
+    - [Push and Pop](#push-and-pop)
+    - [Heapify](#heapify)
   - [Prompt for Notes Formatting](#prompt-for-notes-formatting)
 
 
@@ -2055,6 +2059,359 @@ Think of inserting a new book into a library organized by a specific system. You
         - **Reason**: In the worst-case scenario, the algorithm must traverse the entire tree (visit every node).
         - **Definition of N**: $N$ is the size of the input tree.
         - This is standard for backtracking as it is essentially a brute force method running over all possibilities.
+
+## Heap Priority Queue
+
+### Heap Properties
+
+- **Introduction to Heaps and Priority Queues**
+    - **The Concept of Priority Queues**
+        - A Priority Queue is a data structure distinct from a regular Queue.
+        - In a regular Queue, ordering is First-In-First-Out (FIFO).
+        - In a Priority Queue, ordering is based on a priority value rather than arrival time.
+    - **Variations of Priority Queues**
+        - There are typically two variations based on how priority is defined:
+            - **Minimum Priority:** Prioritizes smaller values first.
+            - **Maximum Priority:** Prioritizes larger values first.
+    - **Example of Priority Queue Behavior**
+        - Given the values: 7, 3, 9.
+        - **Minimum Priority Scenario:**
+            - First pop: 3 (the smallest).
+            - Second pop: 7.
+            - Third pop: 9.
+        - **Dynamic Behavior:**
+            - The structure is dynamic; adding values changes the pop order.
+            - If we add the value 4 to the remaining items (7, 9):
+                - Next pop: 4 (since it is smaller than 7 and 9).
+                - Following pop: 9 (assuming 7 was already removed or based on remaining order).
+        - **Maximum Priority Scenario:**
+            - Given 7, 3, 9.
+            - First pop: 9.
+            - Second pop: 7.
+            - Third pop: 3.
+    - **Terminology and Relationship**
+        - **Interface vs. Implementation:**
+            - "Priority Queue" is the name of the interface.
+            - "Heap" is the data structure used "under the hood" to implement the Priority Queue.
+        - **Historical Context:** Originally, queues were implemented with linked lists, establishing the separation between the interface name and implementation method.
+        - **Usage:** People use the terms "Priority Queue" and "Heap" interchangeably.
+        - "Heap" is more commonly used in conversation, likely because it is a shorter word.
+
+- **Binary Heap Fundamentals**
+    - **Definition**
+        - A Priority Queue is implemented using a Binary Heap.
+        - A Binary Heap is a binary tree, but it is **not** a Binary Search Tree (BST).
+    - **Distinction from Binary Search Trees (BST)**
+        - In a BST, every value in the right subtree is larger than the root, and every value in the left subtree is smaller.
+        - In a Binary Heap (specifically a Min Heap example with root 14):
+            - The root (14) is smaller than every single descendant in the tree, not just the right side.
+            - The strict left/right sorting of a BST does not apply.
+    - **Types of Heaps**
+        - **Min Heap:** Focuses on minimums. The implementation is exactly the same as a Max Heap, just with logic swapped.
+        - **Max Heap:** Focuses on maximums.
+        - Note: The source material focuses primarily on the Min Heap as it is generally more common.
+
+- **Heap Property 1: The Structure Property**
+    - **Complete Binary Tree Requirement**
+        - A Binary Heap is essentially a "Complete Binary Tree".
+    - **Rules of a Complete Binary Tree**
+        - Every single level in the tree must be completely full, with no holes.
+        - **Exception:** The last level is allowed to have holes.
+        - **Constraint on the Last Level:** If there are missing nodes (holes) in the last level, they must be at the end.
+    - **Insertion Order**
+        - Nodes are added from Left to Right.
+        - It is not enough for only the last level to have missing nodes; the existing nodes must be filled sequentially.
+        - Example: You cannot add a node to the far right if the immediate left position is empty.
+        - Intuition: You always add nodes in the "next available position".
+    - **Examples of Violations**
+        - If a node is missing in the second-to-last level, it is not a complete binary tree.
+        - If the last level has nodes but there is a gap (hole) between them (e.g., left child exists, middle missing, right child exists), the structure property is not satisfied.
+
+- **Heap Property 2: The Order Property**
+    - **Purpose**
+        - The goal of a Heap/Priority Queue is to find the minimum (or maximum) value really quickly and easily.
+        - Looking at the root allows finding the priority element in O(1) time.
+    - **Min Heap Rule**
+        - Recursively, for every node, every value in its left subtree and every value in its right subtree must be greater than (or equal to) the node itself.
+        - **Root Condition:** The minimum value among all values must be at the root.
+    - **Recursive Verification Example**
+        - Given a root of 14:
+            - Left child (19) is greater than 14.
+            - Right child (16) is greater than 14.
+        - Checking the subtree starting at 19:
+            - Left child (21) > 19.
+            - Right child (26) > 19.
+        - Checking the subtree starting at 16:
+            - Left child (19) > 16.
+            - Right child (68) > 16.
+    - **Handling Duplicates**
+        - Unlike Binary Search Trees, Heaps allow duplicate values.
+        - Example: The tree contains two 19s.
+        - Refined Rule: All descendants must be greater than or **equal** to the node.
+    - **Max Heap Rule**
+        - The opposite of a Min Heap.
+        - For every node, all descendants must be **smaller** than the node.
+        - The maximum value is at the root.
+
+- **Implementation: Arrays**
+    - **Underlying Structure**
+        - While visualized as binary trees with nodes and pointers, Heaps are actually implemented using **Arrays**.
+    - **Indexing Strategy**
+        - **Index 0:** Essentially ignored/skipped. We do not care about the zeroth index.
+        - **Index 1:** The Root node is always placed at index 1.
+    - **Filling the Array**
+        - The array is filled level by level, going from left to right.
+    - **Mapping Example**
+        - Root (14) -> Index 1.
+        - Level 2 Left (19) -> Index 2.
+        - Level 2 Right (16) -> Index 3.
+        - Level 3 (21, 26, 19, 68) -> Indices 4, 5, 6, 7.
+        - Level 4 (65, 30) -> Indices 8, 9.
+    - **Why Arrays work**
+        - Arrays are valid representations specifically because Heaps are **Complete Binary Trees**.
+        - If the tree were a regular binary tree with random holes, an array would not make sense due to gaps.
+        - Because it is complete, there are never holes in the array sequence.
+
+- **Mathematical Formulas for Traversal**
+    - The decision to skip index 0 is to make the math for finding parents and children cleaner.
+    - **Finding a Left Child**
+        - Formula: `2 * i` (where `i` is the current index).
+        - Example: Root at index 1 -> Left child is at `1 * 2 = 2`.
+        - Example: Node at index 2 -> Left child is at `2 * 2 = 4`.
+    - **Finding a Right Child**
+        - Formula: `2 * i + 1`.
+        - Example: Root at index 1 -> Right child is at `(1 * 2) + 1 = 3`.
+        - Example: Node at index 2 -> Right child is at `(2 * 2) + 1 = 5`.
+    - **Finding a Parent**
+        - Formula: `i / 2` (Integer division / Round down).
+        - **Logic for Left Child:** Since the left child is `2 * i`, dividing by 2 perfectly reverses the operation to return `i`.
+        - **Logic for Right Child:**
+            - The right child index is always odd (`2 * i` is even, `+ 1` makes it odd).
+            - Example: Index 9. `9 / 2 = 4.5`.
+            - Most languages (and math logic here) round down (floor).
+            - `4.5` rounds down to `4`.
+            - `(2 * i + 1) / 2` effectively eliminates the `+1` remainder and the `*2` factor, leaving `i`.
+        - **Programming Note:** In Python, use double slashes `//` for floor division.
+
+- **Traversal Example**
+    - **Scenario:** Moving through the heap using array math.
+        1. Start at Root (Index 1).
+        2. Go Left: `1 * 2` -> Index 2.
+        3. Go Right: `2 * 2 + 1` -> Index 5.
+        4. Go Left: `5 * 2` -> Index 10.
+    - **Bounds Checking:**
+        - If the calculated index (e.g., 10) is greater than the last index of the array (size of heap), the node does not exist (it is null).
+    - **Conclusion on Traversal:**
+        - As long as the structure properties are maintained, array indices allow traversal exactly like pointers.
+
+- **Summary of Importance**
+    - These notes cover the structure property (Complete Binary Tree) and the order property (Min/Max rules).
+    - These properties are critical; without them, the data structure is no longer a heap.
+    - Future topics include inserting and removing values while maintaining these specific properties.
+
+### Push and Pop
+
+- **Heap Class Initialization**
+    - The constructor initializes the heap as an array containing a single value: zero.
+    - This zero acts as a dummy value because the zeroth index is not used; this represents an essentially empty heap.
+
+- **Pushing into the Heap (Insertion)**
+    - **Concept and Goals**
+        - The term "pushing" is used for inserting a new value into a heap or priority queue.
+        - **Structure Property:** To keep the tree contiguous, a new node must be placed in the next available position (the end of the array).
+        - **Order Property (Min Heap):** Every node must be smaller than its children; conversely, a child must be greater than its parent.
+    - **Step-by-Step Algorithm: Percolate Up**
+        - **1. Placement:** Append the new value to the end of the dynamic array.
+            - For example, inserting 17 into a heap of length 10 puts it at index 10.
+        - **2. Comparison:** Compare the new node with its parent to ensure the order property is met.
+            - The parent's index is found by taking the current index `i` and dividing by two (integer division),.
+        - **3. Swapping:**
+            - If the child is smaller than the parent (e.g., 17 is smaller than its parent), swap the two values in the array.
+            - After swapping, the new node moves up the tree.
+        - **4. Iteration:**
+            - Continue comparing the node with its new parent.
+            - If the parent is still larger than the child, swap again.
+            - **Optimization Logic:** When moving a node up (e.g., replacing 19 with 17), we do not need to compare it to the other branch's children because the previous occupant (19) was already valid (smaller than its descendants); therefore, the new smaller value (17) is automatically valid against those descendants,.
+        - **5. Termination:** The algorithm stops when either:
+            - The node reaches the root (index 1) and has no parent.
+            - The order property is satisfied (the parent is smaller than or equal to the child).
+    - **Code Implementation Details**
+        - Calculate the index of the newly inserted element: `len(heap) - 1`.
+        - Use a loop to "percolate up" while the order property is violated.
+        - Inside the loop:
+            - Compare index `i` with parent `i // 2`.
+            - If `heap[i] < heap[i // 2]`: Swap the values.
+            - Update `i` to `i // 2`.
+    - **Time Complexity**
+        - The complexity is **log n**, where n is the number of values in the heap.
+        - This is determined by the height of the tree, which is guaranteed to be balanced in a complete binary tree.
+
+- **Popping from the Heap (Removal)**
+    - **Concept and Goals**
+        - Popping removes the priority element, which is always the minimum value located at the root (index 1).
+        - Just reading the top element is simple, but removing it is complicated because structure and order properties must be maintained.
+    - **Why the Naive Approach Fails**
+        - If you remove the root and replace it with the smaller of its two children, you create a "hole" at the next level.
+        - Shifting nodes up to fill the hole eventually leaves a gap at a random spot, violating the structure property (levels must be full).
+    - **The Correct "Genius" Technique**
+        - **1. Replacement:** Remove the root node (e.g., 14) and replace it with the **last value** in the array (e.g., 30).
+        - **2. Structure Satisfied:** This keeps the array contiguous, satisfying the structure property immediately.
+        - **3. Order Violated:** The new root (30) is likely larger than its children, violating the order property.
+        - **4. Percolate Down:** Shift the new node down until it fits the order property.
+    - **Step-by-Step Algorithm: Percolate Down**
+        - Take the current node (originally the last value) and compare it against its left and right children.
+        - Find the minimum of the two children (e.g., between 16 and 19, the minimum is 16).
+        - Compare the minimum child to the current node.
+        - If the minimum child is smaller than the current node:
+            - Swap the current node with that minimum child.
+            - For example, swap 30 with 16.
+        - Repeat this process recursively down the tree until the node is smaller than its children or has no children.
+    - **Code Implementation Details**
+        - **Empty/Small Heap Checks:**
+            - If length is 1: Return null (heap is empty).
+            - If length is 2: Remove and return the single value (root),.
+        - **Setup for General Case:**
+            - Save the root value (result) to a variable.
+            - Move the last value of the array to index 1 (the root).
+            - Set pointer `i` to 1.
+        - **While Loop Logic:**
+            - Run loop while a **left child exists** (`2 * i < len(heap)`).
+            - **Case A: Swap with Right Child**
+                - Conditions:
+                    1. Right child exists (`2 * i + 1 < len`).
+                    2. Right child is smaller than Left child.
+                    3. Current node is greater than Right child.
+                - Action: Swap current node with Right child and update `i` to `2 * i + 1`,.
+            - **Case B: Swap with Left Child**
+                - Conditions: Case A did not run, AND Current node is greater than Left child,.
+                - Action: Swap current node with Left child and update `i` to `2 * i`.
+            - **Case C: Stop (Break)**
+                - Condition: The current node is already in the proper position (smaller than both children).
+                - Action: Break out of the loop.
+        - **Return:** Finally, return the saved original root value.
+    - **Time Complexity**
+        - The complexity is **log n**, which is the height of the balanced binary tree,.
+        - This cost comes from the percolate down process.
+
+### Heapify
+
+- **Heaps vs. Binary Search Trees (BST)**
+  - **Advantages of Heaps**
+    - **Accessing Min/Max:**
+      - In a heap, you can get the minimum or maximum element (depending on implementation) in **constant time**.
+      - In a Binary Search Tree (BST), this takes **log n time** because you must traverse all the way to the left of the tree.
+    - **Building the Structure:**
+      - **BST Construction:** Requires inserting a node every single time. Time complexity is **n log n** (n insertions $\times$ log n time per insertion).
+      - **Heap Construction:**
+        - Can be built by pushing elements one by one (taking n log n time).
+        - **Heapify (Build Heap):** A special algorithm that builds a heap in **linear time ($O(N)$)**,.
+
+- **The Heapify Algorithm (Build Heap)**
+  - **Concept**
+    - Takes a set/list of values in no particular order (e.g., an array) and turns them into a heap satisfying heap properties.
+    - Time Complexity: **$O(N)$**.
+  - **Initial Structure Property Adjustment**
+    - Input arrays often do not satisfy the structure property initially (e.g., having a real value at the 0th index).
+    - **Step:** Move the element at the 0th index to the last position.
+    - Result: The array satisfies the structure property (e.g., 50 at root, followed by 80, 40, etc.).
+  - **Satisfying the Order Property**
+    - **Definition:** For a Min Heap, every node must have a value smaller than all of its descendants (recursive property). Max heaps are the exact opposite.
+    - **Strategy:** Start at the bottom nodes and work upwards.
+      - Leaf nodes (nodes without children) do not require comparison.
+      - Approximately half of the nodes are leaf nodes and can be skipped.
+
+- **Heapify Step-by-Step Walkthrough**
+  - **Calculating the Starting Point**
+    - Get the number of actual nodes (excluding dummy/0-index).
+    - **Formula:** `(Length - 1) / 2` (Integer division/rounding down).
+    - **Example:**
+      - If length is 10 (9 actual nodes), `9 / 2 = 4`.
+      - Start at **index 4**. This is the first node that actually has children.
+    - Note: You can start at the end and go backward, but calculating the midpoint allows skipping leaf nodes.
+  - **Percolating Down (The Process)**
+    - The algorithm iterates through nodes that have children, performing the "percolate down" operation if necessary (same as when removing/popping nodes).
+    - **Example Trace:**
+      - **Node at Index 4 (Value 30):**
+        - Check: Is 30 smaller than children (90 and 60)?
+        - Result: Yes. No swap needed.
+      - **Node at Index 3 (Value 40):**
+        - Check: Is right child smaller than left? Yes.
+        - Check: Is right child smaller than parent (40)? Yes.
+        - Action: Swap 40 with the right child.
+        - Result: This subtree is now valid.
+      - **Node at Index 2 (Value 80):**
+        - Check: Has two children. Right child (10) is smaller than left.
+        - Check: Is 10 smaller than 80? Yes.
+        - Action: Swap 80 with 10.
+        - Subtree is now valid.
+      - **Node at Index 1 (Root, Value 50):**
+        - Check children: 10 is smaller than the other child.
+        - Check: Is 10 smaller than 50? Yes.
+        - Action: Swap 50 and 10.
+        - **Continue Percolating 50:**
+          - Compare children at new position. Smaller child is 30.
+          - Check: Is 50 bigger than 30? Yes.
+          - Action: Swap 50 and 30.
+        - **Continue Percolating 50:**
+          - Compare children at new position. Smaller child is 60.
+          - Check: Is 50 bigger than 60? No.
+          - Result: 50 stays. Correct spot found.
+  - **Final State**
+    - The array represents a valid heap.
+    - Smallest value (10) is at the root.
+    - All nodes (20, 30, 50, etc.) are smaller than their descendants.
+
+- **Code Implementation Logic**
+  - **Setup:**
+    - Input: An array.
+    - Operation: `append` the 0th element to the end to shift positions (satisfies structure).
+    - Assign array to be the heap.
+  - **Loop Logic:**
+    - Calculate starting index: `current = (len(heap) - 1) // 2`.
+    - **While Loop:**
+      - Create a copy of `current` (e.g., `i`).
+      - Perform **Percolate Down** on `i` (checking children, swapping if needed until valid).
+      - Decrement `current` by 1 (`current - 1`) to move in reverse order toward the root.
+    - **Helper Function:** In a class implementation, "percolate down" logic is usually a helper function because it is also used in `heap_pop`.
+
+- **Time Complexity Analysis: Why O(N)?**
+  - **Misconception:** At first glance, it looks like $O(N \log N)$ because we visit every node and percolate down (log n operation).
+  - **Intuition:**
+    - **Percolating Down vs. Up:**
+      - Percolating **up**: Leaf nodes (the majority) must travel the full height of the tree.
+      - Percolating **down**:
+        - Only the root travels the full height.
+        - The bottom level (leaves) travel distance 0.
+        - The level above leaves travels distance 1.
+      - Shifting down is more efficient because the majority of nodes (at the bottom) do little to no work.
+  - **Mathematical Explanation:**
+    - In a complete binary tree, roughly $N/2$ nodes are at the last level (height 0). Work: $0 \times (N/2)$.
+    - Roughly $N/4$ nodes are at the next level. Work: $1 \times (N/4)$.
+    - Summation series: The sum of these terms converges to roughly **N**.
+  - **Conclusion:** The Big O complexity is **$O(N)$** (linear time). Note: You typically do not need to prove this, just know it.
+
+- **Heap Sort and Searching**
+  - **Heap Sort:**
+    - Building a heap takes **$O(N)$**.
+    - To output a sorted array, you must **pop** every single element.
+    - Popping takes **$\log N$**. Doing this $N$ times takes **$N \log N$**.
+    - Total Time: **$N \log N$** (similar to Merge Sort).
+  - **Searching in a Heap:**
+    - **Disadvantage:** Heaps are **not good for searching** specific values.
+    - **Reason:** Unlike BSTs, there is no strict left/right logic (e.g., a value of 30 could be in either the left or right subtree).
+    - **Complexity:** Searching requires checking every node: **$O(N)$**.
+    - BST Search Complexity: **$O(\log N)$**.
+    - **Purpose:** Heaps are intended for priority access (Min/Max), not random searching.
+
+- **Usage in Coding Interviews**
+  - **Frequency:** Heaps are used more often than BSTs as a utility data structure in problem-solving.
+  - **Context:**
+    - BST problems usually involve implementing BST logic.
+    - Heap problems usually involve using the heap to find min/max values efficiently.
+  - **Key Concepts to Know:**
+    - **Heapify:** Runs in linear time ($O(N)$).
+    - **Push/Pop:** Runs in log time ($O(\log N)$).
+    - **Get Min/Max:** Runs in constant time ($O(1)$).
 
 ## Prompt for Notes Formatting
 
