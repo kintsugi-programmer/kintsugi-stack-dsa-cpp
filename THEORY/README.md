@@ -1,6 +1,6 @@
 # kintsugi-stack-dsa-cpp: THEORY
 
-> "Data Structures and Algorithms (DSA) should be viewed as essential tools, akin to the finely tuned parts of a Formula 1 car. The act of problem-solving with DSA serves as a crucial platform to exhibit both intelligence and creative thinking. The coding challenges themselves are simply various permutations of external factors; like the weather, track, wind, and rain in an F1 race. Ultimately, what dictates success in both domains; coding and Formula 1; is the mastery of planning, strategizing, maintaining flow, and ensuring precise code orchestration." - Siddhant Bali
+> TLDR: This course covers the majority of [Data Structure and Algorithms](#data-structure-and-algorithms) topics required to succeed in technical interviews. For more advanced topics, please see the [Advanced Algorithms](#advanced-algorithms) course.
 
 - Author: [Kintsugi-Programmer](https://github.com/kintsugi-programmer)
 
@@ -17,7 +17,7 @@
     - [Overview](#overview)
 - [Data Structure and Algorithms](#data-structure-and-algorithms)
   - [Arrays](#arrays)
-    - [RAM](#ram)
+    - [RAM(Random Access Memory)](#ramrandom-access-memory)
     - [Static Arrays](#static-arrays)
     - [Dynamic Arrays](#dynamic-arrays)
     - [Stacks](#stacks)
@@ -138,7 +138,7 @@
 
 ---
 
-### RAM
+### RAM(Random Access Memory)
 
 - **Introduction to Data Structures and RAM**
   - A **data structure** is defined as a specific way of **structuring data**.
@@ -150,8 +150,8 @@
 - **RAM Measurement and Binary Basics**
   - **RAM size** is measured in units called **bytes**.
   - It is common for modern computers to possess approximately **8 gigabytes** of RAM.
-  - The term **"giga"** represents approximately **10 to the power of 9**, which is roughly **one billion**.
-  - A single **byte** is composed of exactly **eight bits**.
+  - The term **"giga"** represents approximately **10 to the power of 9 (10^9)**, which is roughly **one billion**.
+  - A single **byte** is composed of exactly **eight bits** `1 Byte = 8 bits = _ _ _ _ _ _ _ _ (0/1 Comb. )`.
   - A **bit** is a storage position for a single digit, with the restriction that the digit must be either a **0 or a 1**.
   - These zeros and ones constitute the fundamental **language of computers**.
   - Storage is hierarchical: individual bits form groups of bits, which form bytes, which collectively form RAM.
@@ -162,13 +162,20 @@
   - It is a common standard for **integers** to be represented by **four bytes** rather than a single byte.
   - Since one byte is eight bits, a four-byte integer is represented by **32 bits**.
   - To represent the integer **1** using 32 bits, the computer uses **31 zeros** followed by a single **1** at the very end.
+    - 1 
+    - = int
+    - = 4B
+    - = 8*4b = 32b
+    - = ` _ _ _ _ _ _ _ _  _ _ _ _ _ _ _ _  _ _ _ _ _ _ _ _  _ _ _ _ _ _ _ _ 
+    - now 1 dec => 1 binary (ya it is !!!)
+    - so 1 int => `00000000000000000000000000000001`(stored this way in memory)
   - Once the data is converted into this byte-based representation, it can be placed into RAM.
 
 - **RAM Structure: Values and Addresses**
   - RAM can be visualized as a **contiguous block of data**.
   - RAM consists of two primary components: **values** and **addresses**.
   - Every value is stored at a **distinct location**, which is referred to as its **address**.
-  - In technical diagrams, addresses are often distinguished from values by placing a **dollar sign (`)** in front of the address number.
+  - In technical diagrams, addresses are often distinguished from values by placing a **dollar sign ($)** in front of the address number.
   - The first address in a sequence is typically **0**.
 
 - **Memory Properties of Arrays**
@@ -186,7 +193,8 @@
   Address: `4 -> Value: 3
   Address: `8 -> Value: 5
   ```
-  - If the addresses were incremented by only one (`0, `1, `2) for integers, there would not be enough room, as each integer requires a full four-byte slot.
+  - ![alt text](image.png)
+  - If the addresses were incremented by only one (`0`, `1`, `2`) for integers, there would not be enough room, as each integer requires a full four-byte slot.
   - Other data types, such as **characters** (e.g., 'A', 'B', 'C'), have different size requirements.
   - **ASCII characters** typically take up only **one byte** of memory.
   - Consequently, the addresses for a character array increment by **one** for each element.
@@ -197,6 +205,7 @@
   Address: `2 -> Value: 'C'
   ```
   - The general rule for storing values contiguously is that the address must increment by the **size of the value** being stored.
+  - ![alt text](image-1.png)
 
 - **Theory vs. Practice**
   - Understanding how memory and addresses work provides the necessary **theoretical foundation** for data structures.
@@ -217,15 +226,17 @@ Storing data in RAM is like a **long row of lockers** in a school hallway; each 
 
   - **Reading Data from an Array**
     - **The Concept of Indices**
-      - Programmers use variables (e.g., `my array`) to represent the allocated array.
+      - ![alt text](image-2.png)
+      - Programmers use variables (e.g., `my_array`) to represent the allocated array.
       - To read the first element, the intuitive action is to go to the first memory address and read the value.
-      - Programmers do not need to know exact memory addresses for every value because they use **indexes**.
+      - Programmers do **not need to know exact memory addresses** for every value because they use **indexes**.
       - **Index 0** is always the first value; it does not start at one,.
       - Subsequent values follow in order: index 1, index 2, and so on.
     - **Efficiency of Reading**
+      - ![alt text](image-3.png)
       - Any index in an array can be automatically mapped to a location in memory.
       - This allows for **instant reading** of any value as long as the index is known.
-      - This operation is called **Big O of 1** (constant time).
+      - This operation is called **Big O of 1: O(1)** (constant time).
       - Even as an array grows larger, reading a specific index happens in the same amount of time in the worst case.
     - **RAM Properties (Random Access Memory)**
       - The ability to go to an arbitrary address and read it instantly is a property of **Random Access Memory (RAM)**.
@@ -234,7 +245,7 @@ Storing data in RAM is like a **long row of lockers** in a school hallway; each 
 
   - **Looping Through an Array**
     - To read every value from start to finish, a programmer starts at index 0.
-    - In code, this is typically represented as `my array[i]`.
+    - In code, this is typically represented as `my_array[i]`.
     - The process involves:
       1. Starting with index `i = 0`.
       2. Reading the value at `i`.
@@ -252,16 +263,20 @@ Storing data in RAM is like a **long row of lockers** in a school hallway; each 
       - The next spot in RAM might be:
         - Occupied by another array.
         - Used by the Operating System for another purpose.
+        - ![alt text](image-4.png)
       - If you put the new value anywhere else in memory, the array is no longer contiguous, which breaks the definition of an array.
+        - ![alt text](image-5.png)
       - If the values are not contiguous, incrementing an index (e.g., going from index 2 to 3) would not lead the computer to the correct memory spot where the value is stored.
+        - ![alt text](image-6.png)
     - **Language Differences:**
       - Languages like **Python or JavaScript** often use **dynamic arrays** as the default, so users rarely encounter these fixed-size limitations,.
       - Static arrays are the specific focus of this limitation.
 
   - **Writing and Removing Data**
+    - ![alt text](image-9.png)
     - **Initialization:**
       - When an array is first allocated, it might be empty but must store something.
-      - Languages may initialize it to all zeros, or it may contain random, arbitrary "garbage" values.
+      - Languages **may initialize** it to all zeros, or it **may contain random, arbitrary "garbage" values**.
     - **Basic Writing:**
       - Adding a value to an empty spot is an **instant operation (Big O of 1)**.
       - Because indices map directly to RAM positions, the computer knows exactly where to write the value.
@@ -270,13 +285,18 @@ Storing data in RAM is like a **long row of lockers** in a school hallway; each 
       - "Removing" a value involves **overwriting** it,.
       - Common methods include replacing the value with a 0, a -1, or another "irrelevant" marker,.
       - Overwriting/removing is a **Big O of 1** (constant time) operation because it just involves going to that specific memory position and changing it.
+      - ![alt text](image-7.png)
+        - in this by removing 7, you aren't shrinking/cutting/deallocating Array part in RAM, you just overwrite it with garbage/0 and feel good !!!
 
   - **Inserting at Arbitrary Positions (Beginning or Middle)**
+    - ![alt text](image-8.png)
     - Arrays are **ordered values**; the position matters.
     - Inserting at the end (if space is available) is efficient (O(1)).
     - Inserting in the middle or beginning is **inefficient** because the order must be preserved.
     - **Example: Inserting 4 before 5 and 6**
-      - If the array has `[5, 6, _]` and you want to insert 4 at the start to get ``:
+      - If the array has `[5, 6, _]` and you want to insert 4 at the start to get final array:
+        - ![alt text](image-11.png)
+          - Ignore RAM
         1. You cannot just overwrite 5 with 4, or you lose the 5.
         2. You must **shift** the existing values to the right.
         3. Step 1: Move the value at index 1 (6) to index 2 (1 + 1).
@@ -292,12 +312,14 @@ Storing data in RAM is like a **long row of lockers** in a school hallway; each 
         - To generalize for the worst case, we say the time complexity is **Big O of N**.
 
   - **Removing from Arbitrary Positions**
+    - ![alt text](image-10.png)
+      - Ignore RAM
     - Removing a value from the middle and wanting to "close the gap" (so the first value is the new start) requires shifting.
-    - **Example: Removing the first element from ``**
+    - **Example: Removing the first element from `[5,6,7]`**
       - To make 6 the new first value:
         1. Shift the value at index 1 (6) to the left to index 0 (1 - 1).
         2. Shift the value at index 2 (7) to the left to index 1 (2 - 1).
-      - The result is ``. The original memory spot for 7 might still hold a value, but we treat it as non-existent or overwrite it with 0.
+      - The result is `[6,7]`. The original memory spot for 7 might still hold a value, but we treat it as non-existent or overwrite it with 0.
     - Like insertion, this is a **Big O of N** operation in the worst case because we may have to shift every subsequent value.
 
   - **Summary of Static Array Operations**
@@ -319,6 +341,54 @@ Storing data in RAM is like a **long row of lockers** in a school hallway; each 
     }
     ```
 
+```cpp
+#include <iostream>
+
+using std::cout;
+using std::endl;
+
+// Insert n into arr at the next open position.
+// Length is the number of 'real' values in arr, and capacity
+// is the size (aka memory allocated for the fixed size array).
+void insertEnd(int arr[], int n, int length, int capacity) {
+    if (length < capacity) {
+        arr[length] = n;
+    }
+}
+
+// Remove from the last position in the array if the array
+// is not empty (i.e. length is non-zero).
+void removeEnd(int arr[], int length) {
+    if (length > 0) {
+        arr[length - 1] = 0;
+    }
+}
+
+// Insert n into index i after shifting elements to the right.
+// Assuming i is a valid index and arr is not full.
+void insertMiddle(int arr[], int i, int n, int length) {
+    for (int index = length - 1; index >= i; index--) {
+        arr[index + 1] = arr[index];
+    }   
+    arr[i] = n;
+}
+
+// Remove value at index i before shifting elements to the left.
+// Assuming i is a valid index.
+void removeMiddle(int arr[], int i, int length) {
+    for (int index = i + 1; index < length; index++) {
+        arr[index - 1] = arr[index];
+    }
+}
+
+void printArr(int arr[], int capacity) {
+    for (int i = 0; i < capacity; i++) {
+        cout << arr[i] << ' ';
+    }
+    cout << endl;
+}
+```
+
 ---
 
 ### Dynamic Arrays
@@ -329,6 +399,12 @@ Storing data in RAM is like a **long row of lockers** in a school hallway; each 
     - In **Python** and **JavaScript**, dynamic arrays are the default array type.
     - In **Java**, they are implemented as an **ArrayList**.
     - In **C++**, they are called a **Vector**.
+    ```
+    Python:  myArr = [1]; myArr.append(2); print(myArr)
+    JS:      const myArr = [1]; myArr.push(2); console.log(myArr)
+    C++:     vector<int> myArr = {1}; myArr.push_back(2);
+    Java:    List<Integer> myArr = new ArrayList<>(List.of(1, 2));
+    ```
   - **Initialization**:
     - You do not necessarily have to specify a size when creating one.
     - If no size is specified, it initializes to a **default size**.
@@ -338,9 +414,14 @@ Storing data in RAM is like a **long row of lockers** in a school hallway; each 
   - **Capacity (Size)**: The total number of slots allocated in memory (e.g., a size of 3).
   - **Length**: The actual number of elements currently stored in the array (e.g., an empty array of size 3 has a length of 0).
   - **Pointers**:
+    - this tracks only end element of array
     - The implementation maintains a **pointer** or variable that tracks the index of the **last element**.
     - Example: If the first element is at index 0 and the next is at index 1, the pointer identifies index 1 as the last element.
     - The **length** is calculated using this pointer; if the pointer is at index 1, the length is 2 (since indices start at 0).
+    - ![alt text](image-12.png)
+      - ignore RAM, focus on just last pointer
+      - this ponter is imp. for push/pop/length as they are dependent on it
+        - as all these processes are incomplete without knowing the end loc. of array
 
 - CORE OPERATIONS
   - **Pushing**:
@@ -352,15 +433,39 @@ Storing data in RAM is like a **long row of lockers** in a school hallway; each 
     - After removing the value, the pointer shifts left by one index to mark the new end.
 
 - THE RESIZING PROCESS (GROWING THE ARRAY)
+  - O(N) ops.
   - **The Problem**: When the array runs out of space (e.g., capacity is 3 and you try to push a fourth element), you cannot simply allocate more memory right next to the existing array.
   - **The Solution**: The dynamic array must allocate a brand new array to contain all elements.
+  - ![alt text](image-13.png)
+  - ![alt text](image-14.png)
+  - ![alt text](image-15.png)
   - **Steps for Resizing**:
     1. **Allocation**: A new array is created in a different, random location in memory.
     2. **Capacity Doubling**: The new array's size is typically **double** the original capacity.
        - Example: An original size of 3 becomes size 6. An original size of 6 becomes size 12.
+       - ![alt text](image-16.png)
     3. **Copying**: All original values are copied from the old array to the new array starting at the beginning (index 0 to 0, index 1 to 1, etc.).
     4. **Insertion**: The new value (the one that triggered the resize) is added to the new space.
     5. **Deallocation**: The original array is **deallocated** or "freed," telling the operating system it is no longer in use so the memory can be reused.
+
+> TLDR: 
+> - For adding new element in array which have space(static or dynamic with pre-allocated size)
+>   - it's O(1) simple insert
+> - But for adding the same when length exceeds capacity
+>   - it's O(n) re-size array + O(1) simple insert 
+>   - so it should be O(n) + O(1) in Dynamic Arrays too where size changes
+>   - but it's not 
+>     - even tho its increasing, but its not resizing for every insertion
+>     - in case of resize array is too big because of 2x size of prev. len. 
+>       - for those elements it's O(1)
+>       ```
+>        [3,4,5,6,7,8]
+>        [3,4,5,6,7,8,9,_,_,_,_,_ ] : insert 9 O(n)
+>        [3,4,5,6,7,8,9,10,_,_,_,_] : insert 10 O(1)
+>       ```
+>       - now this inc of size in long run accomodates most of insertions and
+>       - and Tendencies of O(1) >> O(n)
+> - so, **TC of Insertion of Dynamic Arrays is O(1) (it's Amortized Time Complexity)(it's average)**         
 
 - TIME COMPLEXITY AND AMORTIZATION
   - **Resizing Complexity**:
@@ -372,24 +477,61 @@ Storing data in RAM is like a **long row of lockers** in a school hallway; each 
     - **Amortized complexity** is essentially the **average time** of an operation.
     - Pushing a value to a dynamic array has an **amortized time complexity of O(1)**.
   - **Mathematical Explanation (The Power Series)**:
+    - ![alt text](image-17.png)
+      - want to add 8 elements in dynamic array
+      - and dynamic array have default size 1
     - If you push 8 elements into an array that started at size 1:
+      - ![alt text](image-18.png)
+      - ![alt text](image-19.png)
+      - ![alt text](image-20.png)
+      - ![alt text](image-21.png)
+      - ![alt text](image-22.png)
+        - ignore the O(1) insertions as resizing is dominating/bottle neck than insertion
+        - eg 
+          - last segement have 8 ops. (resizing takes O(N) ) + 8*(O(1)) => 8+8 ops => 16 ops
+          - but as O(N)>>O(1)
+          - and O(N) is dominating/bottle neck
+          - so we conclude to have O(N) ops. => 8 only
       - Total operations = 8 (last allocation/moves) + 4 + 2 + 1 = 15 operations.
     - This calculation is **dominated by the last term**.
+      - pow series say 8 >= 4 + 2 + 1
+      - so 8 ops is dominating/bottle neck than 4 ops , 2 ops , 1 ops 
+      - so we consider 8 ops only
     - The sum of all previous terms will always be less than or equal to the last term.
     - Therefore, the total operations for N elements is always **less than or equal to 2 * N**.
+      - if we want new insertion so we need another 16(8*2) size array, and 16 >= 8+4+2+1 
+      - so 16 is bottle neck/dominating
+      - i.e. 8*2 is main ops
+      - so we conclude to O(2*N)
+        - simplifies to O(N) as we ignore constants in cal. TC
     - In Big O, **O(2 * N)** simplifies to **O(N)**.
+    - ![alt text](image-23.png)
+    - ![alt text](image-24.png)
     - Since it takes O(N) total time to push N elements, the average (amortized) time per push is **O(1)**.
+
+> Dominating Ops. is actually **Bottleneck Ops.** where the whole program's stucks !!! 
 
 - BIG O NOTATION AND CONSTANTS
   - **Constants are Ignored**:
     - We do not care about constants multiplied by N (like O(2 * N)) or added to N (like O(N + 8)).
     - Whether the constant is 10, 100, or 1000, it is simplified to O(N).
   - **Why Constants are Ignored**:
-    - Big O focuses on **growth rates** as input sizes (N) become very large.
+    - Big O focuses on **growth rates** as **input sizes** (N) become very large.
     - We care about how the runtime grows: is it linear (O(N)) or quadratic (O(N^2))?.
     - **Interaction of Functions**: 
       - A faster-growing function like `N^2` will always eventually intersect and surpass a slower-growing function like `N` or `2N`, regardless of the starting constant.
-      - We ignore small input sizes (like 1, 8, or 1000) because only very large inputs significantly slow down a CPU.
+      - We ignore small **input sizes** (like 1, 8, or 1000) because only very large inputs significantly slow down a CPU.
+    - ![alt text](image-25.png)
+      - btw fun fact O(N^2) = O(N) at N=1
+
+> TLDR: 
+> - No Matter One algo is this big seems TC = O(1000000000*N + 10^100000000000000000) , but its still v.smaller than O(N^2) in long run 
+> - O(N^2) > O(1000000000*N + 10^100000000000000000) in long run
+> - O(N^2) > O(N) in long run
+> - O(N) = O(1000000000*N + 10^100000000000000000) (Same Aukaat hai inki !!!)
+> - ![alt text](image-26.png)
+>  - larger growing func. is greater than slow growing func.
+>  - We ignore small **input sizes** (like 1, 8, or 1000) because only very large inputs significantly slow down a CPU.
 
 - DYNAMIC ARRAY PERFORMANCE SUMMARY
   - **Accessing an Element**: **O(1)** (can access any index anywhere in constant time).
@@ -402,6 +544,80 @@ Storing data in RAM is like a **long row of lockers** in a school hallway; each 
 
 - ANALOGY
   - Imagine a dynamic array as a growing dinner party table. You start with a small table (the original capacity). When more guests arrive than there are chairs, you don't just squeeze them in; you move the entire party to a new room with a table twice as big. While the move itself (copying elements) takes a lot of effort, it happens so rarely compared to guests just sitting down (pushing elements) that on average, seating a guest is still a very quick process.
+
+```cpp
+#include <iostream>
+
+using std::cout;
+using std::endl;
+
+// Example implementation of a resizable array (i.e. a vector).
+class Array {
+public:
+    int capacity = 2;
+    int length = 0;
+    int *arr = new int[2]; // Array of capacity = 2
+
+    Array(){};
+
+    // Insert n in the last position of the array
+    void pushback(int n)
+    {
+        if (length == capacity)
+        {
+            resize();
+        }
+        // insert at next empty position
+        arr[length++] = n;
+    }
+
+    void resize()
+    {
+        // Create new array of double capacity
+        capacity = 2 * capacity;
+        int *newArr = new int[capacity];
+
+        // Copy elements to newArr
+        for (int i = 0; i < length; i++)
+        {
+            newArr[i] = arr[i];
+        }
+        arr = newArr;
+        // Normally we would use smart pointers or free the old arr's memory
+    }
+
+    // Remove the last element in the array
+    void popback() {
+        if (length > 0) {
+            length--;
+        }
+    }
+
+    // Get value at i-th index
+    int get(int i) {
+        if (i < length) {
+            return arr[i];
+        }
+        // Here we would throw an out of bounds exception
+    }
+
+    // Insert n at i-th index
+    void insert(int i, int n) {
+        if (i < length) {
+            arr[i] = n;
+            return;
+        }
+        // Here we would throw an out of bounds exception
+    }
+
+    void print() {
+        for (int i = 0; i < length; i++) {
+            cout << arr[i] << ' ';
+        }
+        cout << endl;
+    }
+};
+```
 
 ---
 
