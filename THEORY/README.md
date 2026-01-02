@@ -728,12 +728,14 @@ public:
 ---
 
 ### Singly Linked Lists
+
 - **Singly Linked Lists Overview**
     - Linked lists have significant overlap with arrays but also many differences.
     - They are comprised of **list nodes**, sometimes simply called **nodes**.
 
 - **List Node Definition and Structure**
     - A list node is an object that encapsulates at least two specific things:
+        - ![alt text](image-30.png)
         - **Value**: This can be an integer, a character, another object, or anything else (e.g., the value 4).
         - **Next**: This is a **pointer** that indicates what the next list node in the linked list is.
     - This pointer system is the method for connecting multiple list nodes together to form a linked list.
@@ -746,11 +748,13 @@ public:
     - **Memory Allocation**:
         - When a node object is created, it is stored somewhere in memory.
         - Programmers do not necessarily control the exact memory location.
+          - ![alt text](image-31.png)
         - Multiple nodes (e.g., "red", "blue", and "green") can be created separately in memory.
     - **Implementation of Connections**:
         - In most programming languages, the `next` pointer is implemented as a **reference** to another list node object.
         - To connect nodes in code, you set the `next` property of one node to the variable representing the next node.
         - **Example**: `ListNode1.next = ListNode2`.
+          - ![alt text](image-32.png)
     - **Low-Level Mechanics**:
         - Under the hood, the second node (e.g., "blue") is stored at a specific memory address (e.g., "xx") while the first node is at another (e.g., "y").
         - The pointer tells the system the specific address of the next node.
@@ -759,6 +763,7 @@ public:
 - **Memory Layout Differences**
     - **Linked Lists**: Nodes may be stored in **random order** in memory and are only connected via pointers.
         - A "red" node can point to a "blue" node even if the blue node is stored "behind" it or elsewhere in a "big mess" in memory.
+          - ![alt text](image-33.png)
     - **Arrays**: Arrays are stored in memory in the exact same sequence as they are used by the programmer.
 
 - **Traversing a Linked List**
@@ -772,6 +777,7 @@ public:
         while cur != null:
             cur = cur.next
         ```
+        - ![alt text](image-34.png)
     - **Step-by-Step Execution Example**:
         1. `cur` starts at the "red" node.
         2. The condition `cur != null` is true, so the loop enters.
@@ -784,16 +790,20 @@ public:
 
 - **Complexity and Edge Cases**
     - **Infinite Loops**: If a node's `next` pointer points back to a previous node (e.g., the third node points back to the first), the program will loop forever and eventually crash.
+      - ![alt text](image-35.png)
     - **Time Complexity of Traversal**: Traversing the entire list is **O(n)**, where **n** is the size of the linked list. This is identical to array traversal.
 
 - **Head and Tail Management**
+    - ![alt text](image-36.png)
     - It is helpful to keep track of two specific pointers:
         - **Head**: The first element of the list.
         - **Tail**: The last element of the list.
     - In a list of **size one**, both the Head and Tail pointers point to the same single node.
+      - ![alt text](image-37.png)
 
 - **Operations: Insertion at the End**
     - **Scenario**: Adding a new node (e.g., "purple") to the end of the list.
+      - ![alt text](image-38.png)
     - **Steps**:
         1. Create the new node.
         2. Set the current `tail.next` to the new node (`tail.next = ListNode4`).
@@ -802,6 +812,7 @@ public:
 
 - **Operations: Removal of Nodes**
     - **Constant Time Removal O(1)**: Removing a node (beginning or end) is **O(1)**, provided there is a pointer to the **previous node** of the one being removed.
+      - ![alt text](image-39.png)
     - **Procedure for Middle Removal**:
         - To remove a node between "head" and a third node, set `head.next` to `head.next.next`.
         - This "chains" the fields: `head.next` refers to the second node, and `head.next.next` refers to the third node.
@@ -814,6 +825,66 @@ public:
 **Analogy for Understanding**
 A singly linked list is like a **scavenger hunt**. Each location (node) contains a prize (value) and a slip of paper (pointer) telling you exactly where to find the next location. You can't jump straight to the third location unless you go to the first and second locations to get the clues. Even if the locations are scattered randomly across a city (memory), the clues keep them in a specific logical order.
 
+```cpp
+#include <iostream>
+
+using std::cout;
+using std::endl;
+
+class ListNode {
+public:
+    int val_;
+    ListNode* next = nullptr;
+
+    ListNode(int val) {
+        val_ = val;
+    }
+};
+
+// Implementation for Singly Linked List
+class LinkedList {
+public:
+    ListNode* head;
+    ListNode* tail;
+
+    LinkedList() {
+        // Init the list with a 'dummy' node which makes 
+        // removing a node from the beginning of list easier.
+        head = new ListNode(-1);
+        tail = head;
+    }
+
+    void insertEnd(int val) {
+        tail->next = new ListNode(val);
+        tail = tail->next;
+    }
+
+    void remove(int index) {
+        int i = 0;
+        ListNode* curr = head;
+        while (i < index && curr) {
+            i++;
+            curr = curr->next;
+        }
+        
+        // Remove the node ahead of curr
+        if (curr) {
+            curr->next = curr->next->next;
+        }
+    }
+
+    void print() {
+        ListNode* curr = head->next;
+        while (curr) {
+            cout << curr->val_ << " -> ";
+            curr = curr->next;
+        }
+        cout << endl;
+    }
+};   
+
+```
+
 ---
 
 ### Doubly Linked Lists
@@ -822,6 +893,7 @@ A singly linked list is like a **scavenger hunt**. Each location (node) contains
     - **Overview and Structure**
         - A doubly linked list is a variation of a singly linked list.
         - The primary difference is the presence of two pointers, known as **double pointers**.
+          - ![alt text](image-40.png)
         - Each node contains:
             - A **next pointer** that points to the next node in the list.
             - A **previous pointer** that points to the previous node in the list.
