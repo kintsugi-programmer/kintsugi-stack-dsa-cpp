@@ -973,6 +973,7 @@ public:
             - Linked lists have a slight theoretical benefit for middle operations, but this is often negated by the need to iterate through the list to find the insertion/removal point.
 
 **Analogy to Solidify Understanding**
+
 Think of a **Singly Linked List** like a **one-way train** where each car only knows the car in front of it; if you want to find the person second-to-last, you have to walk from the engine all the way down. A **Doubly Linked List** is like a **train with walkie-talkies between every car**; every car knows who is in front *and* who is behind. If you are at the very last car (the tail) and need to unhook it, you can just talk to the car right behind you to tell it that it's now the new end of the train.
 
 ```cpp
@@ -1057,6 +1058,8 @@ public:
     - Definition and Overview
         - Queues are an important data structure that share similarities with stacks.
         - The defining characteristic of a queue is that it follows the FIFO principle, which stands for "First In First Out".
+          - ![alt text](image-43.png)
+          - ![alt text](image-44.png)
         - Under FIFO, the first element added to the queue is the first element that is removed.
         - Elements are always removed in the same order they were originally added to the queue.
     - Core Operations
@@ -1069,8 +1072,8 @@ public:
             - Unlike a stack, dequeuing involves removing the element from the beginning of the queue rather than the end.
     - Efficiency and Time Complexity
         - A primary goal is to perform queue operations efficiently.
-        - Adding an element to the end of the queue should ideally be done in constant time, O(1).
-        - Removing an element from the beginning of the queue should also be done in constant time, O(1).
+        - Adding an element to the end of the queue should ideally be done in constant time, **O(1)**.
+        - Removing an element from the beginning of the queue should also be done in constant time, **O(1)**.
     - Comparison: Arrays vs. Linked Lists
         - Array Implementation
             - Constant time removal from the beginning is not possible with standard arrays.
@@ -1090,11 +1093,14 @@ public:
             - Both the head and tail pointers are set to point at this initial node.
             - The current pointer is set to this node because it is the only element in the queue.
         - Adding Subsequent Elements
+            - ![alt text](image-45.png)
+            - ![alt text](image-46.png)
             - Example: Adding the value "blue" to the queue.
             - To insert the new node, take the "next" pointer of the current tail node and set it to point to the new node.
             - The head pointer remains at the first element added.
             - The tail pointer is updated to point at the newest node, which is now the end of the queue.
         - Removing Elements (Dequeue)
+            - ![alt text](image-47.png)
             - Removing from the head of the list is a simple and efficient process.
             - To dequeue, take the current pointer (the head) and set it to `current.next`.
             - By moving the pointer to the next node, the original first node is bypassed and can be treated as if it no longer exists in the list.
@@ -1104,6 +1110,65 @@ public:
 
 **Analogy:** Think of a queue like a line at a grocery store checkout. The first person to join the line is the first person served and the first to leave (FIFO). If the store had to shift every single person forward physically every time the person at the front left (like an array implementation), it would be very inefficient. Instead, the cashier just looks at whoever is next in line (like moving a head pointer in a linked list), which is a quick and constant process regardless of how long the line is.
 
+```cpp
+#include <iostream>
+
+using std::cout;
+using std::endl;
+
+class ListNode {
+    public:
+        int val_;
+        ListNode* next = nullptr;
+
+        ListNode(int val) {
+            val_ = val;
+        }
+};
+
+class Queue {
+public:
+    // Implementing this with dummy nodes would be easier!
+    ListNode* left = nullptr;
+    ListNode* right = nullptr;
+
+    Queue() {}
+
+    void enqueue(int val) {
+        ListNode* newNode = new ListNode(val);
+
+        // Queue is non-empty
+        if (right != nullptr) {
+            right->next = newNode;
+            right = right->next;
+        } 
+        // Queue 
+        else {
+            left = right = newNode;
+        }
+    }
+
+    int dequeue() {
+        // Queue is empty
+        if (left == nullptr) {
+            return -1; // Better to throw an exception
+        }
+        // Remove left node and return value
+        int val = left->val_;
+        left = left->next;
+        return val;
+    }
+
+    void print() {
+        ListNode* curr = left;
+        while (curr != nullptr) {
+            cout << curr->val_ << " -> ";
+            curr = curr->next;
+        }
+        cout << endl;
+    }
+};
+```
 ---
 
 ## Recursion
