@@ -454,8 +454,8 @@ void printArr(int arr[], int capacity) {
 > - But for adding the same when length exceeds capacity
 >   - it's O(n) re-size array + O(1) simple insert 
 >   - so it should be O(n) + O(1) in Dynamic Arrays too where size changes
->   - but it's not 
->     - even tho its increasing, but its not resizing for every insertion
+>   - but it's **not**
+>     - even tho its increasing, but it's **not** resizing for every insertion
 >     - in case of resize array is too big because of 2x size of prev. len. 
 >       - for those elements it's O(1)
 >       ```
@@ -542,6 +542,13 @@ void printArr(int arr[], int capacity) {
     - You must shift every subsequent value over to make room or fill a gap.
     - There is **no amortization** for this; it is always O(N) in the worst case.
 
+| Operation           | Big-O Time |
+| ------------------- | ---------- |
+| r / w i-th element  | O(1)       |
+| Insert / Remove End | O(1)       |
+| Insert Middle       | O(n)       |
+| Remove Middle       | O(n)       |
+
 - ANALOGY
   - Imagine a dynamic array as a growing dinner party table. You start with a small table (the original capacity). When more guests arrive than there are chairs, you don't just squeeze them in; you move the entire party to a new room with a table twice as big. While the move itself (copying elements) takes a lot of effort, it happens so rarely compared to guests just sitting down (pushing elements) that on average, seating a guest is still a very quick process.
 
@@ -625,6 +632,8 @@ public:
 
 - **Stacks Overview**
     - A stack is a common data structure in programming that typically supports three specific operations.
+      - ![alt text](image-27.png)
+      - ![alt text](image-28.png)
     - **Core Operations**
         - **Push**: Adding an element to the end of the stack.
         - **Pop**: Removing an element from the end of the stack.
@@ -634,6 +643,12 @@ public:
         - Pushing should be a constant time operation.
         - Popping should be a constant time operation.
         - Peeking at the last element should be a constant time operation.
+
+| Operation  | Big-O Time |
+| ---------- | ---------- |
+| Push       | O(1)       |
+| Pop        | O(1)       |
+| Peek / Top | O(1)       |
 
 - **Implementation with Dynamic Arrays**
     - There is no need to design a stack data structure from scratch because **dynamic arrays** satisfy all efficiency requirements.
@@ -661,6 +676,7 @@ public:
 
 - **LIFO (Last-In-First-Out) Principle**
     - **Definition**: Stacks are a **LIFO** data structure, meaning "Last In, First Out".
+      - ![alt text](image-29.png)
     - **The Reverse Order Property**: The order in which elements are inserted is the reverse of the order in which they are removed.
         - The last element added is the first element removed.
         - The second-to-last element inserted is the second-to-last removed if all elements are popped.
@@ -679,6 +695,31 @@ public:
 
 **Analogy for Understanding:**
 Think of a **stack of cafeteria trays**. When you add a new tray, you place it on the very top (Push). When someone needs a tray, they take the one that was most recently placed on top (Pop). The tray at the very bottom of the stack—the first one placed there—will be the very last one to be used.
+
+```cpp
+#include <vector>
+
+using std::vector;
+
+// Implementing a stack is trivial using a dynamic array
+// (which we implemented earlier).
+class Stack {
+public:
+    vector<int> stack_;
+
+    Stack() {};
+
+    void push(int n) {
+        stack_.push_back(n);
+    }
+
+    int pop() {
+        int res = stack_[stack_.size() - 1];
+        stack_.pop_back();
+        return res;
+    }
+};
+```
 
 ---
 
