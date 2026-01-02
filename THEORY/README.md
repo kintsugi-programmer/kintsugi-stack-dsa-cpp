@@ -909,6 +909,7 @@ public:
 
     - **Operations: Adding a New Node to the End**
         - Adding a node to the end of a doubly linked list is very similar to doing so in a singly linked list.
+          - ![alt text](image-41.png)
         - **Example: Adding Node 4 to a list ending at Node 3:**
             - 1. Take the next pointer of the current tail (Node 3) and assign it to the new node (Node 4).
             - 2. Set the previous pointer of the new node (Node 4) to point at the current tail (Node 3) to preserve doubly linked properties.
@@ -923,6 +924,8 @@ public:
 
     - **Operations: Removing the Last Node**
         - Removing the last node is easier with a doubly linked list because it allows looking backwards.
+          - **O(1)**
+          - ![alt text](image-42.png)
         - **Efficiency Advantage:**
             - In a singly linked list, you would have to start at the beginning and iterate forward to reach the second-to-last node.
             - In a doubly linked list, if you have a pointer to the tail, you can simply follow the previous pointer to find the preceding node.
@@ -964,13 +967,87 @@ public:
             - **Linked Lists (Singly or Doubly):**
                 - Accessing arbitrary element: **O(n)**.
                 - Insert/Remove at end: **O(1)**.
-                - Insert/Remove in middle: **O(n)** (due to the need to iterate to the element first).
+                - Insert/Remove in middle: **O(1)** but most of time **O(n)** (iteration through LL)
         - **Utility:**
             - Arrays are generally more useful for problem-solving because efficient arbitrary access is highly important.
             - Linked lists have a slight theoretical benefit for middle operations, but this is often negated by the need to iterate through the list to find the insertion/removal point.
 
 **Analogy to Solidify Understanding**
 Think of a **Singly Linked List** like a **one-way train** where each car only knows the car in front of it; if you want to find the person second-to-last, you have to walk from the engine all the way down. A **Doubly Linked List** is like a **train with walkie-talkies between every car**; every car knows who is in front *and* who is behind. If you are at the very last car (the tail) and need to unhook it, you can just talk to the car right behind you to tell it that it's now the new end of the train.
+
+```cpp
+#include <iostream>
+
+using std::cout;
+using std::endl;
+
+class ListNode {
+public:
+    int val_;
+    ListNode* next = nullptr;
+    ListNode* prev = nullptr;
+
+    ListNode(int val) {
+        val_ = val;
+    }
+};
+
+// Implementation for Doubly Linked List
+class LinkedList {
+public:
+    ListNode* head;
+    ListNode* tail;
+
+    LinkedList() {
+        // Init the list with a 'dummy' node which makes 
+        // removing a node from the beginning of list easier.
+        head = new ListNode(-1);
+        tail = new ListNode(-1);
+        head->next = tail;
+        tail->prev = head;
+    }
+
+    void insertFront(int val) {
+        ListNode* newNode = new ListNode(val);
+        newNode->prev = head;
+        newNode->next = head->next;
+
+        head->next->prev = newNode;
+        head->next = newNode;
+    }
+
+    void insertEnd(int val) {
+        ListNode* newNode = new ListNode(val);
+        newNode->next = tail;
+        newNode->prev = tail->prev;
+
+        tail->prev->next = newNode;
+        tail->prev = newNode;
+    }
+
+    // Remove first node after dummy head (assume it exists)
+    void removeFront() {
+        head->next->next->prev = head;
+        head->next = head->next->next;
+    }
+
+    // Remove last node before dummy tail (assume it exists)
+    void removeEnd() {
+        tail->prev->prev->next = tail;
+        tail->prev = tail->prev->prev;
+    }
+
+    void print() {
+        ListNode* curr = head->next;
+        while (curr != tail) {
+            cout << curr->val_ << " -> ";
+            curr = curr->next;
+        }
+        cout << endl;
+    }
+};   
+
+```
 
 ---
 
